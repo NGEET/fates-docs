@@ -8,8 +8,9 @@ Welcome to FATES's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :numbered:
 
+   fates_tech_note.rst
 
 
 Indices and tables
