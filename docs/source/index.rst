@@ -11,7 +11,7 @@ Welcome to FATES's documentation!
    :numbered:
 
    fates_tech_note.rst
-
+   CLM50_Tech_Note_References.rst
 
 Indices and tables
 ==================

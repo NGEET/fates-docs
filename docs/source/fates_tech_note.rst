@@ -3489,5 +3489,3 @@ within the area affected by fire is a function of the ratio between
 +-----------------+-----------------+-----------------+-----------------+
 
 
-
-.. rubric:: References
