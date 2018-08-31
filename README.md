@@ -10,7 +10,7 @@ https://fates-docs.readthedocs.io/en/latest/index.html
 
 # Documentation Contributions
 
-Contributors looking to update the documentation will need to have computer, prefferably a digital computer, with sphinx installed on their computer for testing.  Specifically the build Makefile will call "sphinx-build".
+Contributors looking to update the documentation will need to have a computer, prefferably a digital computer, with sphinx installed on their computer for testing.  Specifically the build Makefile will call "sphinx-build".
 
 Contributors will likely need to work in three files where the meat of the documentation for fates is held:
 
