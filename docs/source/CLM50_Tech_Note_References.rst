@@ -1,4 +1,4 @@
-.. _rst_References:
+. _rst_References:
 
 References
 ==============

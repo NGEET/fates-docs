@@ -339,6 +339,7 @@ equations that follow, they are listed here.
 
    \captionof{table}{Table of subscripts used in this document  }
 
+
 +------------------+------------------------+
 | Parameter Symbol | Parameter Name         |
 +==================+========================+
@@ -592,7 +593,6 @@ The **Plant Allocation** and **Reactive Transport Extensible Hypotheses (PARTEH)
    parteh/hypotheses.rst
    
 
-
 Canopy Structure and the Perfect Plasticity Approximation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -671,6 +671,7 @@ To determine whether a second canopy layer is required, the model needs
 to know the spatial extent of tree crowns. Crown area,
 :math:`A_{crown}`, m\ :math:`^{2}`, is defined as
 
+
 .. math:: A_{crown,coh}  = \pi (dbh_{coh} S_{c,patch,cl})^{1.56}
 
 where :math:`A_{crown}` is the crown area of a single tree canopy
@@ -720,7 +721,9 @@ than the total crown area of the cohort, which requires iterative
 solutions, and 2) on some occasions (e.g. after fire), the canopy may
 open up and require ‘promotion’ of cohorts from the understorey, and 3)
 canopy area may change due to the variations of canopy spread values (
+
 :math:`S_{c,patch,cl}`, see the section below for details) when
+
 fractions of cohorts are demoted or promoted. Further details can be
 found in the code references in the footnote.
 
@@ -748,7 +751,9 @@ circularity. :math:`S_{c}` is thus solved iteratively through time.
 
 Each daily model step, :math:`A_{canopy}` and the fraction of the
 gridcell occupied by tree canopies in each canopy layer
+
 (:math:`A_{f,cl}` = :math:`A_{canopy,cl}`/:math:`A_{patch}`) is
+
 calculated based on :math:`S_{c}` from the previous timestep. If
 :math:`A_{f}` is greater than a threshold value :math:`A_{t}`,
 :math:`S_{c}` is increased by a small increment :math:`i`. The threshold
@@ -798,6 +803,7 @@ calculations for every cohort).
 
 Therefore, the leaf area index for each patch is defined as a
 three-dimensional array :math:`\mathit{lai}_{cl,ft,z}` where :math:`C_l`
+
 is the canopy layer, :math:`ft` is the functional type and :math:`z` is
 the leaf layer within each canopy. This three-dimensional structure is
 the basis of the radiation and photosynthetic models. In addition to a
@@ -815,8 +821,7 @@ m\ :math:`^{2}`)
 .. math:: \mathit{tree}_{lai,coh} = \frac{C_{leaf,coh}\cdot\mathrm{sla}_{ft}}{A_{crown,coh}}
 
 where :math:`\mathrm{sla}_{ft}` is the specific leaf area in
-m\ :math:`^{2}` KgC\ :math:`^{-1}` and :math:`C_{leaf}` is in kGC per
-plant.
+m\ :math:`^{2}` KgC\ :math:`^{-1}` and :math:`C_{leaf}` is in kGC per plant.
 
 Stem area index (SAI) is ratio of the total area of all woody stems on a
 plant to the area of ground covered by the plant. During winter in
@@ -1317,6 +1322,7 @@ all the parallel tree canopies in the canopy layer above, thus.
 where :math:`\it{pft}_{wt}` is the areal fraction of each canopy layer
 occupied by each functional type and :math:`z_{max}` is the index of the
 bottom canopy layer of each pft in each canopy layer (the subscripts
+
 :math:`cl` and :math:`ft` are implied but omitted from all
 :math:`z_{max}` references to avoid additional complications)
 
@@ -1373,7 +1379,6 @@ The radiation absorbed by the soil after passing through through
 under-storey vegetation is:
 
 .. math:: \it{abs}_{soil}=  \sum_{ft=1}^{npft}{ \it{pft}_{wt(1,ft,1)}( \mathit{dif}_{down(nz+1)} (1 -  salb_{dif}) +\it{solar}_{dir}   dir_{tr(nz+1)}  (1-  salb_{dir}))}
-
 to which is added the diffuse flux coming directly from the upper
 canopy and hitting no understorey vegetation.
 
@@ -2055,7 +2060,6 @@ individual\ :math:`^{-1}`) and specific leaf area (SLA, m\ :math:`^2` kg
 C\ :math:`^{-1}`). Leaf biomass :math:`C_{leaf,coh}` is controlled by the processes of phenology, allocation and turnover, described in detail in the PARTEH submodule.
 
 .. math:: A_{leaf,coh} = C_{leaf,coh} \cdot SLA_{ft}
-
 
 However, using this model, where leaf area and crown area are both
 functions of diameter, the leaf area index of each tree in a closed
