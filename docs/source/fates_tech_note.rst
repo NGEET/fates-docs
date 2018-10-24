@@ -339,25 +339,30 @@ equations that follow, they are listed here.
 
    \captionof{table}{Table of subscripts used in this document  }
 
-+------------------+-----------------------+
-| Parameter Symbol | Parameter Name        |
-+==================+=======================+
-| *ft*             | Plant Functional Type |
-+------------------+-----------------------+
-| *fc*             | Fuel Class            |
-+------------------+-----------------------+
-| *lsc*            | Litter Size Class     |
-+------------------+-----------------------+
-| *coh*            | Cohort Index          |
-+------------------+-----------------------+
-| *patch*          | Patch Index           |
-+------------------+-----------------------+
-| *Cl*             | Canopy Layer          |
-+------------------+-----------------------+
-| *z*              | Leaf Layer            |
-+------------------+-----------------------+
-| *mc*             | Moisture Class        |
-+------------------+-----------------------+
+
++------------------+------------------------+
+| Parameter Symbol | Parameter Name         |
++==================+========================+
+| *ft*             | Plant Functional Type  |
++------------------+------------------------+
+| *fc*             | Fuel Class             |
++------------------+------------------------+
+| *lsc*            | Litter Size Class      |
++------------------+------------------------+
+| *coh*            | Cohort Index           |
++------------------+------------------------+
+| *patch*          | Patch Index            |
++------------------+------------------------+
+| *cl*             | Canopy Layer           |
++------------------+------------------------+
+| *z*              | Leaf Layer             |
++------------------+------------------------+
+| *mc*             | Moisture Class         |
++------------------+------------------------+
+| *o*              | Plant Organ Index      |
++------------------+------------------------+
+| *s*              | Nutrient Species Index |
++------------------+------------------------+
 
 .. raw:: latex
 
@@ -397,27 +402,27 @@ restarted. The state variables of a cohort are as follows:
 | Diameter        | :math:`\it{dbh_ | cm              |                 |
 |                 | {coh}}`         |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| Structural      | :math:`{b_{stru | KgC             | Stem wood       |
-| Biomass         | c,coh}}`        | plant\ :math:`^ | (above and      |
-|                 |                 | {-1}`           | below ground)   |
+| Carbon Mass     | :math:`{C_{(o   | Kg              | leaf, fine-root |
+|                 | ,coh)}}`        | plant\          | sapwood,        |
+|                 |                 | :math:`^{-1}`   | storage,        |
+|                 |                 |                 | structural,     |
+|                 |                 |                 | reproductive    |
 +-----------------+-----------------+-----------------+-----------------+
-| Alive Biomass   | :math:`{b_{aliv | KgC             | Leaf, fine root |
-|                 | e,coh}}`        | plant\ :math:`^ | and sapwood     |
-|                 |                 | {-1}`           |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| Stored Biomass  | :math:`{b_{stor | KgC             | Labile carbon   |
-|                 | e,coh}}`        | plant\ :math:`^ | reserve         |
-|                 |                 | {-1}`           |                 |
+| Nutrient Mass   | :math:`{N_{(o   | Kg              | Optional        |
+|                 | ,s,coh)}}`      | plant\ :math:`^ | depending on    |
+|                 |                 | {-1}`           | hypothesis.     |
+|                 |                 |                 | See PARTEH      |
+|                 |                 |                 | documentation.  |
 +-----------------+-----------------+-----------------+-----------------+
 | Leaf memory     | :math:`{l_{memo | KgC             | Leaf mass when  |
 |                 | ry,coh}}`       | plant\ :math:`^ | leaves are      |
 |                 |                 | {-1}`           | dropped         |
 +-----------------+-----------------+-----------------+-----------------+
-| Canopy Layer    | :math:`{C_{l,co | integer         | 1 = top layer   |
-|                 | h}}`            |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
 | Phenological    | :math:`{S_{phen | integer         | 1=leaves off.   |
 | Status          | ,coh}}`         |                 | 2=leaves on     |
++-----------------+-----------------+-----------------+-----------------+
+| Canopy Layer    | :math:`cl_{coh  | integer         | 1=top canopy    |
+| Index           | }`              |                 | >1=understory   |
 +-----------------+-----------------+-----------------+-----------------+
 | Canopy trimming | :math:`C_{trim, | fraction        | 1.0=max leaf    |
 |                 | coh}`           |                 | area            |
@@ -466,12 +471,12 @@ can be restarted, are as follows
 |             | itter,patch | m\ :math:`^ |             |             |
 |             | }`          | {-2}`       |             |             |
 +-------------+-------------+-------------+-------------+-------------+
-| AG Coarse   | :math:`     | KgC         | Size Class  |             |
-| Woody       | {CWD}_{A    | m\ :math:`^ | (lsc)       |             |
+| AG Coarse   | :math:`{CWD}| KgC         | Size Class  |             |
+| Woody       | _{A         | m\ :math:`^ | (lsc)       |             |
 | Debris      | G,patch}`   | {-2}`       |             |             |
 +-------------+-------------+-------------+-------------+-------------+
-| BG Coarse   | :math:`     | KgC         | Size Class  |             |
-| Woody       | {CWD}_{B    | m\ :math:`^ | (lsc)       |             |
+| BG Coarse   | :math:`{CWD}| KgC         | Size Class  |             |
+| Woody       | _{B         | m\ :math:`^ | (lsc)       |             |
 | Debris      | G,patch}`   | {-2}`       |             |             |
 +-------------+-------------+-------------+-------------+-------------+
 | Canopy      | :math:`S_{c | -           | Canopy      |             |
@@ -519,9 +524,13 @@ Each cohort is initialized at the minimum canopy height
 functional type and denotes the smallest size of plant which is tracked
 by the model. Smaller plants are not considered, and their emergence
 from the recruitment processes is unresolved and therefore implicitly
-parameterized in the seedling establishment model.. The diameter of each
-cohort is then specified using the log-linear allometry between stem
-diameter and canopy height
+parameterized in the seedling establishment model.
+
+
+**NOTE: With Modular allometry, the following is 1 of several different height to diameter relationships**
+
+The diameter of each cohort is then specified using the log-linear allometry between stem
+diameter and canopy height.
 
 .. math:: \mathit{dbh}_{coh} = 10^{\frac{\log_{10}(h_{coh}) - c_{allom}}{m_{allom}}  }
 
@@ -530,7 +539,7 @@ and the intercept :math:`c_{allom}` is 0.37. The structural biomass
 associated with a plant of this diameter and height is given (as a
 function of wood density, :math:`\rho`, g cm\ :math:`^{-3}`)
 
-.. math:: b_{struc,coh} =c_{str}h_{coh}^{e_{str,hite}} dbh_{coh}^{e_{str,dbh}} \rho_{ft}^{e_{str,dens}}
+.. math:: C_{struc,coh} =c_{str}h_{coh}^{e_{str,hite}} dbh_{coh}^{e_{str,dbh}} \rho_{ft}^{e_{str,dens}}
 
 taken from the original ED1.0 allometry
 :ref:`Moorcroft et al. 2001<mc_2001>` (values of the allometric constants in
@@ -538,15 +547,17 @@ Table `[table:allom] <#table:allom>`__. The maximum amount of leaf
 biomass associated with this diameter of tree is calculated according to
 the following allometry
 
-.. math:: b_{max,leaf,coh} =c_{leaf}\it{dbh}_{coh}^{e_{leaf,dbh}} \rho_{ft}^{e_{leaf,dens}}
+.. math:: C_{max,leaf,coh} =c_{leaf}\it{dbh}_{coh}^{e_{leaf,dbh}} \rho_{ft}^{e_{leaf,dens}}
 
 from this quantity, we calculate the active/fine root biomass
-:math:`b_{root,coh}` as
+:math:`C_{root,coh}` as
 
-.. math:: b_{root,coh} =  b_{max,leaf,coh}\cdot f_{frla}
+.. math:: C_{root,coh} =  C_{max,leaf,coh}\cdot f_{frla}
 
 where :math:`f_{frla}` is the fraction of fine root biomass to leaf
-biomass, assigned per PFT
+biomass, assigned per PFT.
+
+**The previous section should be expanded to include the modular allometry options.**
 
 .. raw:: latex
 
@@ -568,114 +579,19 @@ biomass, assigned per PFT
 
 [table:init]
 
-Allocation of biomass
-^^^^^^^^^^^^^^^^^^^^^
 
-Total live biomass :math:`b_{alive}` is the state variable of the model
-that describes the sum of the three live biomass pools leaf
-:math:`b_{leaf}`, root :math:`b_{root}` and sapwood :math:`b_{sw}` (all
-in kGC individual\ :math:`^{-1}`). The quantities are constrained by the
-following
+Allocation and Reactive Transport (PARTEH)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. math:: b_{alive} = b_{leaf} + b_{root} + b_{sw}
+The **Plant Allocation** and **Reactive Transport Extensible Hypotheses (PARTEH)** is a suite of modules that handle the processes of allocation, transport and reactions (i.e. thos processes related to movement and change, yet perhaps not the genesis) of various arbitrary species (carbon, nutrients, toxins, etc) within the various organs of live vegetation.  In FATES, these processes are resolved per unit plant, for each cohort.
 
-Sapwood volume is a function of tree height and leaf biomass
+.. toctree::
+   :maxdepth: 2
+   :numbered:
 
-.. math:: b_{sw} = b_{leaf}\cdot h_{coh}\cdot f_{swh}
-
-where :math:`f_{swh}` is the ratio of sapwood mass (kgC) to leaf mass
-per unit tree height (m). Also, root mass is a function of leaf mass
-
-.. math:: b_{root} = b_{leaf}\cdot f_{swh}
-
-Thus
-
-.. math:: b_{alive} = b_{leaf} + b_{leaf}\cdot f_{frla} + b_{leaf}\cdot h_{coh}\cdot f_{swh}
-
-Rearranging gives the fraction of biomass in the leaf pool
-:math:`f_{leaf}` as
-
-.. math:: f_{leaf} = \frac{1}{1+h_{coh}\cdot f_{swh}+f_{frla} }
-
-Thus, we can determine the leaf fraction from the height at the tissue
-ratios, and the phenological status of the cohort :math:`S_{phen,coh}`.
-
-.. math:: b_{leaf} = b_{alive} \cdot l _{frac}
-
-To divide the live biomass pool at restart, or whenever it is
-recalculated, into its consituent parts, we first
-
-.. math::
-
-   b_{leaf} = \left\{ \begin{array}{ll}
-   b_{alive} \cdot l _{frac}&\textrm{for } S_{phen,coh} = 1\\
-   &\\
-   0&\textrm{for } S_{phen,coh} = 0\\
-   \end{array} \right.
-
-Because sometimes the leaves are dropped, using leaf biomass as a
-predictor of root and sapwood would produce zero live biomass in the
-winter. To account for this, we add the LAI memory variable
-:math:`l_{memory}` to the live biomass pool to account for the need to
-maintain root biomass when leaf biomass is zero. Thus, to calculated the
-root biomass, we use
-
-.. math:: b_{root} = (b_{alive}+l_{memory})\cdot l_{frac} \cdot f_{frla}
-
-To calculated the sapwood biomass, we use
-
-.. math:: b_{sw} = (b_{alive}+l_{memory})\cdot l_{frac} \cdot f_{swh} \cdot h_{coh}
-
-.. raw:: latex
-
-   \captionof{table}{Allometric Constants}
-
-+-----------------+-----------------+-----------------+-----------------+
-| Parameter       | Parameter Name  | Units           | Default Value   |
-| Symbol          |                 |                 |                 |
-+=================+=================+=================+=================+
-| :math:`c_{allom | Allometry       |                 | 0.37            |
-| }`              | intercept       |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`m_{allom | Allometry slope |                 | 0.64            |
-| }`              |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`c_{str}` | Structural      |                 | 0.06896         |
-|                 | biomass         |                 |                 |
-|                 | multiplier      |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`e_{str,d | Structural      |                 | 1.94            |
-| bh}`            | Biomass dbh     |                 |                 |
-|                 | exponent        |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`e_{str,h | Structural      |                 | 0.572           |
-| ite}`           | Biomass height  |                 |                 |
-|                 | exponent        |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`e_{str,d | Structural      |                 | 0.931           |
-| ens}`           | Biomass density |                 |                 |
-|                 | exponent        |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`c_{leaf}`| Leaf biomass    |                 | 0.0419          |
-|                 | multiplier      |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`e_{leaf, | Leaf biomass    |                 | 1.56            |
-| dbh}`           | dbh exponent    |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`e_{leaf, | Leaf biomass    |                 | 0.55            |
-| dens}`          | density         |                 |                 |
-|                 | exponent        |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`f_{swh}` | Ratio of        | m\ :math:`^{-1}`|                 |
-|                 | sapwood mass to |                 |                 |
-|                 | height          |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`f_{frla}`| Ratio of fine   | -               | 1.0             |
-|                 | root mass to    |                 |                 |
-|                 | leaf mass       |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-
-[table:allom]
+   parteh/overview_domain.rst
+   parteh/hypotheses.rst
+   
 
 Canopy Structure and the Perfect Plasticity Approximation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -755,10 +671,11 @@ To determine whether a second canopy layer is required, the model needs
 to know the spatial extent of tree crowns. Crown area,
 :math:`A_{crown}`, m\ :math:`^{2}`, is defined as
 
-.. math:: A_{crown,coh}  = \pi (dbh_{coh} S_{c,patch,Cl})^{1.56}
+
+.. math:: A_{crown,coh}  = \pi (dbh_{coh} S_{c,patch,cl})^{1.56}
 
 where :math:`A_{crown}` is the crown area of a single tree canopy
-(m:math:`^{-2}`) and :math:`S_{c,patch,Cl}` is the ‘canopy spread’
+(m:math:`^{-2}`) and :math:`S_{c,patch,cl}` is the ‘canopy spread’
 parameter (m cm^-1) of this canopy layer, which is assigned as a
 function of canopy space filling, discussed below. In contrast to
 :ref:`Purves et al. 2008<purves2008>` , we use an exponent, identical to that
@@ -804,7 +721,9 @@ than the total crown area of the cohort, which requires iterative
 solutions, and 2) on some occasions (e.g. after fire), the canopy may
 open up and require ‘promotion’ of cohorts from the understorey, and 3)
 canopy area may change due to the variations of canopy spread values (
-:math:`S_{c,patch,Cl}`, see the section below for details) when
+
+:math:`S_{c,patch,cl}`, see the section below for details) when
+
 fractions of cohorts are demoted or promoted. Further details can be
 found in the code references in the footnote.
 
@@ -832,22 +751,24 @@ circularity. :math:`S_{c}` is thus solved iteratively through time.
 
 Each daily model step, :math:`A_{canopy}` and the fraction of the
 gridcell occupied by tree canopies in each canopy layer
-(:math:`A_{f,Cl}` = :math:`A_{canopy,Cl}`/:math:`A_{patch}`) is
+
+(:math:`A_{f,cl}` = :math:`A_{canopy,cl}`/:math:`A_{patch}`) is
+
 calculated based on :math:`S_{c}` from the previous timestep. If
 :math:`A_{f}` is greater than a threshold value :math:`A_{t}`,
 :math:`S_{c}` is increased by a small increment :math:`i`. The threshold
 :math:`A_{t}` is, hypothetically, the canopy fraction at which light
 competition begins to impact on tree growth. This is less than 1.0 owing
-to the non-perfect spatial spacing of tree canopies. If :math:`A_{f,Cl}`
+to the non-perfect spatial spacing of tree canopies. If :math:`A_{f,cl}`
 is greater than :math:`A_{t}`, then :math:`S_{c}` is reduced by an
 increment :math:`i`, to reduce the spatial extent of the canopy, thus.
 
 .. math::
 
-   S_{c,patch,Cl,t+1} = \left\{ \begin{array}{ll}
-   S_{c,patch,Cl,t} + i& \textrm{for $A_{f,Cl} < A_{t}$}\\
+   S_{c,patch,cl,t+1} = \left\{ \begin{array}{ll}
+   S_{c,patch,cl,t} + i& \textrm{for $A_{f,cl} < A_{t}$}\\
    &\\
-   S_{c,patch,Cl,t} - i& \textrm{for $A_{f,Cl} > A_{t}$}\\
+   S_{c,patch,cl,t} - i& \textrm{for $A_{f,cl} > A_{t}$}\\
    \end{array} \right.
 
 The values of :math:`S_{c}` are bounded to upper and lower limits. The
@@ -857,10 +778,10 @@ largest canopy extent :math:`S_{c,max}`
 
 .. math::
 
-   S_{c,patch,Cl} = \left\{ \begin{array}{ll}
-   S_{c,min}& \textrm{for } S_{c,patch,Cl}< S_{c,\rm{min}}\\
+   S_{c,patch,cl} = \left\{ \begin{array}{ll}
+   S_{c,min}& \textrm{for } S_{c,patch,cl}< S_{c,\rm{min}}\\
    &\\
-   S_{c,max}& \textrm{for } S_{c,patch,Cl} > S_{c,\rm{max}}\\
+   S_{c,max}& \textrm{for } S_{c,patch,cl} > S_{c,\rm{max}}\\
    \end{array} \right.
 
 This iterative scheme requires two additional parameters (:math:`i` and
@@ -881,26 +802,26 @@ sake of the radiation and photosynthesis calculations (to avoid separate
 calculations for every cohort).
 
 Therefore, the leaf area index for each patch is defined as a
-three-dimensional array :math:`\mathit{lai}_{Cl,ft,z}` where :math:`C_l`
+three-dimensional array :math:`\mathit{lai}_{cl,ft,z}` where :math:`C_l`
+
 is the canopy layer, :math:`ft` is the functional type and :math:`z` is
 the leaf layer within each canopy. This three-dimensional structure is
 the basis of the radiation and photosynthetic models. In addition to a
 leaf area profile matrix, we also define, for each patch, the area which
-is covered by leaves at each layer as :math:`\mathit{carea}_{Cl,ft,z}`.
+is covered by leaves at each layer as :math:`\mathit{carea}_{cl,ft,z}`.
 
 Each plant cohort is already defined as a member of a single canopy
 layer and functional type. This means that to generate the
-:math:`x_{Cl,ft,z}` matrix, it only remains to divide the leaf area of
+:math:`x_{cl,ft,z}` matrix, it only remains to divide the leaf area of
 each cohort into leaf layers. First, we determine how many leaf layers
 are occupied by a single cohort, by calculating the ‘tree LAI’ as the
 total leaf area of each cohort divided by its crown area (both in
 m\ :math:`^{2}`)
 
-.. math:: \mathit{tree}_{lai,coh} = \frac{b_{leaf,coh}\cdot\mathrm{sla}_{ft}}{A_{crown,coh}}
+.. math:: \mathit{tree}_{lai,coh} = \frac{C_{leaf,coh}\cdot\mathrm{sla}_{ft}}{A_{crown,coh}}
 
 where :math:`\mathrm{sla}_{ft}` is the specific leaf area in
-m\ :math:`^{2}` KgC\ :math:`^{-1}` and :math:`b_{leaf}` is in kGC per
-plant.
+m\ :math:`^{2}` KgC\ :math:`^{-1}` and :math:`C_{leaf}` is in kGC per plant.
 
 Stem area index (SAI) is ratio of the total area of all woody stems on a
 plant to the area of ground covered by the plant. During winter in
@@ -933,7 +854,7 @@ provided by the radiation absorption algorithm. Specifically, the SAI of
 an individual cohort (:math:`\mathrm{tree}_{sai,coh}`, m\ :math:`^{2}`
 m\ :math:`^{-2}`) is calculated as follows,
 
-.. math:: \mathrm{tree}_{sai,coh} = k_{sai}\cdot b_{struc,coh} ,
+.. math:: \mathrm{tree}_{sai,coh} = k_{sai}\cdot C_{struc,coh} ,
 
 where :math:`k_{sai}` is the coefficient linking structural biomass to
 SAI. The number of occupied leaf layers for cohort :math:`coh`
@@ -991,25 +912,25 @@ profile. Specifically, the relative canopy area for the cohort
 
 .. math:: \mathit{area}_{1:nz,coh}  =  \frac{A_{crown,coh}}{A_{canopy,patch}}.
 
-The total occupied canopy area for each canopy layer (:math:`Cl`), plant
+The total occupied canopy area for each canopy layer (:math:`cl`), plant
 functional type (:math:`ft`) and leaf layer (:math:`z`) bin is thus
 
 .. math::
   
-   \mathit{c}_{area,Cl,ft,z} = \sum_{coh=1}^{coh=ncoh} area_{1:nz,coh} 
+   \mathit{c}_{area,cl,ft,z} = \sum_{coh=1}^{coh=ncoh} area_{1:nz,coh} 
 
-where :math:`ft_{coh}=ft`  and  :math:`Cl_{coh} = Cl.`
+where :math:`ft_{coh}=ft`  and  :math:`cl_{coh} = cl.`
 
 All of these quantities are summed across cohorts to give the complete
 leaf and stem area profiles,
 
 .. math::
 
-   \mathit{lai} _{Cl,ft,z} = \sum_{coh=1}^{coh=ncoh} \mathit{lai}_{z,coh}  
+   \mathit{lai} _{cl,ft,z} = \sum_{coh=1}^{coh=ncoh} \mathit{lai}_{z,coh}  
 
 .. math::
 
-   \mathit{sai}_{Cl,ft,z} = \sum_{coh=1}^{coh=ncoh} \mathit{sai}_{z,coh}  
+   \mathit{sai}_{cl,ft,z} = \sum_{coh=1}^{coh=ncoh} \mathit{sai}_{z,coh}  
    
 
 Burial of leaf area by snow
@@ -1055,10 +976,10 @@ The resulting exposed (:math:`elai, esai`) and total
 .. math::
 
    \begin{array}{ll}
-   \mathit{elai} _{Cl,ft,z} &= \mathit{lai} _{Cl,ft,z} \cdot f_{exp,z}\\
-   \mathit{esai} _{Cl,ft,z} &= \mathit{sai} _{Cl,ft,z} \cdot f_{exp,z}\\
-   \mathit{tlai} _{Cl,ft,z} &= \mathit{lai} _{Cl,ft,z}\\
-   \mathit{tsai} _{Cl,ft,z} &= \mathit{sai} _{Cl,ft,z} \
+   \mathit{elai} _{cl,ft,z} &= \mathit{lai} _{cl,ft,z} \cdot f_{exp,z}\\
+   \mathit{esai} _{cl,ft,z} &= \mathit{sai} _{cl,ft,z} \cdot f_{exp,z}\\
+   \mathit{tlai} _{cl,ft,z} &= \mathit{lai} _{cl,ft,z}\\
+   \mathit{tsai} _{cl,ft,z} &= \mathit{sai} _{cl,ft,z} \
    \end{array} ,
 
 and are used in the radiation interception and photosynthesis algorithms
@@ -1334,12 +1255,12 @@ explanation. The FATES model, however, calculates radiative and
 photosynthetic fluxes for a more complex hierarchical structure within
 each patch/time-since-disturbance class, as described in the leaf area
 profile section. Firstly, we denote two or more canopy layers (denoted
-:math:`C_l`). The concept of a ‘canopy layer’ refers to the idea that
+:math:`cl`). The concept of a ‘canopy layer’ refers to the idea that
 plants are organized into discrete over and under-stories, as predicted
 by the Perfect Plasticity Approximation
 (:ref:`Purves et al. 2008<purves2008>`, :ref:`Fisher et al. 2010<Fisheretal2010>`). Within each canopy layer
 there potentially exist multiple cohorts of different plant functional
-types and heights. Within each canopy layer, :math:`C_l`, and functional
+types and heights. Within each canopy layer, :math:`cl`, and functional
 type, :math:`ft`, the model resolves numerous leaf layers :math:`z`,
 and, for some processes, notably photosynthesis, each leaf layer is
 split into a fraction of sun and shade leaves, :math:`f_{sun}` and
@@ -1349,7 +1270,10 @@ The radiation scheme described in Section is solved explicitly for this
 structure, for both the visible and near-infrared wavebands, according
 to the following assumptions.
 
--  A *canopy layer* (:math:`C_{L}`) refers to either the over or understorey
+-  A *canopy layer* (:math:`cl`) refers literally to the vertical layer
+   within the canopy this cohort resides in. The top canopy layer
+   has index 1. A closed canopy forest will therefore by definition
+   have at least two layers, and perhaps more.
 
 -  A *leaf layer* (:math:`z`) refers to the discretization of the LAI
    within the canopy of a given plant functional type.
@@ -1371,7 +1295,7 @@ to the following assumptions.
    `patch` subscript for simplicity in the following discussion.
 
 Within this framework, the majority of the terms in the radiative
-transfer scheme are calculated with indices of :math:`C_L`,
+transfer scheme are calculated with indices of :math:`cl`,
 :math:`\it{ft}` and :math:`z`. In the following text, we revisit the
 simplified version of the radiation model described above, and explain
 how it is modified to account for the more complex canopy structure used
@@ -1388,82 +1312,82 @@ The amount of direct light reaching each leaf layer is a function of the
 leaves existing above the layer in question. If a leaf layer ‘:math:`z`’
 is in the top canopy layer (the over-storey), it is only shaded by
 leaves of the same PFT so :math:`k_{dir}` is unchanged from equation. If
-there is more than one canopy layer (:math:`C_{l,max}>1`), then the
+there is more than one canopy layer (:math:`cl_{max}>1`), then the
 amount of direct light reaching the top leaf surfaces of the
 second/lower layer is the weighted average of the light attenuated by
 all the parallel tree canopies in the canopy layer above, thus.
 
-.. math:: dir_{tr,Cl,:,1} =\sum_{ft=1}^{npft}{(dir_{tr,Cl,ft,z_{max}} \cdot c_{area,Cl-1,ft,z_{max}})}
+.. math:: dir_{tr(cl,:,1)} =\sum_{ft=1}^{npft}{(dir_{tr(cl,ft,z_{max})} \cdot c_{area(cl-1,ft,z_{max})})}
 
 where :math:`\it{pft}_{wt}` is the areal fraction of each canopy layer
 occupied by each functional type and :math:`z_{max}` is the index of the
 bottom canopy layer of each pft in each canopy layer (the subscripts
-:math:`C_l` and :math:`ft` are implied but omitted from all
+
+:math:`cl` and :math:`ft` are implied but omitted from all
 :math:`z_{max}` references to avoid additional complications)
 
 Similarly, the sunlit fraction for a leaf layer ‘:math:`z`’ in the
-second canopy layer (where :math:`C_l > 1`) is
+second canopy layer (where :math:`cl > 1`) is
 
-.. math:: f_{sun,Cl,ft,z} = W_{sun,Cl} \cdot e^{k_{dir,ft,laic,z}}
+.. math:: f_{sun(cl,ft,z)} = W_{sun(cl)} \cdot e^{k_{dir(ft,laic,z)}}
 
-where :math:`W_{sun,Cl}` is the weighted average sunlit fraction in the
+where :math:`W_{sun,cl}` is the weighted average sunlit fraction in the
 bottom layer of a given canopy layer.
 
-.. math:: W_{sun,Cl} = \sum_{ft=1}^{npft}{(f_{sun,Cl-1,ft,zmax} \cdot  c_{area,Cl-1,ft,zmax})}
+.. math:: W_{sun(cl)} = \sum_{ft=1}^{npft}{(f_{sun(cl-1,ft,zmax)} \cdot  c_{area(cl-1,ft,zmax)})}
 
 Following through the sequence of equations for the simple single pft
 and canopy layer approach above, the :math:`\mathit{refl}_{dif}` and
-:math:`\mathit{tran}_{dif}` fluxes are also indexed by :math:`C_l`,
+:math:`\mathit{tran}_{dif}` fluxes are also indexed by :math:`cl`,
 :math:`\it{ft}`, and :math:`z`. The diffuse radiation reflectance ratio
 :math:`r_z` is also calculated in a manner that homogenizes fluxes
 between canopy layers. For the canopy layer nearest the soil
-(:math:`C_l` = :math:`C_{l,max}`). For the top canopy layer
-(:math:`C_l`\ =1), a weighted average reflectance from the lower layers
+(:math:`cl` = :math:`cl_{max}`). For the top canopy layer
+(:math:`cl`\ =1), a weighted average reflectance from the lower layers
 is used as the baseline, in lieu of the soil albedo. Thus:
 
-.. math:: r_{z,Cl,:,1} =  \sum_{ft=1}^{npft}{(r_{z,Cl-1,ft,1}   \it{pft}_{wt,Cl-1,ft,1})}
+.. math:: r_{z(cl,:,1)} =  \sum_{ft=1}^{npft}{(r_{z(cl-1,ft,1)}   \it{pft}_{wt(cl-1,ft,1)})}
 
 For the iterative flux resolution, the upwards and downwards fluxes are
-also averaged between canopy layers, thus where :math:`C_l>1`
+also averaged between canopy layers, thus where :math:`cl>1`
 
-.. math:: rad_{dn, Cl,ft,1} = \sum_{ft=1}^{npft}{(rad_{dn, Cl-1,ft,zmax} \cdot  \it{pft}_{wt,Cl-1,ft,zmax})}
+.. math:: rad_{dn(cl,ft,1)} = \sum_{ft=1}^{npft}{(rad_{dn(cl-1,ft,zmax)} \cdot  \it{pft}_{wt(cl-1,ft,zmax)})}
 
-and where :math:`C_l` =1, and :math:`C_{l,max}>1`
+and where :math:`cl` =1, and :math:`cl_{max}>1`
 
-.. math:: rad_{up,Cl,ft,zmax} = \sum_{ft=1}^{npft}{(rad_{up, Cl+1,ft,1} \cdot  \it{pft}_{wt,Cl+1,ft,1})}
+.. math:: rad_{up(cl,ft,zmax)} = \sum_{ft=1}^{npft}{(rad_{up(cl+1,ft,1)} \cdot  \it{pft}_{wt(cl+1,ft,1)})}
 
 The remaining terms in the radiation calculations are all also indexed
-by :math:`C_l`, :math:`ft` and :math:`z` so that the fraction of
-absorbed radiation outputs are termed :math:`abs_{dir,Cl,ft,z}` and
-:math:`abs_{dif,Cl,ft,z}`. The sunlit and shaded absorption rates are
+by :math:`cl`, :math:`ft` and :math:`z` so that the fraction of
+absorbed radiation outputs are termed :math:`abs_{dir(cl,ft,z)}` and
+:math:`abs_{dif(cl,ft,z)}`. The sunlit and shaded absorption rates are
 therefore
 
-.. math:: abs_{sha,Cl,ft,z} = abs_{dif,Cl,ft,z}\cdot f_{sha,Cl,ft,z}
+.. math:: abs_{sha(cl,ft,z)} = abs_{dif(cl,ft,z)}\cdot f_{sha(cl,ft,z)}
 
 and
 
-.. math:: abs_{sun,Cl,ft,z} =  abs_{dif,Cl,ft,z} \cdot f_{sun,Cl,ft,z}+ abs_{dir,Cl,ft,z}
+.. math:: abs_{sun(cl,ft,z)} =  abs_{dif(cl,ft,z)} \cdot f_{sun(cl,ft,z)}+ abs_{dir(cl,ft,z)}
 
 The albedo of the mixed pft canopy is calculated as the weighted average
 of the upwards radiation from the top leaf layer of each pft where
-:math:`C_l`\ =1:
+:math:`cl`\ =1:
 
-.. math:: \it{alb}_{canopy}=  \sum_{ft=1}^{npft}{\frac{\mathit{dif}_{up,1,ft,1}    \it{pft}_{wt,1,ft,1}} {\it{solar}_{dir} + \it{solar}_{dif}}}
+.. math:: \it{alb}_{canopy}=  \sum_{ft=1}^{npft}{\frac{\mathit{dif}_{up(1,ft,1)}    \it{pft}_{wt(1,ft,1)}} {\it{solar}_{dir} + \it{solar}_{dif}}}
 
 The radiation absorbed by the soil after passing through through
 under-storey vegetation is:
 
-.. math:: \it{abs}_{soil}=  \sum_{ft=1}^{npft}{ \it{pft}_{wt,1,ft,1}( \mathit{dif}_{down,nz+1} (1 -  salb_{dif}) +\it{solar}_{dir}   dir_{tr,nz+1}  (1-  salb_{dir}))}
-
+.. math:: \it{abs}_{soil}=  \sum_{ft=1}^{npft}{ \it{pft}_{wt(1,ft,1)}( \mathit{dif}_{down(nz+1)} (1 -  salb_{dif}) +\it{solar}_{dir}   dir_{tr(nz+1)}  (1-  salb_{dir}))}
 to which is added the diffuse flux coming directly from the upper
 canopy and hitting no understorey vegetation.
 
-.. math:: \it{abs}_{soil}=  \it{abs}_{soil}+dif_{dn,2,1}  (1-  \sum_{ft=1}^{npft}{\it{pft}_{wt,1,ft,1}})  (1 -  salb_{dif})
+.. math:: \it{abs}_{soil}=  \it{abs}_{soil}+dif_{dn(2,1)}  (1-  \sum_{ft=1}^{npft}{\it{pft}_{wt(1,ft,1)}})  (1 -  salb_{dif})
 
 and the direct flux coming directly from the upper canopy and hitting
 no understorey vegetation.
 
-.. math:: \it{abs}_{soil}=  \it{abs}_{soil}+\it{solar}_{dir} dir_{tr,2,1}(1-  \sum_{ft=1}^{npft}{\it{pft}_{wt,1,ft,1}})  (1 -  salb_{dir})
+.. math:: \it{abs}_{soil}=  \it{abs}_{soil}+\it{solar}_{dir} dir_{tr(2,1)}(1-  \sum_{ft=1}^{npft}{\it{pft}_{wt(1,ft,1)}})  (1 -  salb_{dir})
 
 These changes to the radiation code are designed to be structurally
 flexible, and the scheme may be collapsed down to only include on canopy
@@ -1629,26 +1553,26 @@ photosynthetically active radiation, nitrogen-based variation in
 photosynthetic properties). The remaining drivers of photosynthesis
 (:math:`P_{atm}`, :math:`K_c`, :math:`o_i`, :math:`K_o`, temperature,
 atmospheric CO\ :math:`_2`) remain the same throughout the canopy. The
-rate of gross photosynthesis (:math:`gpp_{Cl,ft,z}`)is the smoothed
+rate of gross photosynthesis (:math:`gpp_{cl,ft,z}`)is the smoothed
 minimum of the three potentially limiting processes (carboxylation,
 electron transport, export limitation), but calculated independently for
 each leaf layer:
 
-.. math:: \textrm{gpp}_{Cl,ft,z} = \rm{min}(w_{c,Cl,ft,z},w_{j,Cl,ft,z},w_{e,Cl,ft,z}).
+.. math:: \textrm{gpp}_{cl,ft,z} = \rm{min}(w_{c,cl,ft,z},w_{j,cl,ft,z},w_{e,cl,ft,z}).
 
-For :math:`w_{c,Cl,ft,z},`, we use
+For :math:`w_{c,cl,ft,z},`, we use
 
 .. math::
 
-   w_{c,Cl,ft,z}=  \left\{ \begin{array}{ll}
-   \frac{V_{c,max,Cl,ft,z}(c_{i,Cl,ft,z}- \Gamma_*)}{c_{i,Cl,ft,z}+K_c(1+o_i/K_o)} & \textrm{for $C_3$ plants}\\
+   w_{c,cl,ft,z}=  \left\{ \begin{array}{ll}
+   \frac{V_{c,max,cl,ft,z}(c_{i,cl,ft,z}- \Gamma_*)}{c_{i,cl,ft,z}+K_c(1+o_i/K_o)} & \textrm{for $C_3$ plants}\\
    &\\
-   V_{c,max,Cl,ft,z}& \textrm{for $C_4$ plants}\\
+   V_{c,max,cl,ft,z}& \textrm{for $C_4$ plants}\\
    \end{array} \right.
-   c_{i,Cl,ft,z}-\Gamma_*\ge 0
+   c_{i,cl,ft,z}-\Gamma_*\ge 0
 
 where :math:`V_{c,max}` now varies with PFT, canopy depth and layer
-(see below). Internal leaf :math:`CO_{2}` (:math:`c_{i,Cl,ft,z})` is
+(see below). Internal leaf :math:`CO_{2}` (:math:`c_{i,cl,ft,z})` is
 tracked seperately for each leaf layer. For the light limited rate
 :math:`w_j`, we use
 
@@ -1661,15 +1585,15 @@ tracked seperately for each leaf layer. For the light limited rate
    \end{array} \right.
 
 where :math:`J` is calculated as above but based on the absorbed
-photosynthetically active radiation( :math:`\phi_{Cl,ft,z}`) for either
+photosynthetically active radiation( :math:`\phi_{cl,ft,z}`) for either
 sunlit or shaded leaves in Wm\ :math:`^{-2}`. Specifically,
 
 .. math::
 
-   \phi_{Cl,ft,z}=  \left\{ \begin{array}{ll}
-   abs_{sun,Cl,ft,z}& \textrm{for sunlit leaves}\\
+   \phi_{cl,ft,z}=  \left\{ \begin{array}{ll}
+   abs_{sun,cl,ft,z}& \textrm{for sunlit leaves}\\
    &\\
-   abs_{sha,Cl,ft,z}& \textrm{for shaded leaves}\\
+   abs_{sha,cl,ft,z}& \textrm{for shaded leaves}\\
    \end{array} \right.
 
 The export limited rate of carboxylation for C3 plants and the PEP
@@ -1679,10 +1603,10 @@ s\ :math:`^{-1}`) is calculated in a similar fashion,
 
 .. math::
 
-   w_{e,Cl,ft,z}=  \left\{ \begin{array}{ll}
-   0.5V_{c,max,Cl,ft,z} & \textrm{for $C_3$ plants}\\
+   w_{e,cl,ft,z}=  \left\{ \begin{array}{ll}
+   0.5V_{c,max,cl,ft,z} & \textrm{for $C_3$ plants}\\
    &\\
-   4000 V_{c,max,Cl,ft,z} \frac{c_{i,Cl,ft,z}}{P_{atm}}& \textrm{for $C_4$ plants}.\\
+   4000 V_{c,max,cl,ft,z} \frac{c_{i,cl,ft,z}}{P_{atm}}& \textrm{for $C_4$ plants}.\\
    \end{array} \right.
 
 Variation in plant physiology with canopy depth
@@ -1699,17 +1623,17 @@ each leaf layer :math:`V_{above}`,
 .. math::
 
    \begin{array}{ll}
-   V_{c,max,Cl,ft,z} & = V_{c,max0,ft} e^{-K_{n,ft}V_{above,Cl,ft,z}},\\
-   J_{max,Cl,ft,z} & = J_{max0,ft} e^{-K_{n,ft}V_{above,Cl,ft,z}},\\
+   V_{c,max,cl,ft,z} & = V_{c,max0,ft} e^{-K_{n,ft}V_{above,cl,ft,z}},\\
+   J_{max,cl,ft,z} & = J_{max0,ft} e^{-K_{n,ft}V_{above,cl,ft,z}},\\
    \end{array}
 
 where :math:`V_{c,max,0}` and :math:`J_{max,0}` are the top-of-canopy
 photosynthetic rates. :math:`V_{above}` is the sum of exposed leaf area
-index (:math:`\textrm{elai}_{Cl,ft,z}`) and the exposed stem area index
-(:math:`\textrm{esai}_{Cl,ft,z}`)( m\ :math:`^{2}` m\ :math:`^{-2}` ).
+index (:math:`\textrm{elai}_{cl,ft,z}`) and the exposed stem area index
+(:math:`\textrm{esai}_{cl,ft,z}`)( m\ :math:`^{2}` m\ :math:`^{-2}` ).
 Namely,
 
-.. math:: V_{Cl,ft,z} = \textrm{elai}_{Cl,ft,z} + \textrm{esai}_{Cl,ft,z}.
+.. math:: V_{cl,ft,z} = \textrm{elai}_{cl,ft,z} + \textrm{esai}_{cl,ft,z}.
 
 The vegetation index shading a particular leaf layer in the top canopy
 layer is equal to
@@ -1717,7 +1641,7 @@ layer is equal to
 .. math::
 
    \begin{array}{ll}
-   V_{above,Cl,ft,z}= \sum_{1}^{z} V_{Cl,ft,z} & \textrm{for $Cl= 1$. }
+   V_{above,cl,ft,z}= \sum_{1}^{z} V_{cl,ft,z} & \textrm{for $cl= 1$. }
    \end{array}
 
 For lower canopy layers, the weighted average vegetation index of the
@@ -1727,12 +1651,12 @@ shading. Thus,
 .. math::
 
    \begin{array}{ll}
-   V_{above,Cl,ft,z}=  \sum_{1}^{z}  V_{Cl,ft,z} + V_{canopy,Cl-1} & \textrm{for $Cl >1$, }\\
+   V_{above,cl,ft,z}=  \sum_{1}^{z}  V_{cl,ft,z} + V_{canopy,cl-1} & \textrm{for $cl >1$, }\\
    \end{array}
 
 where :math:`V_{canopy}` is calculated as
 
-.. math:: V_{canopy,Cl} =  \sum_{ft=1}^{\emph{npft}} {\sum_{z=1}^{nz(ft)} (V_{Cl,ft,z} \cdot  \it{pft}_{wt,Cl,ft,1}).}
+.. math:: V_{canopy,cl} =  \sum_{ft=1}^{\emph{npft}} {\sum_{z=1}^{nz(ft)} (V_{cl,ft,z} \cdot  \it{pft}_{wt,cl,ft,1}).}
 
 :math:`K_{n}` is the coefficient of nitrogen decay with canopy depth.
 The value of this parameter is taken from the work of
@@ -1839,15 +1763,15 @@ m\ :math:`^{-2}` s\ :math:`^{-1}`) and shade leaves (
 :math:`\textrm{gpp}_{shade}`, :math:`\mu`\ mol CO\ :math:`_2`
 m\ :math:`^{-2}` s\ :math:`^{-1}`) as
 
-.. math:: \textrm{gpp}_{Cl,ft,z} =\textrm{gpp}_{sun,Cl,ft,z} f_{sun,Cl,ft,z}+ \textrm{gpp}_{sha,Cl,ft,z}(1-f_{sun,Cl,ft,z}).
+.. math:: \textrm{gpp}_{cl,ft,z} =\textrm{gpp}_{sun,cl,ft,z} f_{sun,cl,ft,z}+ \textrm{gpp}_{sha,cl,ft,z}(1-f_{sun,cl,ft,z}).
 
 The assimilation per leaf layer is then accumulated across all the leaf
 layers in a given cohort (*coh*) to give the cohort-specific gross
 primary productivity (:math:`\mathit{GPP}_{coh}`),
 
-.. math:: \textit{GPP}_{coh} = 12\times 10^{-9}\sum_{z=1}^{nz(coh)}gpp_{Cl,ft,z} A_{crown,coh} \textrm{elai}_{Cl,ft,z}
+.. math:: \textit{GPP}_{coh} = 12\times 10^{-9}\sum_{z=1}^{nz(coh)}gpp_{cl,ft,z} A_{crown,coh} \textrm{elai}_{cl,ft,z}
 
-The :math:`\textrm{elai}_{l,Cl,ft,z}` is the exposed leaf area which is
+The :math:`\textrm{elai}_{l,cl,ft,z}` is the exposed leaf area which is
 present in each leaf layer in m\ :math:`^{2}` m\ :math:`^{-2}`. (For all
 the leaf layers that are completely occupied by a cohort, this is the
 same as the leaf fraction of :math:`\delta_{vai}`). The fluxes are
@@ -1941,7 +1865,7 @@ This top-of-canopy flux is scaled to account for variation in
 :math:`N_a` through the vertical canopy, in the same manner as the
 :math:`V_{c,max}` values are scaled using :math:`V_{above}`.
 
-.. math:: r_{leaf,Cl,ft,z}  = r_{m,leaf,ft,0} e^{-K_{n,ft}V_{above,Cl,ft,z}}\beta_{ft}f(t)
+.. math:: r_{leaf,cl,ft,z}  = r_{m,leaf,ft,0} e^{-K_{n,ft}V_{above,cl,ft,z}}\beta_{ft}f(t)
 
 Leaf respiration is also adjusted such that it is reduced by drought
 stress, :math:`\beta_{ft}`, and canopy temperature, :math:`f(t_{veg})`.
@@ -1951,7 +1875,7 @@ adjusted leaf level fluxes are scaled to individual-level (gC individual
 :math:`^{-1}` s\ :math:`^{-1}`) in the same fashion as the
 :math:`\rm{GPP}_{coh}` calculations
 
-.. math:: \rm{R}_{m,leaf,coh} = 12\times 10^{-9}\sum_{z=1}^{nz(coh)}r_{leaf,Cl,ft,z} A_{crown} \textrm{elai}_{Cl,ft,z}
+.. math:: \rm{R}_{m,leaf,coh} = 12\times 10^{-9}\sum_{z=1}^{nz(coh)}r_{leaf,cl,ft,z} A_{crown} \textrm{elai}_{cl,ft,z}
 
 The stem and the coarse-root respiration terms are derived using the
 same base rate of respiration per unit of tissue Nitrogen.
@@ -2125,329 +2049,17 @@ cohort.
 | :math:`m_{ft}`   | Slope of Ball-Berry term | none  | *ft*       |
 +------------------+--------------------------+-------+------------+
 
-
-Allocation and Growth
-^^^^^^^^^^^^^^^^^^^^^
-
-Total assimilation carbon enters the ED model each day as a
-cohort-specific Net Primary Productivity :math:`\mathit{NPP}_{coh}`,
-which is calculated as
-
-.. math:: \mathit{NPP}_{coh} = \mathit{GPP}_{coh} - R_{plant,coh}
-
-This flux of carbon is allocated between the demands of tissue turnover,
-of carbohydrate storage and of growth (increase in size of one or many
-plant organs). Priority is explicitly given to maintenance respiration,
-followed by tissue maintenance and storage, then allocation to live
-biomass and then to the expansion of structural and live biomass pools.
-All fluxes here are first converted into in KgC
-individual\ :math:`^{-1}` year\ :math:`^{-1}` and ultimately integrated
-using a timesteps of 1/365 years for each day.
-
-Tissue maintenance demand
--------------------------
-
-We calculate a ‘tissue maintenance’ flux. The magnitude of this flux is
-such that the quantity of biomass in each pool will remain constant,
-given background turnover rates. For roots, this maintenenace demand is
-simply
-
-.. math:: r_{md,coh}  = b_{root}\cdot\alpha_{root,ft}
-
-Where :math:`\alpha_{root,ft}` is the root turnover rate in y^-1. Given
-that, for deciduous trees, loss of leaves is assumed to happen only one
-per growing season, the algorithm is dependent on phenological habit
-(whether or not this PFT is evergreen), thus
-
-.. math::
-
-   l_{md,coh} = \left\{ \begin{array}{ll}
-    b_{leaf}\cdot\alpha_{leaf,ft}&\textrm{for } P_{evergreen}= 1\\
-   &\\
-   0&\textrm{for }  P_{evergreen}= 0\\
-   \end{array} \right.
-
-Leaf litter resulting from deciduous senescence is handled in the
-phenology section. The total quantity of maintenance demand
-(:math:`t_{md,coh}`. KgC individual y\ :math:`^{-1}`) is therefore
-
-.. math:: t_{md,coh}  = l_{md,coh} + r_{md,coh}
-
-Allocation to storage and turnover
-----------------------------------
-
-The model must now determine whether the NPP input is sufficient to meet
-the maintenance demand and keep tissue levels constant. To determine
-this, we introduce the idea of ‘carbon balance’ :math:`C_{bal,coh}` (KgC
-individual\ :math:`^{-1}`) where
-
-.. math:: C_{bal,coh}= \mathit{NPP}_{coh} - t_{md,coh}\cdot f_{md,min,ft}
-
-where :math:`f_{md,min,ft}` is the minimum fraction of the maintenance
-demand that the plant must meet each timestep, which is indexed by *ft*
-and represents a life-history-strategy decision concerning whether
-leaves should remain on in the case of low carbon uptake (a risky
-strategy) or not be replaced (a conservative strategy). Subsequently, we
-determine a flux to the storage pool, where the flux into the pool, as a
-fraction of :math:`C_{bal,coh}`, is proportional to the discrepancy
-between the target pool size and the actual pool size :math:`f_{tstore}`
-where
-
-.. math:: f_{tstore} =  \mathrm{max}\left(0,\frac{b_{store}}{b_{leaf}\cdot S_{cushion}}\right)
-
-The allocation to storage is a fourth power function of
-:math:`f_{tstore}` to mimic the qualitative behaviour found for carbon
-allocation in arabidopsis by :ref:`Smith et al. 2007<smith2007>`.
-
-.. math::
-
-   \frac{\delta b_{store}}{\delta t} = \left\{ \begin{array}{ll}
-   C_{bal,coh} \cdot e^{-f_{tstore}^{4}} &\textrm{for }C_{bal,coh}>0\\
-   &\\
-   C_{bal,coh} &\textrm{for }C_{bal,coh}\leq0\\
-   \end{array} \right.
-
-If the carbon remaining after the storage and minimum turnover fluxes
-have been met, the next priority is the remaining flux to leaves
-:math:`t_{md}\cdot(1-f_{md,min})`. If the quantity of carbon left
-:math:`(C_{bal,coh}-\frac{\delta b_{store}}{\delta t})` is insufficient
-to supply this amount of carbon, then the store of alive carbon is
-depleted (to represent those leaves that have fallen off and not been
-replaced)
-
-.. math::
-
-   \frac{\delta b_{alive}}{\delta t} = \left\{ \begin{array}{ll}
-   0 &\textrm{ for } (C_{bal,coh}-\frac{\delta b_{store}}{\delta t}) > t_{md}\cdot(1-f_{md,min})\\
-   &\\
-   t_{md}\cdot(1-f_{md,min}) - \left(C_{bal,coh}-\frac{\delta b_{store}}{\delta t}\right)&\textrm{ for } (C_{bal,coh}-\frac{\delta b_{store}}{\delta t}) \leq t_{md}\cdot(1-f_{md,min})\\
-   \end{array} \right.
-
-correspondingly, the carbon left over for growth (:math:`C_{growth}`:
-(KgC individual\ :math:`^{-1}` year\ :math:`^{-1}`) is therefore
-
-.. math::
-
-   C_{growth} = \left\{ \begin{array}{ll}
-   C_{bal,coh}-\frac{\delta b_{store}}{\delta t} &\textrm{ for } (C_{bal,coh}-\frac{\delta b_{store}}{\delta t}) > 0\\
-   &\\
-   0&\textrm{ for } (C_{bal,coh}-\frac{\delta b_{store}}{\delta t}) \leq 0\\
-   \end{array} \right.
-
-to allocate the remaining carbon (if there is any), we first ascertain
-whether the live biomass pool is at its target, or whether is has been
-depleted by previous low carbon timesteps. Thus
-
-.. math::
-
-   \begin{array}{lll}
-   b_{alive,target}&= b_{leaf,target}  (1+ f_{frla}+f_{swh}h_{coh}) &\textrm{for } S_{phen,coh} = 2\\
-   b_{alive,target}&= b_{leaf,target}  ( f_{frla}+f_{swh}h_{coh})&\textrm{for } S_{phen,coh} = 1\\
-   \end{array}
-
-where the target leaf biomass :math:`b_{leaf.target}` ((Kg C
-individual\ :math:`^{-1}`)) is the allometric relationship between dbh
-and leaf biomass, ameliorated by the leaf trimming fraction (see
-‘control of leaf area’ below)
-
-.. math:: b_{leaf.target} = c_{leaf}\cdot dbh_{coh}^{e_{leaf,dbh}} \rho_{ft} ^{e_{leaf,dens}}\cdot C_{trim,coh}
-
-:math:`\rho_{ft}` is the wood density, in g cm\ :math:`^{3}`.
-
-Allocation to Seeds
--------------------
-
-The fraction remaining for growth (expansion of live and structural
-tissues) :math:`f_{growth}` is 1 minus that allocated to seeds.
-
-.. math:: f_{growth,coh} = 1 - f_{seed,coh}
-
-Allocation to seeds only occurs if the alive biomass is not below its
-target, and then is a predefined fixed fraction of the carbon remaining
-for growth. Allocation to clonal reproduction (primarily for grasses)
-occurs when :math:`\textrm{max}_{dbh}` is achieved.
-
-.. math::
-
-   f_{seed,coh} = \left\{ \begin{array}{ll}
-   R_{frac,ft}&\textrm{ for } \textrm{max}_{dbh} < dbh_{coh} \\
-   &\\
-   \left( R_{frac,ft}+C_{frac,ft} \right) &\textrm{ for } \textrm{max}_{dbh} \geq dbh_{coh} \\
-   \end{array} \right.
-
-the total amount allocated to seed production (:math:`p_{seed,coh}` in
-KgC individual :math:`^{-1}` y\ :math:`^{-1}`) is thus
-
-.. math:: p_{seed,coh} = C_{growth}\cdot f_{seed,coh}
-
-Allocation to growing pools
----------------------------
-
-The carbon is then partitioned into carbon available to grow the
-:math:`b_{alive}` and :math:`b_{struc}` pools. A fraction :math:`v_{a}`
-is available to live biomass pools, and a fraction :math:`v_{s}` is
-available to structural pools.
-
-.. math:: \frac{\delta b_{alive}}{\delta t} = C_{growth}\cdot  f_{growth} v_{a}
-
-.. math:: \frac{\delta b_{struc}}{\delta t} = C_{growth}\cdot  f_{growth} v_{s}
-
-If the alive biomass is lower than its ideal target, all of the
-available carbon is directed into that pool. Thus:
-
-.. math::
-
-   v_{a}= \left\{ \begin{array}{ll}
-   \frac{1}{1+u}&\textrm{ for } b_{alive} \geq b_{alive,target} \\
-   &\\
-   1.0&\textrm{ for } b_{alive} <  b_{alive,target} \\
-   \end{array} \right.
-
-.. math::
-
-   v_{s}= \left\{ \begin{array}{ll}
-   \frac{u}{1+u}&\textrm{ for } b_{alive} \geq b_{alive,target} \\
-   &\\
-   0.0&\textrm{ for } b_{alive} <  b_{alive,target} \\
-   \end{array} \right.
-
-In this case, the division of carbon between the live and structural
-pools :math:`u` is derived as the inverse of the sum of the rates of
-change in live biomass with respect to structural:
-
-.. math:: u = \frac{1}{\frac{\delta b_{leaf}}{ \delta b_{struc} } + \frac{\delta b_{root}}{ \delta b_{struc} } +\frac{\delta b_{sw}}{ \delta b_{struc} } }
-
-To calculate all these differentials, we first start with
-:math:`\delta b_{leaf}/\delta b_{struc}`, where
-
-.. math:: \frac{\delta b_{leaf}}{ \delta b_{struc}}= \frac{\frac{\delta \mathrm{dbh}}{\delta b_{struc}}}   {\frac{\delta \mathrm{dbh} }{\delta b_{leaf}} }
-
-The rates of change of dbh with respect to leaf and structural biomass
-are the differentials of the allometric equations linking these terms to
-each other. Hence,
-
-.. math:: \frac{\delta \mathrm{dbh} }{\delta b_{leaf}}=\frac{1}{b_{trim,coh}}\cdot (e_{leaf,dbh}-1)\exp  {\big(c_{leaf} \mathrm{dbh}^{(e_{leaf,dbh})-1} \rho_{ft}^{e_{leaf,dens}} \big)}
-
-and where :math:`\mathrm{dbh}_{coh} >   \mathrm{dbh}_{max}`
-
-.. math:: \frac{\delta b_{struc}}{\delta \mathrm{dbh}}  = e_{str,dbh} \cdot c_{str}\cdot e_{str,hite} h_{coh}^{e_{str,dbh}-1}   \mathrm{dbh}_{coh}^{e_{str,dbh}} \rho_{ft}^{e_{str,dens}}
-
-If :math:`\mathrm{dbh}_{coh} \leq   \mathrm{dbh}_{max}` then we must
-also account for allocation for growing taller as:
-
-.. math:: \frac{\delta b_{struc}}{\delta \mathrm{dbh}} =  \frac{\delta b_{struc}}{\delta \mathrm{dbh}} + \frac{\delta h}{\delta \mathrm{dbh}} \cdot  \frac{\delta b_{struc}}{\delta \mathrm{dbh} }
-
-where
-
-.. math:: \frac{\delta h}{\delta \mathrm{dbh}}= 1.4976  \mathrm{dbh}_{coh}^{m_{allom}-1}
-
-.. math:: \frac{\delta  \mathrm{dbh} }{\delta b_{struc}} =\frac{1}{ \frac{\delta b_{struc}}{\delta \mathrm{dbh}} }
-
-Once we have the :math:`\delta b_{leaf}/\delta b_{struc}`, we calculate
-:math:`\delta b_{root}/\delta b_{struc}` as
-
-.. math:: \frac{\delta  b_{root}}{\delta b_{struc}} =\frac{\delta b_{leaf}}{\delta b_{struc}}\cdot f_{frla}
-
-and the sapwood differential as
-
-.. math:: \frac{\delta  b_{sw}}{\delta b_{struc}} = f_{swh}\left( h_{coh} \frac{\delta b_{leaf}}{ \delta b_{struc}} + b_{leaf,coh}\frac{\delta h}{\delta b_{struc}} \right)
-
-where
-
-.. math:: \frac{\delta h}{\delta b_{struc}} =  \frac{1}{c_{str}\times e_{str,hite} h_{coh}^{e_{str,dbh}-1}   \mathrm{dbh}_{coh}^{e_{str,dbh}} \rho_{ft}^{e_{str,dens}}}
-
-In all of the above terms, height in in m, :math:`\mathrm{dbh}` is in
-cm, and all biomass pools are in KgCm\ :math:`^{-2}`. The allometric
-terms for the growth trajectory are all taken from the ED1.0 model, but
-could in theory be altered to accomodate alternative allometric
-relationships. Critically, the non-linear relationships between live and
-structural biomass pools are maintained in this algorithm, which
-diverges from the methodology currently deployed in the CLM4.5.
-
-Integration of allocated fluxes
--------------------------------
-
-All of the flux calculations generate differential of the biomass state
-variables against time (in years). To integrate these differential rates
-into changes in the state variables, we use a simple simple forward
-Euler integration. Other methods exist (e.g. ODEINT solvers, Runge Kutta
-methods etc.), but they are more prone to errors that become difficult
-to diagnose, and the typically slow rates of change of carbon pools mean
-that these are less important than they might be in strongly non-linear
-systems (soil drainage, energy balance, etc.)
-
-.. math:: b_{alive,t+1} = \textrm{min}\left( 0,b_{alive,t} +  \frac{\delta b_{alive}}{\delta t}  \delta t \right)
-
-.. math:: b_{struc,t+1} = \textrm{min}\left(0, b_{struc,t} +  \frac{\delta b_{struc}}{\delta t}  \delta t \right)
-
-.. math:: b_{store,t+1} = \textrm{min}\left(0, b_{store,t} +  \frac{\delta b_{store}}{\delta t}  \delta t \right)
-
-In this case, :math:`\delta t` is set to be one day
-(:math:`\frac{1}{365}` years).
-
-.. raw:: latex
-
-   \bigskip
-
-.. raw:: latex
-
-   \captionof{table}{Parameters needed for allocation model. }
-
-+-----------------+-----------------+-----------------+-----------------+
-| Parameter       | Parameter Name  | Units           | indexed by      |
-| Symbol          |                 |                 |                 |
-+=================+=================+=================+=================+
-| S               | Target stored   | none            | *ft*            |
-|                 | biomass as      |                 |                 |
-|                 | fraction of     |                 |                 |
-|                 | :math:`b_{leaf}`|                 |                 |
-|                 |                 |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| f               | Minimum         | none            | *ft*            |
-|                 | fraction of     |                 |                 |
-|                 | turnover that   |                 |                 |
-|                 | must be met     |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| R               | Fraction        | none            | *ft*            |
-|                 | allocated to    |                 |                 |
-|                 | seeds           |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| C               | Fraction        | none            | *ft*            |
-|                 | allocated to    |                 |                 |
-|                 | clonal          |                 |                 |
-|                 | reproduction    |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| :math:`\textrm{ | Diameter at     | m               | *ft*            |
-| max}_{dbh}`     | which maximum   |                 |                 |
-|                 | height is       |                 |                 |
-|                 | achieved        |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-| P               | Does this       | 1=yes, 0=no     | *ft*            |
-|                 | cohort have an  |                 |                 |
-|                 | evergreen       |                 |                 |
-|                 | phenological    |                 |                 |
-|                 | habit?          |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
-
-.. raw:: latex
-
    \bigskip 
 
 Control of Leaf Area Index
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The leaf area :math:`A_{leaf}` (m:math:`^{-2}`) of each cohort is
-calculated from leaf biomass :math:`b_{leaf,coh}` (kgC
+calculated from leaf biomass :math:`C_{leaf,coh}` (kgC
 individual\ :math:`^{-1}`) and specific leaf area (SLA, m\ :math:`^2` kg
-C\ :math:`^{-1}`)
+C\ :math:`^{-1}`). Leaf biomass :math:`C_{leaf,coh}` is controlled by the processes of phenology, allocation and turnover, described in detail in the PARTEH submodule.
 
-.. math:: A_{leaf,coh} = b_{leaf,coh} \cdot SLA_{ft}
-
-For a given tree allometry, leaf biomass is determined from basal area
-using the function used by :ref:`Moorcroft et al. 2001<mc_2001>` where :math:`d_w`
-is wood density in g cm\ :math:`^{-3}`.
-
-.. math:: b_{leaf,coh} = c_{leaf} \cdot dbh_{coh}^{e_{leaf,dbh}} \rho_{ft}^{e_{leaf,dens}}
+.. math:: A_{leaf,coh} = C_{leaf,coh} \cdot SLA_{ft}
 
 However, using this model, where leaf area and crown area are both
 functions of diameter, the leaf area index of each tree in a closed
@@ -2462,7 +2074,7 @@ supportive root and stem tissue, plus the costs of growing the leaf. The
 tissue turnover maintenance cost (KgC m\ :math:`^{-2} y^{-1}` of leaf is
 the total maintenance demand divided by the leaf area:
 
-.. math:: L_{cost,coh} = \frac{t_{md,coh}} {b_{leaf,coh} \cdot \textrm{SLA}}
+.. math:: L_{cost,coh} = \frac{t_{md,coh}} {C_{leaf,coh} \cdot \textrm{SLA}}
 
 The net uptake for each leaf layer :math:`U_{net,z}` in (KgC
 m\ :math:`^{-2}` year\ :math:`^{-1}`) is
@@ -2476,7 +2088,7 @@ year\ :math:`^{-1}`). We use an iterative scheme to define the cohort
 specific canopy trimming fraction :math:`C_{trim,coh}`, on an annual
 time-step, where
 
-.. math:: b_{leaf,coh} =   C_{trim} \times 0.0419  dbh_{coh}^{1.56} d_w^{0.55}
+.. math:: C_{leaf,coh} =   C_{trim} \times 0.0419  dbh_{coh}^{1.56} d_w^{0.55}
 
 If the annual maintenance cost of the bottom layer of leaves (KgC m-2
 year-1) is less than then the canopy is trimmed by an increment :math:`\iota_l`\ (0.01), which is applied until the end of  next calander year. Because this is an optimality model, there is an
@@ -2639,19 +2251,19 @@ at the beginning of the next growing season (it is a target, since
 depletion of stored carbon in the off season may render achieving the
 target impossible).
 
-.. math:: l_{memory,coh} = b_{leaf,coh}
+.. math:: l_{memory,coh} = C_{leaf,coh}
 
 Leaf carbon is then added to the leaf litter flux :math:`l_{leaf,coh}`
 (KgC individual\ :math:`^{-1}`)
 
-.. math:: l_{leaf,coh} = b_{leaf,coh}
+.. math:: l_{leaf,coh} = C_{leaf,coh}
 
 The alive biomass is depleted by the quantity of leaf mass lost, and the
 leaf biomass is set to zero
 
-.. math:: b_{alive,coh} = b_{alive,coh} - b_{leaf,coh}
+.. math:: C_{alive,coh} = C_{alive,coh} - C_{leaf,coh}
 
-.. math:: b_{leaf,coh} = 0
+.. math:: C_{leaf,coh} = 0
 
 Finally, the status :math:`S_{phen,coh}` is set to 1, indicating that
 the leaves have fallen off.
@@ -2661,15 +2273,15 @@ off (:math:`S_{phen,coh}`\ =1) and the phenological status triggers
 budburst (:math:`S_{phen,grid}`\ =2) then the leaf mass is set the
 maximum of the leaf memory and the available store
 
-.. math:: b_{leaf,coh} =  \textrm{max}\left(l_{memory,coh}, b_{store,coh}\right.)
+.. math:: C_{leaf,coh} =  \textrm{max}\left(l_{memory,coh}, C_{store,coh}\right.)
 
 this amount of carbon is removed from the store
 
-.. math:: b_{store,coh} = b_{store,coh}  - b_{leaf,coh}
+.. math:: C_{store,coh} = C_{store,coh}  - C_{leaf,coh}
 
 and the new leaf biomass is added to the alive pool
 
-.. math:: b_{alive,coh} = b_{alive,coh}  + b_{leaf,coh}
+.. math:: C_{alive,coh} = C_{alive,coh}  + C_{leaf,coh}
 
 Lastly, the leaf memory variable is set to zero and the phenological
 status of the cohort back to ‘2’. No parameters are currently required
@@ -2806,7 +2418,7 @@ Litter Production and Fragmentation
   of proscribing this to the SPITFIRE fire model (seed ’Fuel Load’
   section for more detail. 1-hour (twigs), 10-hour (small branches),
   100-hour (large branches) and 1000-hour(boles or trunks). 4.5 %, 7.5%,
-  21 % and 67% of the woody biomass (:math:`b_{store,coh} + b_{sw,coh}`)
+  21 % and 67% of the woody biomass (:math:`C_{store,coh} + C_{sw,coh}`)
   is partitioned into each class, respectively.
 
 :math:`l_{leaf}` and :math:`l_{root}` are indexed by plant functional
@@ -2832,7 +2444,7 @@ Inputs into the litter pools come from tissue turnover, mortality of
 canopy trees, mortality of understorey trees, mortality of seeds, and
 leaf senescence of deciduous plants.
 
-.. math:: l_{leaf,in,ft} =\Big(\sum_{i=1}^{n_{coh,ft}} n_{coh}(l_{md,coh}  + l_{leaf,coh}) + M_{t,coh}.b_{leaf,coh}\Big)/\sum_{p=1}^{n_{pat}}A_{patch}
+.. math:: l_{leaf,in,ft} =\Big(\sum_{i=1}^{n_{coh,ft}} n_{coh}(l_{md,coh}  + l_{leaf,coh}) + M_{t,coh}.C_{leaf,coh}\Big)/\sum_{p=1}^{n_{pat}}A_{patch}
 
 where :math:`l_{md,coh}` is the leaf turnover rate for evergreen trees
 and :math:`l_{leaf,coh}` is the leaf loss from phenology in that
@@ -2841,18 +2453,18 @@ flux in that timestep (in individuals). For fine root input.
 :math:`n_{coh,ft}` is the number of cohorts of functional type
 ‘:math:`FT`’ in the current patch.
 
-.. math:: l_{root,in,ft} =\Big(\sum_{i=1}^{n_{coh,ft}} n_{coh}(r_{md,coh} ) + M_{t,coh}.b_{root,coh}\Big)/\sum_{p=1}^{n_{pat}}A_p
+.. math:: l_{root,in,ft} =\Big(\sum_{i=1}^{n_{coh,ft}} n_{coh}(r_{md,coh} ) + M_{t,coh}.C_{root,coh}\Big)/\sum_{p=1}^{n_{pat}}A_p
 
 where :math:`r_{md,coh}` is the root turnover rate. For coarse woody
 debris input (:math:`\mathit{CWD}_{AG,in,lsc}` , we first calculate the
-sum of the mortality :math:`M_{t,coh}.(b_{struc,coh}+b_{sw,coh})` and
+sum of the mortality :math:`M_{t,coh}.(C_{struc,coh}+C_{sw,coh})` and
 turnover :math:`n_{coh}(w_{md,coh}`) fluxes, then separate these into
 size classes and above/below ground fractions using the fixed fractions
 assigned to each (:math:`f_{lsc}` and :math:`f_{ag}`)
 
-.. math:: \mathit{CWD}_{AG,in,lsc} =\Big(f_{lsc}.f_{ag}\sum_{i=1}^{n_{coh,ft}}n_{coh}w_{md,coh}  + M_{t,coh}.(b_{struc,coh}+b_{sw,coh})\Big)/\sum_{p=1}^{n_{pat}}A_p
+.. math:: \mathit{CWD}_{AG,in,lsc} =\Big(f_{lsc}.f_{ag}\sum_{i=1}^{n_{coh,ft}}n_{coh}w_{md,coh}  + M_{t,coh}.(C_{struc,coh}+C_{sw,coh})\Big)/\sum_{p=1}^{n_{pat}}A_p
 
-.. math:: \mathit{CWD}_{BG,in,lsc} =\Big(f_{lsc}.(1-f_{ag})\sum_{i=1}^{n_{coh,ft}}n_{coh}w_{md,coh}  + M_{t,coh}.(b_{struc,coh}+b_{sw,coh})\Big)/\sum_{p=1}^{n_{pat}}A_p
+.. math:: \mathit{CWD}_{BG,in,lsc} =\Big(f_{lsc}.(1-f_{ag})\sum_{i=1}^{n_{coh,ft}}n_{coh}w_{md,coh}  + M_{t,coh}.(C_{struc,coh}+C_{sw,coh})\Big)/\sum_{p=1}^{n_{pat}}A_p
 
 Litter Outputs
 --------------
@@ -2990,10 +2602,10 @@ year\ :math:`^{-1}`) is simulated as the sum of four additive terms,
 where :math:`M_b` is the background mortality that is unaccounted by
 any of the other mortality rates and is fixed at 0.014. :math:`M_{cs}`
 is the carbon starvation derived mortality, which is a function of the
-non-structural carbon storage term :math:`b_{store,coh}` and the
+non-structural carbon storage term :math:`C_{store,coh}` and the
 PFT-specific ‘target’ carbon storage, :math:`l_{targ,ft}`, as follows:
 
-.. math:: M_{cs,coh}= \rm{max} \left(0.0, S_{m,ft} \left(0.5 -  \frac{b_{store,coh}}{l_{targ,ft}b_{leaf}}\right)\right)
+.. math:: M_{cs,coh}= \rm{max} \left(0.0, S_{m,ft} \left(0.5 -  \frac{C_{store,coh}}{l_{targ,ft}C_{leaf}}\right)\right)
 
 where :math:`S_{m,ft}` is the `stress mortality` parameter, or the
 fraction of trees in a landscape that die when the mean condition of a
