@@ -1380,6 +1380,7 @@ The radiation absorbed by the soil after passing through through
 under-storey vegetation is:
 
 .. math:: \it{abs}_{soil}=  \sum_{ft=1}^{npft}{ \it{pft}_{wt(1,ft,1)}( \mathit{dif}_{down(nz+1)} (1 -  salb_{dif}) +\it{solar}_{dir}   dir_{tr(nz+1)}  (1-  salb_{dir}))}
+
 to which is added the diffuse flux coming directly from the upper
 canopy and hitting no understorey vegetation.
 
