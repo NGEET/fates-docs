@@ -526,42 +526,13 @@ by the model. Smaller plants are not considered, and their emergence
 from the recruitment processes is unresolved and therefore implicitly
 parameterized in the seedling establishment model.
 
+The diameter of each cohort is then specified according to the height-diameter allometry function associated with the PFT of interest, see :ref:`allometry_table`. The biomass pools for the newly recruited plant are then determined from the allometry equations that define the target (idealized) sizes for each pool.
 
-**NOTE: With Modular allometry, the following is 1 of several different height to diameter relationships**
-
-The diameter of each cohort is then specified using the log-linear allometry between stem
-diameter and canopy height.
-
-.. math:: \mathit{dbh}_{coh} = 10^{\frac{\log_{10}(h_{coh}) - c_{allom}}{m_{allom}}  }
-
-where the slope of the log-log relationship, :math:`m_{allom}` is 0.64
-and the intercept :math:`c_{allom}` is 0.37. The structural biomass
-associated with a plant of this diameter and height is given (as a
-function of wood density, :math:`\rho`, g cm\ :math:`^{-3}`)
-
-.. math:: C_{struc,coh} =c_{str}h_{coh}^{e_{str,hite}} dbh_{coh}^{e_{str,dbh}} \rho_{ft}^{e_{str,dens}}
-
-taken from the original ED1.0 allometry
-:ref:`Moorcroft et al. 2001<mc_2001>` (values of the allometric constants in
-Table `[table:allom] <#table:allom>`__. The maximum amount of leaf
-biomass associated with this diameter of tree is calculated according to
-the following allometry
-
-.. math:: C_{max,leaf,coh} =c_{leaf}\it{dbh}_{coh}^{e_{leaf,dbh}} \rho_{ft}^{e_{leaf,dens}}
-
-from this quantity, we calculate the active/fine root biomass
-:math:`C_{root,coh}` as
-
-.. math:: C_{root,coh} =  C_{max,leaf,coh}\cdot f_{frla}
-
-where :math:`f_{frla}` is the fraction of fine root biomass to leaf
-biomass, assigned per PFT.
-
-**The previous section should be expanded to include the modular allometry options.**
+.. _model_init_params_coldstart:
 
 .. raw:: latex
 
-   \captionof{table}{Parameters needed for model initialization.}
+   \captionof{table}{(INCOMPLETE) List of the parameters that define the intialization of new plants during a "cold-start" simulation.}
 
 +-----------------+-----------------+-----------------+-----------------+
 | Parameter       | Parameter Name  | Units           | Default Value   |
@@ -574,10 +545,7 @@ biomass, assigned per PFT.
 |                 | Planting        | m\ :math:`^{-2}`|                 |
 |                 | density         |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| :math:`A_{tot}` | Model area      | m\ :math:`^{2}` | 10,000          |
-+-----------------+-----------------+-----------------+-----------------+
 
-[table:init]
 
 .. _parteh_section:
 
@@ -656,7 +624,7 @@ The following table details the different allometric relationships that governs 
 
 .. _allometry_table:
 
-.. table:: Table of Allometry
+.. table:: Table of Allometric Functions
    :align: center
 
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
