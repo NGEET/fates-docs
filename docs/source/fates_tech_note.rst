@@ -700,11 +700,10 @@ that are moved from the canopy (:math:`L_c`) to the understorey.
 
 .. math:: L_{c}= \frac{A_{loss,patch} w_{coh}}{\sum_{coh=1}^{nc,patch}{w_{coh}}} ,
 
-where :math:`w_{coh}` is a weighting of each cohort determined by basal
-diameter :math:`dbh` (cm) and the competitive exclusion coefficient
+where :math:`w_{coh}` is a weighting of each cohort.  There are two possible ways of calculating this weighting coefficient.  The first, as described in :ref:`Fisher et al. 2010<Fisheretal2010>`, is to probabilistically weight cohorts based on their height :math:`h` (m) and the competitive exclusion coefficient
 :math:`C_{e}`
 
-.. math:: w_{coh}=dbh_{coh}C_{e}.
+.. math:: w_{coh}=h_{coh} C_{e}.
 
 The higher the value of :math:`C_e` the greater the impact of tree
 diameter on the probability of a given tree obtaining a position in the
@@ -715,10 +714,12 @@ and the higher the probability that slower growing trees will get into
 the canopy. Appropriate values of :math:`C_e` are poorly constrained but
 alter the outcome of competitive processes.
 
+The second way of weighting the cohorts is a more determinstic method based on a strict rank-ordering of the cohorts by height, where all cohorts shorter than that cohorts whose cumulative (from the tallest cohort) rank-ordered crown area equals the area of the patch area are demoted to the lower canopy layer. This is derived from the original PPA algorithm described in :ref:`Purves et al. 2008<purves2008>`.
+
 The process by which trees are moved between canopy layers is complex
 because 1) the crown area predicted for a cohort to lose may be larger
 than the total crown area of the cohort, which requires iterative
-solutions, and 2) on some occasions (e.g. after fire), the canopy may
+solutions, and 2) on some occasions (e.g. after fire, or if the parameter which sets the disturbed area as a function of the fractional crown area of canopy tree mortality is less than one), the canopy may
 open up and require ‘promotion’ of cohorts from the understorey, and 3)
 canopy area may change due to the variations of canopy spread values (
 
@@ -1379,6 +1380,7 @@ The radiation absorbed by the soil after passing through through
 under-storey vegetation is:
 
 .. math:: \it{abs}_{soil}=  \sum_{ft=1}^{npft}{ \it{pft}_{wt(1,ft,1)}( \mathit{dif}_{down(nz+1)} (1 -  salb_{dif}) +\it{solar}_{dir}   dir_{tr(nz+1)}  (1-  salb_{dir}))}
+
 to which is added the diffuse flux coming directly from the upper
 canopy and hitting no understorey vegetation.
 
