@@ -579,6 +579,7 @@ biomass, assigned per PFT.
 
 [table:init]
 
+.. _parteh_section:
 
 Allocation and Reactive Transport (PARTEH)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -586,12 +587,116 @@ Allocation and Reactive Transport (PARTEH)
 The **Plant Allocation** and **Reactive Transport Extensible Hypotheses (PARTEH)** is a suite of modules that handle the processes of allocation, transport and reactions (i.e. thos processes related to movement and change, yet perhaps not the genesis) of various arbitrary species (carbon, nutrients, toxins, etc) within the various organs of live vegetation.  In FATES, these processes are resolved per unit plant, for each cohort.
 
 .. toctree::
-   :maxdepth: 2
-   :numbered:
+   :maxdepth: 1
 
    parteh/overview_domain.rst
    parteh/hypotheses.rst
    
+
+.. _allometry_section:
+
+Allometry and Growth Along Allometric Curves
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the previous section,  :ref:`parteh_section`, we covered the equations that describe how growth is implemented, as well the order of operations and logic of that forumlation.  In this section, we will discuss the various allometric functions that generate the relative rates of change, as well as the target biomass quantities :math:`\grave{X}`.
+
+"Forced" Growth Along Allometric Curves
+---------------------------------------
+
+Growth specified by current PARTEH hypotheses follow along the allometric curves.  A hypothetical example of a cohorts integration along such a curve is provided in the top panel of the diagram below. It is assumed that when a plant grows in stature, the structural biomass matches the target structural biomass for its size (DBH).  This is represented by the grey dot sitting on the allometry line for structural biomass.
+
+**A state of being "on allometry" is consistent with the cohort (grey dot) existing on the allometric curve.**
+
+It is expected, and it is represented in the model, that due to either continuous or event based turnover, that biomass pools are continually depleted, thus pulling the grey dot straight down, away from the allometry line.  Recall from the PARTEH description, that the first step in the growth algorithm is to use available carbon to replace these lost biomass pools (without increasing dbh) so that it is "on allometry". 
+
+Also, all numerical integration has some amount of truncation error (step error). When FATES conducts the stature growth integration step, it typically uses Euler integration, because it is fast and simple.  As a result, all biomass pools are projected along the tangent of the allometric curves from where they started.  When the curvature parameters that govern these relationships are greater than 1, this results in continual "undershooting" of the actual target quantity.  This is not a liability, firstly because growth is forced to be mass conservative.  And secondly, to re-iterate the explanation above, upon the next growth step the algorithm will spend carbon to first get the pools back "on allometry", before it projects along the tangent again.  This is represented in the lower panel.
+
+
+.. figure:: images/growth_allometry_p1.png
+
+
+However, we also have to accomodate for cases where the actual amount of biomass in the cohort's pools are larger than the target sizes dictated by the cohort's diameter.  This can be visualized by the cohort residing somewhere above the line.  This can happen for two reasons, 1) cohort fusion or 2) growth along allometric curves with curvature parameters (exponents) less than 1.
+
+For woody plants, if a non-structural biomass pool is greater than the target pool size, the solution is simple.  That pool is flagged to be ignored during the stature growth step, and eventually the cohort's dbh will increase such that the target size exceeds its actual size again.  This is visualized in the top panel of the diagram below.
+
+There is a caveat here.  The diameter must be "tied" to one of the biomass pools.  And for woody plants, we choose structural carbon.  And thus, we cannot flag to ignore structural carbon during stature growth since it is inextricably linked to diameter.  Therefore, cohorts that have structural biomass that is greater than the target biomass dictated by its diameter, will have their DBH forceably increased (without increasing any biomass) until the allometric target matches the actual biomass.  See the lower panel in the diagram below.
+
+.. figure:: images/growth_allometry_p2.png
+
+Note, the explanation above was explained for woody plants, which tie diameter to structural biomass.  For non-woody plants, such as grasses, we tie leaf biomass to diameter instead.
+
+Allometric Relationships
+------------------------
+
+.. _FatesAllometryMod.F90: https://github.com/NGEET/fates/blob/master/biogeochem/FatesAllometryMod.F90
+
+FATES-PARTEH (in its base hypotheses) uses allometry to dictate the target biomass quantities of structure, sapwood, leaf, fine-root, reproduction and storage. Further, FATES also uses allometric relationships to define a cohort's height and crown area.  All of these target quantities are tied to diameter. Biomass pools may also be functionally dependent on other biomass pools, as long as a cyclical relationship is not generated, and can ultimately be related to diameter or other external factors.  For instance, target root biomass is typically defined as proportional to leaf biomass.  Target leaf biomass is dependent on height and a canopy trimming function, while crown area and above ground biomass are each also dependent on height.
+
+The FATES code is written in a way that offers flexibility in how these relationships are cast.  Each of these forumulations uses one or more user defined constant parameters, but it also allows for completely different functional forms. All of FATES allometric relationships can be found in the file FatesAllometryMod.F90_.  
+
+Important note. Most allometry relationships from field research define total above ground biomass (AGB) as their estimated quantity instead of structural biomass.  In FATES, since AGB is not a state-variable, it must be derived from the portions of several state variables.  However, we make a simplification in FATES, and assume that the allometric relationships for AGB only contain structural wood and sapwood, and do not contain leaves, storage or reproductive tissues.  Diagnostics on AGB will include all terms.  Thus the allometric target for AGB contains the state targets and the fraction of above ground biomass (pft constant parameter) :math:`f_{a}`.
+
+.. math::
+   :label: allom_agb_eq
+
+   \grave{C}_{(AGB)} &= (\grave{C}_{(structure)} + \grave{C}_{(sapwood)}) * f_{agb}
+
+
+Note that the diameter to height relationships all use an effective diameter, :math:`d_*`.  This is the minimum between the actual plant diameter, and the PFT specific parameter that specifies the diameter at which maximum height occurs :math:`d_{hmax}`.
+
+.. math::
+   :label: allom_dbh_maxh
+
+   d_* = \text{min}(d,d_{hmax})
+
+
+
+The following table details the different allometric relationships that governs growth and stature, and the optional relationships and parameters associated with those relationships.  
+
+
+.. _allometry_table:
+
+.. table:: Table of Allometry
+   :align: center
+
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | Reference                                               | Function                                                                                 |
+   +=========================================================+==========================================================================================+
+   | Diameter to Height                                                                                                                                 |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | Power Function                                          | :math:`h = p_1 \cdot d_*^{p_2}`                                                          |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | :Ref:`Obrien et al (1995)<Obrienetal1995>`              | :math:`h = 10^{(log10(d_*) \cdot p_1+p_2)}`                                              |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | :ref:`Poorter et al (2006)<Poorteretal2006>`            | :math:`h = p_1 \cdot (1 - e^{p_2 \cdot d_*^{p_3}})`                                      |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | :ref:`Martinez Cano et al (2019)<MartinezCanoetal2019>` | :math:`h = (p_1 \cdot d_*^{p_2}) / (p_3+ d_*^{p_2})`                                     |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | Target Above Ground Biomass                                                                                                                        |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | :ref:`Saldarriaga et al. (1998)<Saldarriaga1988>`       | :math:`\grave{C}_{agb} = f_{agb} \cdot p_1 \cdot h^{p_2} \cdot d^{p_3} \cdot \rho^{p_4}` |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | 2 Parameter power function                              | :math:`\grave{C}_{agb} = p_1/\text{c2b} \cdot d^{p_2}`                                   |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | :ref:`Chave et al. (2014)<Chaveetal2014>`               | :math:`\grave{C}_{agb} = p_1/\text{c2b} \cdot (\rho \cdot d^{2} \cdot h)^{p_2}`          |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | Target Leaf Biomass  (TBD)                                                                                                                         |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | Target Sapwood Biomass    (TBD)                                                                                                                    |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | Target Fine-root Biomass    (TBD)                                                                                                                  |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   | Target Storage Biomass    (TBD)                                                                                                                    |
+   +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+
+
+*List of allometric relationships, their functional forms, and relevant parameters.*
+
 
 Canopy Structure and the Perfect Plasticity Approximation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1379,6 +1484,7 @@ The radiation absorbed by the soil after passing through through
 under-storey vegetation is:
 
 .. math:: \it{abs}_{soil}=  \sum_{ft=1}^{npft}{ \it{pft}_{wt(1,ft,1)}( \mathit{dif}_{down(nz+1)} (1 -  salb_{dif}) +\it{solar}_{dir}   dir_{tr(nz+1)}  (1-  salb_{dir}))}
+
 to which is added the diffuse flux coming directly from the upper
 canopy and hitting no understorey vegetation.
 
