@@ -30,4 +30,4 @@ To test contributions, perform a compilation from the docs/ folder.
 
 Then open the resulting local html code in your browser of choice.
 
-> google-chrome google-chrome docs/build/html/index.html
+> google-chrome docs/build/html/index.html
