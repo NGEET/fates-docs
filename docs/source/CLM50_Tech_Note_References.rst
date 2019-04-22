@@ -372,6 +372,13 @@ Cao, M., Marshall, S. and Gregson, K., 1996. Global carbon exchange and
 methane emissions from natural wetlands: Application of a process-based
 model. J. Geophys. Res. 101(D9):14,399-14,414.
 
+.. _Chaveetal2014:
+
+|br|
+
+Chave et al, 2015. Improved allometric models to estimate the abovegroud
+biomass of tropical trees.  Global Change Biology. V20, p3177-3190.
+
 .. _Chuangetal2006:
 
 |br|
@@ -1714,6 +1721,16 @@ Martin, J.P., Haider, K. and Kassim, G., 1980. Biodegradation and
 stabilization after 2 years of specific crop, lignin, and polysaccharide
 carbons in soils. Soil Science Society of America Journal 44:1250-1255.
 
+.. _MartinezCanoetal2019:
+
+ |br|
+
+Martinez Cano, I., Muller-Landau, H. C., Wright, S. J., Bohlman, S. A. and Pacala S. W., 2019. 
+Tropical tree height and crown allometries for the Barro Colorado Nature Monument, Panama: 
+a comparison of alternative hierarchical models incorporating interspecific variation in relation 
+to life history traits. Biogeosciences 16(4):847-862.
+
+
 .. _Maryetal1993:
 
 |br|
@@ -1879,6 +1896,12 @@ basins. J. Geophys. Res. 112:D21101. DOI:10.1029/2007JD008674.
 |br|
 
 Norman, J.M., 1979. Modeling the complete crop canopy. Modification of the Aerial Environment of Crops, pp. 249-280.
+
+.. _Obrienetal1995:
+
+|br|
+
+O'Brien, S.T., S. T., Hubbell, S. P., Spiro, P., Condit, R., and Foster, R. B. 1995. Diameter, Height, Crown, and Age Relationship in Eight Neotropical Tree Species, Ecology, 76: 1926–1939.
 
 .. _Oikawaetal2005:
 
@@ -2124,6 +2147,13 @@ Pomeroy, J. W., D. M. Gray, K. R. Shook, B. Toth, R. L. H. Essery,
 A. Pietroniro, and N. Hedstrom. 1998. An evaluation of snow accumulation
 and ablation processes for land surface modelling. Hydrol. Process. 12:2339–2367.
 
+.. _Poorteretal2006:
+
+|br|
+
+Poorter, L., L. Bongers and F. Bongers. 2006.  Architecture of 54 moist-forest tree species: Traits, trade-offs, and functional groups.  Ecology, 87(5): 1289-1301.
+
+
 .. _Portmannetal2010:
 
 |br|
@@ -2317,6 +2347,12 @@ DOI:10.1029/2008JD010834.
 |br|
 
 Sato, H., A. Itoh, and T. Kohyama, 2007. SEIB-DGVM: A new Dynamic Global Vegetation Model using a spatially explicit individual-based approach. Ecological Modelling 200.3, pp. 2793307.
+
+.. _Saldarriaga1988:
+
+|br|
+
+Saldarriaga, J.G. et al., 1998. Journal of Ecology vol 76 p938-958.
 
 .. _Schaafetal2002:
 

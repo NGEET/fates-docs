@@ -7,7 +7,7 @@ Welcome to FATES's documentation!
 =================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :numbered:
 
    fates_tech_note.rst
