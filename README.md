@@ -1,12 +1,13 @@
 
 # fates-docs: Documentation Repository for the FATES Model
 
+[![DOI](https://zenodo.org/badge/146812405.svg)](https://zenodo.org/badge/latestdoi/146812405)
+
 FATES documentation is compiled using [sphinx](http://www.sphinx-doc.org/en/master/).  
 
 The documentation source code found in the origin repository is automatically passed to Read The Docs, which compiles the source on server, and serves the documentation web-pages here:
 
 https://fates-docs.readthedocs.io/en/latest/index.html
-
 
 ## Documentation Contributions
 
