@@ -3185,7 +3185,7 @@ geographic extent and intensity, with widespread collateral damage to remaining 
 vegetation and soils, leading to disturbance to water, energy, and carbon cycling, as well as 
 ecosystem integrity (:ref:`Keller et al., 2004 <kelleretal2004>`; :ref:`Asner et al., 2004 <asneretal2004>`).
 
-The new selective logging module in FATES mimics the ecological, biophysical, 
+The selective logging module in FATES mimics the ecological, biophysical, 
 and biogeochemical processes following a logging event.  The module  
 (1) specifies the timing and areal extent of a logging event; 
 (2) calculates the fractions of trees that are damaged by direct felling, collateral damage, 
@@ -3239,8 +3239,8 @@ fraction of trees killed by construction of log decks, skid trails and roads for
 the harvested trees, as well as storing and transporting logs offsite (Figure 1.17.1a). 
 In a logging operation, the loggers typically avoid large trees when they build log decks, skids, 
 and trails by knocking down relatively small trees as it is not economical to knock down large trees. 
-Therefore, we implemented another DBH threshold, :math:`DBHmax_{infra}`, so that only a fraction 
-of trees :math:`<=DBHmax_{infra}` (called mechanical damage fraction) are removed for 
+Therefore, we implemented another DBH threshold, :math:`DBH_{max_{infra}}`, so that only a fraction 
+of trees :math:`<=DBH_{max_{infra}}` (called mechanical damage fraction) are removed for 
 building infrastructure (:ref:`Feldpausch et al., 2005 <feldpauschetal2005>`). 
 
 Patch dynamics following logging disturbance
@@ -3287,49 +3287,49 @@ trunks and branches of the dead trees caused by collateral and mechanical damage
 leaves and fine roots become litter. Specifically, the densities of dead trees as a result of direct felling, 
 collateral, and mechanical damages in a cohort are calculated as follows:
 
-.. math:: D_{direct} = lmort_{direct} x n/A
-.. math:: D_{collateral} = lmort_{collateral} x n/A
-.. math:: D_{mechanical} = lmort_{mechanical} x n/A
+.. math:: D_{direct} = lmort_{direct} * n/A
+.. math:: D_{collateral} = lmort_{collateral} * n/A
+.. math:: D_{mechanical} = lmort_{mechanical} * n/A
 
-where :math: `A` stands for the area of the patch being logged, and :math: `n` is the number of individuals 
-in the cohort where the mortality types apply (i.e., as specified by the size thresholds, :math: `DBH_{min}`
-and :math: `DBH_{max_infra}`). For each cohort, we denote :math: `D_{indirect} = D_{collateral} + D_{mechanical}`
-and :math: `D_{total} = D_{direct} + D_{indirect}`, respectively.
+where :math:`A` stands for the area of the patch being logged, and :math:`n` is the number of individuals 
+in the cohort where the mortality types apply (i.e., as specified by the size thresholds, :math:`DBH_{min}`
+and :math:`DBH_{max_{infra}}`). For each cohort, we denote :math:`D_{indirect} = D_{collateral} + D_{mechanical}`
+and :math:`D_{total} = D_{direct} + D_{indirect}`, respectively.
 
 .. figure:: images/Logging_figure3.png
 
-Leaf litter (:math: `Litter_{leaf}, [kg C]`) and root litter (:math: `Litter_{root}, [kg C]`) at the cohort level 
+Leaf litter (:math:`Litter_{leaf}, [kg C]`) and root litter (:math:`Litter_{root}, [kg C]`) at the cohort level 
 are then calculated as:
 
-.. math:: Litter_{leaf} = D_{total} x B_{leaf} x A
-.. math:: D_{leaf} = D_{total} x (B_{root} + B_{store}) x A
+.. math:: Litter_{leaf} = D_{total} * B_{leaf} * A
+.. math:: D_{leaf} = D_{total} * (B_{root} + B_{store}) * A
 
-where :math: `B_{leaf}`, :math: `B_{root}`, :math: `B_{store}` are live biomass in leaves and fine roots, and stored 
+where :math:`B_{leaf}`, :math:`B_{root}`, :math:`B_{store}` are live biomass in leaves and fine roots, and stored 
 biomass in the labile carbon reserve in all individual trees in the cohort of interest.
 
 Following the existing CWD structure in FATES (:ref:`Fisher et al., 2015 <Fisheretal2015>`), CWD in the logging module 
 is first separated into two categories: above-ground CWD and below-ground CWD. Within each category, four size classes 
 are tracked based on their source, following :ref:`Thonicke et al. (2010)<thonickeetal2010>`: trunks, large branches, 
-small branches and twigs. Above-ground CWD from trunks (:math:`CWD_{trunk_agb}, [kg C]`) and large branches/small 
-branches/twig (:math: `CWD_{branch_agb}, [kg C]`) are calculated as follows:
+small branches and twigs. Above-ground CWD from trunks (:math:`CWD_{trunk_{agb}}, [kg C]`) and large branches/small 
+branches/twig (:math:`CWD_{branch_{agb}}, [kg C]`) are calculated as follows:
 
-.. math:: CWD_{trunk_agb} = D_{indiect} x B_{stem_agb} x f_{trunk} x A
-.. math:: CWD_{branch_agb} = D_{total} x B_{stem_agb} x f_{branch} x A
+.. math:: CWD_{trunk_{agb}} = D_{indiect} * AGB_{stem} * f_{trunk} * A
+.. math:: CWD_{branch_{agb}} = D_{total} * AGB_{stem} * f_{branch} * A
 
-where :math: `B_{stem_agb}` is the amount of above ground stem biomass in the cohort, :math: `f_{trunk}` and :math: `f_{branch}` 
+where :math:`AGB_{stem}` is the amount of above ground stem biomass in the cohort, :math:`f_{trunk}` and :math:`f_{branch}` 
 represent the fraction of trunks and large branches/small branches/twig. Similarly, the below-ground CWD from 
-trunks (:math: `CWD_{trunk_bg}, [kg C]`) and branches/twig (:math: `CWD_{branch_bg}, [kg C]`) are calculated as follows:
+trunks (:math:`CWD_{trunk_{bg}}, [kg C]`) and branches/twig (:math:`CWD_{branch_{bg}}, [kg C]`) are calculated as follows:
 
-.. math:: CWD_{trunk_bg} = D_{total} x B_{root_bg} x f_{trunk} x A
-.. math:: CWD_{branch_bg} = D_{total} x B_{root_bg} x f_{branch} x A
+.. math:: CWD_{trunk_{bg}} = D_{total} * B_{root_{bg}} * f_{trunk} * A
+.. math:: CWD_{branch_{bg}} = D_{total} * B_{root_{bg}} * f_{branch} * A
 
-where :math: `B_{croot} [kg C]` is the amount of coarse root biomass in the cohort. Site-level total litter and CWD inputs 
+where :math:`B_{croot} [kg C]` is the amount of coarse root biomass in the cohort. Site-level total litter and CWD inputs 
 can then be obtained by integrating the corresponding pools over all the cohorts in the site. To ensure mass conservation, 
 
-.. math:: \delta_B= \delta_Litter + \delta_CWD + trunk_product    
+.. math:: \delta_B= \delta_{Litter} + \delta_{CWD} + trunk_{product}    
 
-where :math:`delta_B` is total loss of biomass due to logging,  :math: `\delta_litter` and :math: `\delta_CWD` are the 
-increments in litter and CWD pools, and :math: `trunk_product` represents harvested logs shipped offsite.
+where :math:`\delta_B` is total loss of biomass due to logging,  :math:`\delta_{litter}` and :math:`\delta_{CWD}` are the 
+increments in litter and CWD pools, and :math:`trunk_{product}` represents harvested logs shipped offsite.
 
 Following the logging event, the forest structure and composition in terms of cohort distributions, as well as the live 
 biomass and necromass pools are updated.  Following this logging event update to forest structure, the native processes 
