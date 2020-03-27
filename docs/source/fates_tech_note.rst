@@ -2728,7 +2728,7 @@ where :math:`DBH` is diameter at breast height in cm, :math:`r_s` is the rate th
 
 where :math:`age` is cohort age in years, :math:`r_a` is the rate that mortality increases with age, and :math:`p_a` is the inflection point of the curve, i.e. the age at which annual mortality rate has increased to 50%.
 
-Cohort age is not tracked in default FATES. In order to have age-dependent mortality on, set the flag hlm_use_cohort_age_tracking to .true. in the FATES namelist options. To turn on either size- or age-dependent mortality set the :math:`p` and :math:`r` parameters to sensible values in the FATES parameter file. 
+Cohort age is not tracked in default FATES. In order to have age-dependent mortality on, set the flag use_fates_cohort_age_tracking to .true. in the FATES namelist options. To turn on either size- or age-dependent mortality set the :math:`p` and :math:`r` parameters to sensible values in the FATES parameter file. 
 	 
 
 .. raw:: latex
