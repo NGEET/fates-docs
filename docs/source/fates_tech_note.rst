@@ -2249,7 +2249,7 @@ and
 .. math:: D_{a} = \frac{e_{i}-e_{a}}{1000}
 
 Stomatal conductance is the larger of the two roots that satisfies the quadratic equation. 
-Values for :math: `c_{i}` are given by:
+Values for :math:`c_{i}` are given by:
 
 .. math:: c_{i} = c_{a} - (1.4r_{b}+1.6r_{s})P_{atm}A_{n}
 
