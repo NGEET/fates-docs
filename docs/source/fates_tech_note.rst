@@ -2087,7 +2087,7 @@ and have been found to vary widely with plant type
 :ref:`Medlyn et al. 2011<Medlynetal2011>`.
 
 The second (default) representation of stomatal conductance in FATES is follows 
-the Universal Stomatal Optimization (USO) theory, and is otherwise known as
+the Unified Stomatal Optimization (USO) theory, and is otherwise known as
 the Medlyn model of stomatal conductance (:ref:`Medlyn et al. 2011<Medlynetal2011>`). 
 The Medlyn model calculates stomatal conductance (i.e., the inverse of resistance) based 
 on net leaf photosynthesis, the vapor pressure deficit, and the CO2 concentration at the 
@@ -2142,13 +2142,140 @@ R\ :math:`_{gas}` is the universal gas constant (J K\ :math:`^{-1}`
 kmol\ :math:`^{-1}`) and :math:`\theta_{atm}` is the atmospheric
 potential temperature (K).
 
+Both :math:`b_{ft}` and :math:`m_{ft}` are PFT-specific parameters. The default
+values for the Ball-Berry and Medlyn stomatal conductance model representations
+are provide below:
+
+.. raw:: latex
+
+   \captionof{table}{Variables use in the Medlyn equation}
+
++-----------------------------+--------------------------+----------------------+
+| PFT Name                    | Ball-Berry :math:`m_{ft}`| Medlyn :math:`m_{ft}`|
++=============================+==========================+======================+
+| Broadleaf evergreen tropical| 8                        | 4.1                  |
+| tree                        |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Needleleaf evergreen        | 8                        | 2.3                  |
+| extratropical tree          |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Needleleaf colddecid        | 8                        | 2.3                  |
+| extratropical tree          |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Broadleaf evergreen         | 8                        | 4.1                  |
+| extratropical tree          |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Broadleaf hydrodecid        | 8                        | 4.4                  |
+| tropical tree               |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Broadleaf colddecid         | 8                        | 4.4                  |
+| extratropical tree          |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Broadleaf evergreen         | 8                        | 4.7                  |
+| extratropical shrub         |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Broadleaf hydrodecid        | 8                        | 4.7                  |
+| extratropical shrub         |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Broadleaf colddecid         | 8                        | 4.7                  |
+| extratropical shrub         |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Arctic :math:`C_{3}`        | 8                        | 2.2                  |
+| grass                       |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| Cool :math:`C_{3}`          | 8                        | 5.3                  |
+| grass                       |                          |                      |
++-----------------------------+--------------------------+----------------------+
+| :math:`C_{4}`               | 8                        | 1.6                  |
+| grass                       |                          |                      |
++-----------------------------+--------------------------+----------------------+
+
+For both the Ball-Berry and Medlyn stomatal models the default :math:`b_{ft}` is 
+1000 for all PFTs.
+
+Numerical implementation of the Medlyn stomatal conductance model
+-----------------------------------------------------------------------
+Photosynthesis is calculated assuming there is negligible capacity to store :math:`CO_{2}` 
+and water vapor at the leaf surface so that：
+
+.. math:: A_{n} = \frac{c_{a}-c_{i}}{1.4r_{b}+1.6r_{s}P_{atm}} = \frac{c_{a}-c_{s}}{1.4r_{b}P_{atm}} = \frac{c_{s}-c_{i}}{1.6r_{s}P_{atm}}
+
+The terms 1.4 and 1.6 are the ratios of diffusivity of :math:`CO_{2}` to :math:`H_{2}O` for the leaf 
+boundary layer resistance and stomatal resistance. The transpiration fluxes are related as:
+
+.. math:: \frac{e_{a}-e_{i}}{r_{b}+r_{s}} = \frac{e_{a}-e_{s}}{r_{b}} = \frac{e_{s}-e_{i}}{r_{s}}
+
+.. math:: e_{a} = \frac{P_{atm}q_{s}}{0.622}
+
++-------------------+-----------------------------+------------------+------------+
+| Parameter Symbol  | Parameter Name              | Units            | indexed by |
++===================+=============================+==================+============+
+| :math:`c_{a}`     | Atmospheric :math:`CO_{2}`  |                  |            |
+|                   | pressure                    | Pa               |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`c_{i}`     | Internal leaf :math:`CO_{2}`| Pa               |            |
+|                   | partial pressure            |                  |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`r_{b}`     | Leaf boundary layer         | s m\ :math:`^2`  |            |
+|                   | resistance                  | :math:`\mu`\ mol\|            |
+|                   |                             | :math:`^{-1}`    |            |
+|                   |                             |                  |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`e_{a}`     | Vapor pressure of air       | Pa               |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`e_{i}`     | Saturation vapor pressure   | Pa               |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`e_{s}`     | Vapor pressure at the leaf  | Pa               |            |
+|                   | surface                     |                  |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`q_{s}`     | Specific humidity of canopy | kg kg            |            |
+|                   | air                         | :math:`^{-1}`    |            |
++-------------------+-----------------------------+------------------+------------+
+
+In the model, an initial guess of c_{i} is obtained assuming the ratio between c_{i} and 
+c_{a} (0.7 for C_{3} plants and 0.4 for C_{4} plants) to calculate A_n based on 
+:ref:`Farquhar 1980<Farquharetal1980>`. Solving for c_{s}:
+
+.. math:: c_{s} = c_{a}-1.4r_{b}P_{atm}A_{n}
+
+e_{s} can be represented as:
+
+.. math:: e_{s} = \frac{e_{a}r_{s}+e_{i}r_{b}}{r_{b}+r_{s}}
+
+Where e_{i} is a function of temperature
+
+Substitution of :math:`e_{s}` following :math:`D_{s} = e_{i}-e_{s}` gives an expression for stomatal resistance
+(:math:`r_{s}`) as a function of photosynthesis (:math:`A_{n}`), given here in terms of conductance with :math:`g_{s} =
+\frac{1}{r_{s}}` and :math:`g_{b} =\frac{1}{r_{b}}`
+
+where
+
+.. math:: b = -[2(b_{ft}x\beta_{sw}+d)+\frac{m_{ft}d^{2}}{g_{b}D_{a}}]
+
+.. math:: c = (b_{ft}x\beta_{sw})^{2}+[2g_{0}x\beta_{sw}+d(1-\frac{{m_{ft}}^{2}}{D_{a}}]d
+
+and
+
+.. math:: d = \frac{1.6A_{n}}{c_{s}/P_{atm}}
+
+.. math:: D_{a} = \frac{e_{i}-e_{a}}{1000}
+
+Stomatal conductance is the larger of the two roots that satisfies the quadratic equation. 
+Values for c_{i} are given by:
+
+.. math:: c_{i} = c_{a} - (1.4r_{b}+1.6r_{s})P_{atm}A_{n}
+
+The equations for :math:`c_{i} , c_{s} , r_{s}`, and :math:`A_{n}` are solved iteratively until :math:`c_{i}` converges. 
+Iteration will be exited if convergence criteria is met or if at least five iterations are completed.
+
+
 Resolution of stomatal conductance theory in the FATES canopy structure
 -----------------------------------------------------------------------
 
 The stomatal conductance is calculated, as with photosynthesis, for each
-canopy, PFT and leaf layer. The CLM code requires a single canopy
+canopy, PFT and leaf layer. The HLM code requires a single canopy
 conductance estimate to be generated from the multi-layer multi-PFT
-array. In previous iterations of the CLM, sun and shade-leaf specific
+array. In previous iterations of the HLM, sun and shade-leaf specific
 values have been reported and then averaged by their respective leaf
 areas. In this version, the total canopy condutance
 :math:`G_{s,canopy}`, is calculated as the sum of the cohort-level
@@ -2165,18 +2292,9 @@ cohort.
 
 .. raw:: latex
 
-   \captionof{table}{Parameters needed for stomatal conductance model.  }
-
-+------------------+--------------------------+-------+------------+
-| Parameter Symbol | Parameter Name           | Units | indexed by |
-+==================+==========================+=======+============+
-| :math:`b_{ft}`   | Slope of Ball-Berry term | none  | *ft*       |
-+------------------+--------------------------+-------+------------+
-| :math:`m_{ft}`   | Slope of Ball-Berry term | none  | *ft*       |
-+------------------+--------------------------+-------+------------+
-
    \bigskip 
 
+   
 Control of Leaf Area Index
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
