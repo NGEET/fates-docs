@@ -2074,8 +2074,8 @@ surface (Pa), :math:`e_i` is the saturation vapor pressure (Pa) inside
 the leaf at the vegetation temperature conductance (:math:`\mu`\ mol
 m\ :math:`^{-2}` s\ :math:`^{-1}`) when :math:`A` = 0.
 
-The second (default) representation of stomatal conductance in FATES is follows 
-the Unified Stomatal Optimization (USO) theory, and is otherwise known as
+The second (default) representation of stomatal conductance in FATES follows 
+the Unified Stomatal Optimization (USO) theory, otherwise known as
 the Medlyn model of stomatal conductance (:ref:`Medlyn et al. 2011<Medlynetal2011>`). 
 The Medlyn model calculates stomatal conductance (i.e., the inverse of resistance) based 
 on net leaf photosynthesis, the vapor pressure deficit, and the CO2 concentration at the 
@@ -2122,7 +2122,7 @@ leaf surface. Leaf stomatal resistance is calculated as:
 | :math:`P_{atm}`   | Atmospheric pressure     | Pa               |            |
 +-------------------+--------------------------+------------------+------------+
 
-Resistance is converted from units of s m\ :math:`^2 \mu`
+In both models leaf resistance is converted from units of s m\ :math:`^2 \mu`
 mol\ :math:`^{-1}` to s m\ :math:`^{-1}` as: 1 s m\ :math:`^{-1}` =
 :math:`1\times 10^{-9}`\ R\ :math:`_{\rm{gas}} \theta_{\rm{atm}}P_{\rm{atm}}`
 (:math:`\mu`\ mol\ :math:`^{-1}` m\ :math:`^{2}` s), where
@@ -2220,7 +2220,7 @@ boundary layer resistance and stomatal resistance. The transpiration fluxes are 
 |                   | air                         | :math:`^{-1}`    |            |
 +-------------------+-----------------------------+------------------+------------+
 
-In the model, an initial guess of :math:`c_{i}` is obtained assuming the ratio between 
+In the Medlyn model, an initial guess of :math:`c_{i}` is obtained assuming the ratio between 
 :math:`c_{i}` and :math:`c_{a}` (0.7 for :math:`C_{3}` plants and 0.4 for :math:`C_{4}` plants) 
 to calculate :math:`A_n` based on :ref:`Farquhar 1980<Farquharetal1980>`. Solving for :math:`c_{s}`:
 
