@@ -2044,14 +2044,14 @@ Fundamental stomatal conductance theory
 ---------------------------------------
 
 Within FATES, leaf-level stomatal conductance is representated by two main
-approaches. The first is that found in CLM4.5 where stomatal conductance 
-(1/resistance) is calculated using the Ball-Berry conductance
-model as described by :ref:`Collatz et al. (1991)<Collatzetal1991>` and implemented in
-a global climate model by :ref:`Sellers et al. 1996<sellers1996>`. The model
-relates stomatal conductance (i.e., the inverse of resistance) to net
-leaf photosynthesis, scaled by the relative humidity at the leaf surface
-and the CO\ :math:`_2` concentration at the leaf surface. The primary
-difference between the CLM implementation and that used by
+approaches. The first calculates stomatal conductance 
+(1/resistance) using the Ball-Berry model as implemented in
+CLM4.5 (http://www.cesm.ucar.edu/models/cesm1.2/clm/CLM45_Tech_Note.pdf) and
+described by :ref:`Collatz et al. (1991)<Collatzetal1991>` and 
+:ref:`Sellers et al. 1996<sellers1996>`. The model relates stomatal conductance 
+(i.e., the inverse of resistance) to net leaf photosynthesis, scaled by the 
+relative humidity at the leaf surfaceand the CO\ :math:`_2` concentration at the 
+leaf surface. The primary difference between the CLM implementation and that used by
 :ref:`Collatz et al. (1991)<Collatzetal1991>` and :ref:`Sellers et al. (1996)<sellers1996>` is
 that they used net photosynthesis (i.e., leaf photosynthesis minus leaf
 respiration) instead of gross photosynthesis. As implemented here,
@@ -2072,19 +2072,7 @@ rate, :math:`A` (:math:`\mu`\ mol CO\ :math:`_2` m\ :math:`^{-2}`s\ :math:`^{-1}
 the leaf surface (Pa), :math:`e_s` is the vapor pressure at the leaf
 surface (Pa), :math:`e_i` is the saturation vapor pressure (Pa) inside
 the leaf at the vegetation temperature conductance (:math:`\mu`\ mol
-m\ :math:`^{-2}` s\ :math:`^{-1}`) when :math:`A` = 0 . This yields:
-
-.. math:: g_{s} = m_{ft} \frac{AxRH}{C_a}+b_{ft} \beta_{sw}
-
-Typical values for :math:`m_{ft}` are 9 for C\ :math:`_3` plants and :math:`m_{ft}` = 4
-for C\ :math:`_4` plants (
-:ref:`Collatz et al. 1991<Collatzetal1991>`, :ref:`Collatz, 1992<Collatzetal1992>`, :ref:`Sellers et al 1996<sellersetal1996>`).
-:ref:`Sellers et al. 1996<sellers1996>` used :math:`b` = 10000 for C\ :math:`_3`
-plants and :math:`b` = 40000 for C\ :math:`_4` plants. Here, :math:`b`
-was chosen to give a maximum stomatal resistance of 20000 s
-m\ :math:`^{-1}`. These terms are nevertheless plant strategy dependent,
-and have been found to vary widely with plant type
-:ref:`Medlyn et al. 2011<Medlynetal2011>`.
+m\ :math:`^{-2}` s\ :math:`^{-1}`) when :math:`A` = 0.
 
 The second (default) representation of stomatal conductance in FATES is follows 
 the Unified Stomatal Optimization (USO) theory, and is otherwise known as
