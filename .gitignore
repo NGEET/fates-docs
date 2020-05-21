@@ -1,3 +1,9 @@
 docs/sphinx_build
 docs/sphinx_static
 docs/sphinx_templates
+docs/build/
+docs/source/_build/
+
+# Silly mac osx files
+.DS_Store
+

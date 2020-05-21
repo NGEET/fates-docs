@@ -2008,7 +2008,7 @@ respiration has occurred.
 | Parameter       | Parameter Name  | Units           | indexed by      |
 | Symbol          |                 |                 |                 |
 +=================+=================+=================+=================+
-| :math:`-K_{n,ft | Rate of         | none            | -               |
+| :math:`-K_{n,ft | Rate of         | none            |                 |
 | }`              | reduction of N  |                 |                 |
 |                 | through the     |                 |                 |
 |                 | canopy          |                 |                 |
@@ -2043,8 +2043,9 @@ Stomatal Conductance
 Fundamental stomatal conductance theory
 ---------------------------------------
 
-Stomatal conductance is unchanged in concept from the CLM4.5 approach.
-Leaf stomatal resistance is calculated from the Ball-Berry conductance
+Within FATES, leaf-level stomatal conductance is representated by two main
+approaches. The first is that found in CLM4.5 where stomatal conductance 
+(1/resistance) is calculated using the Ball-Berry conductance
 model as described by :ref:`Collatz et al. (1991)<Collatzetal1991>` and implemented in
 a global climate model by :ref:`Sellers et al. 1996<sellers1996>`. The model
 relates stomatal conductance (i.e., the inverse of resistance) to net
@@ -2055,7 +2056,7 @@ difference between the CLM implementation and that used by
 that they used net photosynthesis (i.e., leaf photosynthesis minus leaf
 respiration) instead of gross photosynthesis. As implemented here,
 stomatal conductance equals the minimum conductance (:math:`b`) when
-gross photosynthesis (:math:`A`) is zero. Leaf stomatal resistance is
+gross photosynthesis (:math:`A`) is zero. Leaf stomatal conductance is
 
 .. math:: \frac{1}{r_{s}} = m_{ft} \frac{A}{c_s}\frac{e_s}{e_i}P_{atm}+b_{ft} \beta_{sw}
 
@@ -2064,16 +2065,18 @@ where :math:`r_{s}` is leaf stomatal resistance (s m\ :math:`^2`
 type dependent parameter equivalent to :math:`g_{0}` in the Ball-Berry
 model literature. This parameter is also scaled by the water stress
 index :math:`\beta_{sw}`. Similarly, :math:`m_{ft}` is the slope of the
-relationship between the assimilation, :math:`c_s` and humidty dependant
-term and the stomatal conductance, and so is equivalent to the
-:math:`g_{1}` term in the stomatal literature. :math:`A` is leaf
-photosynthesis (:math:`\mu`\ mol CO\ :math:`_2` m\ :math:`^{-2}`
-s\ :math:`^{-1}`), :math:`c_s` is the CO\ :math:`_2` partial pressure at
+relationship (i.e. stomatal slope, or the :math:`g_{1}` term in the stomatal literature) 
+between stomatal conductance and the stomatal index, comprised of the leaf assimilation 
+rate, :math:`A` (:math:`\mu`\ mol CO\ :math:`_2` m\ :math:`^{-2}`s\ :math:`^{-1}`), 
+:math:`c_s` is the CO\ :math:`_2` partial pressure at
 the leaf surface (Pa), :math:`e_s` is the vapor pressure at the leaf
 surface (Pa), :math:`e_i` is the saturation vapor pressure (Pa) inside
 the leaf at the vegetation temperature conductance (:math:`\mu`\ mol
-m\ :math:`^{-2}` s\ :math:`^{-1}`) when :math:`A` = 0 . Typical values
-are :math:`m_{ft}` = 9 for C\ :math:`_3` plants and :math:`m_{ft}` = 4
+m\ :math:`^{-2}` s\ :math:`^{-1}`) when :math:`A` = 0 . This yields:
+
+.. math:: g_{s} = m_{ft} \frac{AxRH}{C_a}+b_{ft} \beta_{sw}
+
+Typical values for :math:`m_{ft}` are 9 for C\ :math:`_3` plants and :math:`m_{ft}` = 4
 for C\ :math:`_4` plants (
 :ref:`Collatz et al. 1991<Collatzetal1991>`, :ref:`Collatz, 1992<Collatzetal1992>`, :ref:`Sellers et al 1996<sellersetal1996>`).
 :ref:`Sellers et al. 1996<sellers1996>` used :math:`b` = 10000 for C\ :math:`_3`
@@ -2082,6 +2085,54 @@ was chosen to give a maximum stomatal resistance of 20000 s
 m\ :math:`^{-1}`. These terms are nevertheless plant strategy dependent,
 and have been found to vary widely with plant type
 :ref:`Medlyn et al. 2011<Medlynetal2011>`.
+
+The second (default) representation of stomatal conductance in FATES is follows 
+the Universal Stomatal Optimization (USO) theory, and is otherwise known as
+the Medlyn model of stomatal conductance (:ref:`Medlyn et al. 2011<Medlynetal2011>`). 
+The Medlyn model calculates stomatal conductance (i.e., the inverse of resistance) based 
+on net leaf photosynthesis, the vapor pressure deficit, and the CO2 concentration at the 
+leaf surface. Leaf stomatal resistance is calculated as:
+
+.. math:: \frac{1}{r_{s}} = g_{s} = b_{ft} \beta_{sw}+1.6(1+\frac{m_{ft}}{\sqrt{D_{s}}})\frac{A_{n}}{C_{s}/{P_{atm}}}
+
+.. raw:: latex
+
+   \captionof{table}{Variables use in the Medlyn equation}
+
++-------------------+--------------------------+------------------+------------+
+| Parameter Symbol  | Parameter Name           | Units            | indexed by |
++===================+==========================+==================+============+
+| :math:`r_{s}`     | Leaf stomatal resistance | s m\ :math:`^{2}`|            |
+|                   |                          | :math:`\mu`\ mol\|            |
+|                   |                          | :math:`^{-1}`    |            |
++-------------------+--------------------------+------------------+------------+
+| :math:`g_{s}`     | Leaf stomatal conductance| :math:`\mu`\mol  |            |
+|                   |                          | m\ :math:`^{2}`  |            |
+|                   |                          | s\ :math:`^{-1}` |            |
++-------------------+--------------------------+------------------+------------+
+| :math:`b_{ft}`    | Minimum stomatal         | :math:`\mu`\mol  |*ft*        |
+|                   | conductance or the       | m\ :math:`^{2}`  |            |
+|                   | cuticular conductance    | s\ :math:`^{-1}` |            |
++-------------------+--------------------------+------------------+------------+
+| :math:`\beta_{sw}`| Soil water stress factor | none             |            |
++-------------------+--------------------------+------------------+------------+
+| :math:`D_{s}`     | Vapor pressure deficit at| kPa              |            |
+|                   | the leaf surface         |                  |            |
++-------------------+--------------------------+------------------+------------+
+| :math:`m_{ft}`    | Stomatal slope           | kPa\             |            |
+|                   |                          | :math:`^{0.5}`   |*ft*        |
++-------------------+--------------------------+------------------+------------+
+| :math:`A_{n}`     | Leaf net photosynthesis  | :math:`\mu`\mol  |            |
+|                   |                          | :math:`CO_{2}` m\|            |
+|                   |                          | :math:`^{-2}` s\ |            |
+|                   |                          | :math:`^{-1}`    |            |
++-------------------+--------------------------+------------------+------------+
+| :math:`C_{s}`     | :math:`CO_{2}` partial   | Pa               |            |
+|                   | pressure at the leaf     |                  |            |
+|                   | surface                  |                  |            |
++-------------------+--------------------------+------------------+------------+
+| :math:`P_{atm}`   | Atmospheric pressure     | Pa               |            |
++-------------------+--------------------------+------------------+------------+
 
 Resistance is converted from units of s m\ :math:`^2 \mu`
 mol\ :math:`^{-1}` to s m\ :math:`^{-1}` as: 1 s m\ :math:`^{-1}` =
