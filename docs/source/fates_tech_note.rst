@@ -449,42 +449,42 @@ can be restarted, are as follows
 
    \captionof{table}{State variables of `patch' structure}
 
-+-------------+-------------+-------------+-------------+-------------+
-| Quantity    | Variable    | Units       | Indexed By  |             |
-|             | name        |             |             |             |
-+=============+=============+=============+=============+=============+
-| Area        | :math:`\it{ | m\ :math:`^ | -           |             |
-|             | A_{patch}}` | {2}`        |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Age         | :math:`age_ | years       | -           |             |
-|             | {patch}`    |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Seed        | :math:`seed_| KgC         | :math:`ft`  |             |
-|             | {patch}`    | m\ :math:`^ |             |             |
-|             |             | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Leaf Litter | :math:`l_{l | KgC         | :math:`ft`  |             |
-|             | itter,patch | m\ :math:`^ |             |             |
-|             | }`          | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Root Litter | :math:`r_{l | KgC         | :math:`ft`  |             |
-|             | itter,patch | m\ :math:`^ |             |             |
-|             | }`          | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| AG Coarse   | :math:`{CWD}| KgC         | Size Class  |             |
-| Woody       | _{A         | m\ :math:`^ | (lsc)       |             |
-| Debris      | G,patch}`   | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| BG Coarse   | :math:`{CWD}| KgC         | Size Class  |             |
-| Woody       | _{B         | m\ :math:`^ | (lsc)       |             |
-| Debris      | G,patch}`   | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Canopy      | :math:`S_{c | -           | Canopy      |             |
-| Spread      | ,patch}`    |             | Layer       |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Column      | :math:`{l_{ | integer     | -           |             |
-| Index       | patch}}`    |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
++-------------+-------------+-------------+-------------+
+| Quantity    | Variable    | Units       | Indexed By  |
+|             | name        |             |             |
++=============+=============+=============+=============+
+| Area        | :math:`\it{ | m\ :math:`^ |             |
+|             | A_{patch}}` | {2}`        |             |
++-------------+-------------+-------------+-------------+
+| Age         | :math:`age_ | years       |             |
+|             | {patch}`    |             |             |
++-------------+-------------+-------------+-------------+
+| Seed        | :math:`seed_| KgC         | :math:`ft`  |
+|             | {patch}`    | m\ :math:`^ |             |
+|             |             | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| Leaf Litter | :math:`l_{l | KgC         | :math:`ft`  |
+|             | itter,patch | m\ :math:`^ |             |
+|             | }`          | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| Root Litter | :math:`r_{l | KgC         | :math:`ft`  |
+|             | itter,patch | m\ :math:`^ |             |
+|             | }`          | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| AG Coarse   | :math:`{CWD}| KgC         | Size Class  |
+| Woody       | _{A         | m\ :math:`^ | (lsc)       |
+| Debris      | G,patch}`   | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| BG Coarse   | :math:`{CWD}| KgC         | Size Class  |
+| Woody       | _{B         | m\ :math:`^ | (lsc)       |
+| Debris      | G,patch}`   | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| Canopy      | :math:`S_{c |             | Canopy      |
+| Spread      | ,patch}`    |             | Layer       |
++-------------+-------------+-------------+-------------+
+| Column      | :math:`{l_{ | integer     |             |
+| Index       | patch}}`    |             |             |
++-------------+-------------+-------------+-------------+
 
 
 Model Structure
@@ -2060,19 +2060,21 @@ gross photosynthesis (:math:`A`) is zero. Leaf stomatal conductance is
 
 .. math:: \frac{1}{r_{s}} = m_{ft} \frac{A}{c_s}\frac{e_s}{e_i}P_{atm}+b_{ft} \beta_{sw}
 
-where :math:`r_{s}` is leaf stomatal resistance (s m\ :math:`^2`
-:math:`\mu`\ mol\ :math:`^{-1}`), :math:`b_{ft}` is a plant functional
+where :math:`r_{s}` is leaf stomatal resistance (s m\ :math:`^2` leaf area
+:math:`\mu`\ mol :math:`H_{2}O^{-1}`), :math:`b_{ft}` in units of 
+:math:`\mu`\ mol :math:`H_{2}O` m\ :math:`^{-2}` leaf area s\ :math:`^{-1}` is a plant functional
 type dependent parameter equivalent to :math:`g_{0}` in the Ball-Berry
 model literature. This parameter is also scaled by the water stress
 index :math:`\beta_{sw}`. Similarly, :math:`m_{ft}` is the slope of the
 relationship (i.e. stomatal slope, or the :math:`g_{1}` term in the stomatal literature) 
 between stomatal conductance and the stomatal index, comprised of the leaf assimilation 
-rate, :math:`A` (:math:`\mu`\ mol CO\ :math:`_2` m\ :math:`^{-2}`s\ :math:`^{-1}`), 
+rate, :math:`A` (:math:`\mu`\ mol CO\ :math:`_2` m\ :math:`^{-2}` leaf area s\ :math:`^{-1}`), 
 :math:`c_s` is the CO\ :math:`_2` partial pressure at
 the leaf surface (Pa), :math:`e_s` is the vapor pressure at the leaf
 surface (Pa), :math:`e_i` is the saturation vapor pressure (Pa) inside
-the leaf at the vegetation temperature conductance (:math:`\mu`\ mol
-m\ :math:`^{-2}` s\ :math:`^{-1}`) when :math:`A` = 0.
+the leaf at the vegetation temperature :math:`T_{v}` (K), and :math:`b_{ft}` 
+is the conductace (:math:`\mu`\ mol\ :math:`H_{2}O` m\ :math:`^{-2}` leaf area s\ :math:`^{-1}`)
+when :math:`A` = 0.
 
 The second (default) representation of stomatal conductance in FATES follows 
 the Unified Stomatal Optimization (USO) theory, otherwise known as
@@ -2087,43 +2089,45 @@ leaf surface. Leaf stomatal resistance is calculated as:
 
    \captionof{table}{Variables use in the Medlyn equation}
 
-+-------------------+--------------------------+------------------+------------+
-| Parameter Symbol  | Parameter Name           | Units            | indexed by |
-+===================+==========================+==================+============+
-| :math:`r_{s}`     | Leaf stomatal resistance | s m\ :math:`^{2}`|            |
-|                   |                          | :math:`\mu`\ mol\|            |
-|                   |                          | :math:`^{-1}`    |            |
-+-------------------+--------------------------+------------------+------------+
-| :math:`g_{s}`     | Leaf stomatal conductance| :math:`\mu`\mol  |            |
-|                   |                          | m\ :math:`^{2}`  |            |
-|                   |                          | s\ :math:`^{-1}` |            |
-+-------------------+--------------------------+------------------+------------+
-| :math:`b_{ft}`    | Minimum stomatal         | :math:`\mu`\mol  |*ft*        |
-|                   | conductance or the       | m\ :math:`^{2}`  |            |
-|                   | cuticular conductance    | s\ :math:`^{-1}` |            |
-+-------------------+--------------------------+------------------+------------+
-| :math:`\beta_{sw}`| Soil water stress factor | none             |            |
-+-------------------+--------------------------+------------------+------------+
-| :math:`D_{s}`     | Vapor pressure deficit at| kPa              |            |
-|                   | the leaf surface         |                  |            |
-+-------------------+--------------------------+------------------+------------+
-| :math:`m_{ft}`    | Stomatal slope           | kPa\             |            |
-|                   |                          | :math:`^{0.5}`   |*ft*        |
-+-------------------+--------------------------+------------------+------------+
-| :math:`A_{n}`     | Leaf net photosynthesis  | :math:`\mu`\mol  |            |
-|                   |                          | :math:`CO_{2}` m\|            |
-|                   |                          | :math:`^{-2}` s\ |            |
-|                   |                          | :math:`^{-1}`    |            |
-+-------------------+--------------------------+------------------+------------+
-| :math:`C_{s}`     | :math:`CO_{2}` partial   | Pa               |            |
-|                   | pressure at the leaf     |                  |            |
-|                   | surface                  |                  |            |
-+-------------------+--------------------------+------------------+------------+
-| :math:`P_{atm}`   | Atmospheric pressure     | Pa               |            |
-+-------------------+--------------------------+------------------+------------+
++-------------------+--------------------------+------------------------+------------+
+| Parameter Symbol  | Parameter Name           | Units                  | indexed by |
++===================+==========================+========================+============+
+| :math:`r_{s}`     | Leaf stomatal resistance | s m\ :math:`^{2}` leaf |            |
+|                   |                          | area :math:`\mu`\ mol  |            |
+|                   |                          | :math:`H_{2}O^{-1}`    |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`g_{s}`     | Leaf stomatal conductance| :math:`\mu`\mol        |            |
+|                   |                          | :math:`H_{2}O`         |            |
+|                   |                          | m\ :math:`^{2}` leaf   |            |
+|                   |                          | area s\ :math:`^{-1}`  |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`b_{ft}`    | Minimum stomatal         | :math:`\mu`\mol        |*ft*        |
+|                   | conductance or the       | :math:`H_{2}O`         |            |
+|                   | cuticular conductance    | m\ :math:`^{2}` leaf   |            |
+|                   |                          | area s\ :math:`^{-1}`  |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`\beta_{sw}`| Soil water stress factor | none                   |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`D_{s}`     | Vapor pressure deficit at| kPa                    |            |
+|                   | the leaf surface         |                        |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`m_{ft}`    | Stomatal slope           | kPa\                   |            |
+|                   |                          | :math:`^{0.5}`         |*ft*        |
++-------------------+--------------------------+------------------------+------------+
+| :math:`A_{n}`     | Leaf net photosynthesis  | :math:`\mu`\mol        |            |
+|                   |                          | :math:`CO_{2}` m\      |            |
+|                   |                          | :math:`^{-2}` leaf     |            |
+|                   |                          | area s\ :math:`^{-1}`  |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`C_{s}`     | :math:`CO_{2}` partial   | Pa                     |            |
+|                   | pressure at the leaf     |                        |            |
+|                   | surface                  |                        |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`P_{atm}`   | Atmospheric pressure     | Pa                     |            |
++-------------------+--------------------------+------------------------+------------+
 
-In both models leaf resistance is converted from units of s m\ :math:`^2 \mu`
-mol\ :math:`^{-1}` to s m\ :math:`^{-1}` as: 1 s m\ :math:`^{-1}` =
+In both models leaf resistance is converted from units of s m\ :math:`^2 \mu`\
+mol\ :math:`H_{2}O^{-1}` to s m\ :math:`^{-1}` as: 1 s m\ :math:`^{-1}` =
 :math:`1\times 10^{-9}`\ R\ :math:`_{\rm{gas}} \theta_{\rm{atm}}P_{\rm{atm}}`
 (:math:`\mu`\ mol\ :math:`^{-1}` m\ :math:`^{2}` s), where
 R\ :math:`_{gas}` is the universal gas constant (J K\ :math:`^{-1}`
@@ -2138,45 +2142,45 @@ are provide below:
 
    \captionof{table}{Variables use in the Medlyn equation}
 
-+-----------------------------+--------------------------+----------------------+
-| PFT Name                    | Ball-Berry :math:`m_{ft}`| Medlyn :math:`m_{ft}`|
-+=============================+==========================+======================+
-| Broadleaf evergreen tropical| 8                        | 4.1                  |
-| tree                        |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Needleleaf evergreen        | 8                        | 2.3                  |
-| extratropical tree          |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Needleleaf colddecid        | 8                        | 2.3                  |
-| extratropical tree          |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Broadleaf evergreen         | 8                        | 4.1                  |
-| extratropical tree          |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Broadleaf hydrodecid        | 8                        | 4.4                  |
-| tropical tree               |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Broadleaf colddecid         | 8                        | 4.4                  |
-| extratropical tree          |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Broadleaf evergreen         | 8                        | 4.7                  |
-| extratropical shrub         |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Broadleaf hydrodecid        | 8                        | 4.7                  |
-| extratropical shrub         |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Broadleaf colddecid         | 8                        | 4.7                  |
-| extratropical shrub         |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Arctic :math:`C_{3}`        | 8                        | 2.2                  |
-| grass                       |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| Cool :math:`C_{3}`          | 8                        | 5.3                  |
-| grass                       |                          |                      |
-+-----------------------------+--------------------------+----------------------+
-| :math:`C_{4}`               | 8                        | 1.6                  |
-| grass                       |                          |                      |
-+-----------------------------+--------------------------+----------------------+
++-----------------------------+-------------------------------------+--------------------------------------------+
+| PFT Name                    | Ball-Berry :math:`m_{ft}` (unitless)| Medlyn :math:`m_{ft}` (kPa\ :math:`^{0.5}`)|
++=============================+=====================================+============================================+
+| Broadleaf evergreen tropical| 8                                   | 4.1                                        |
+| tree                        |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Needleleaf evergreen        | 8                                   | 2.3                                        |
+| extratropical tree          |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Needleleaf colddecid        | 8                                   | 2.3                                        |
+| extratropical tree          |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf evergreen         | 8                                   | 4.1                                        |
+| extratropical tree          |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf hydrodecid        | 8                                   | 4.4                                        |
+| tropical tree               |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf colddecid         | 8                                   | 4.4                                        |
+| extratropical tree          |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf evergreen         | 8                                   | 4.7                                        |
+| extratropical shrub         |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf hydrodecid        | 8                                   | 4.7                                        |
+| extratropical shrub         |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf colddecid         | 8                                   | 4.7                                        |
+| extratropical shrub         |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Arctic :math:`C_{3}`        | 8                                   | 2.2                                        |
+| grass                       |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Cool :math:`C_{3}`          | 8                                   | 5.3                                        |
+| grass                       |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| :math:`C_{4}`               | 8                                   | 1.6                                        |
+| grass                       |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
 
 For both the Ball-Berry and Medlyn stomatal models the default :math:`b_{ft}` is 
 1000 for all PFTs.
@@ -2205,7 +2209,9 @@ boundary layer resistance and stomatal resistance. The transpiration fluxes are 
 |                   | partial pressure            |                  |            |
 +-------------------+-----------------------------+------------------+------------+
 | :math:`r_{b}`     | Leaf boundary layer         | s m\ :math:`^2`  |            |
-|                   | resistance                  | :math:`\mu`\ mol\|            |
+|                   | resistance                  | leaf area        |            |
+|                   |                             | :math:`\mu`\ mol |            |
+|                   |                             | :math:`H_{2}O`\  |            |
 |                   |                             | :math:`^{-1}`    |            |
 |                   |                             |                  |            |
 +-------------------+-----------------------------+------------------+------------+
