@@ -7,8 +7,7 @@ Technical Documentation for FATES
 Authors of FATES code and technical documentation. 
 
 ^^^^^^^^^^^^^^^^^^^
-Rosie A. Fisher<sup>1,2</sup>, Ryan G. Knox<sup>3</sup>, Charles D. Koven<sup>3</sup>, Gregory Lemieux<sup>3</sup>, Chonggang Xu<sup>4</sup>, Brad Christofferson<sup>5</sup>, Jacquelyn Shuman <sup>1</sup>,  Maoyi Huang<sup>6</sup>, Erik Kluzek<sup>1</sup>, Jessica F. Needham<sup>3</sup>, Jennifer Holm<sup>3</sup>, Marlies Kovenock <sup>7</sup>, Abigail L. S. Swann<sup>7</sup>, Stefan Muszala, Shawn P. Serbin<sup>8</sup>, Qianyu Li<sup>8</sup>, Mariana Verteinstein<sup>1</sup>, Anthony P. Walker<sup>1</sup>
-
+Rosie A. Fisher<sup>1,2</sup>, Ryan G. Knox<sup>3</sup>, Charles D. Koven<sup>3</sup>, Gregory Lemieux<sup>3</sup>, Chonggang Xu<sup>4</sup>, Brad Christofferson<sup>5</sup>, Jacquelyn Shuman <sup>1</sup>,  Maoyi Huang<sup>6</sup>, Erik Kluzek<sup>1</sup>, Jessica F. Needham<sup>3</sup>, Jennifer Holm<sup>3</sup>, Marlies Kovenock <sup>7</sup>, Abigail L. S. Swann<sup>7</sup>, Stefan Muszala, Shawn P. Serbin<sup>8</sup>, Qianyu Li<sup>8</sup>, Mariana Verteinstein<sup>1</sup>, Anthony P. Walker<sup>1</sup>, Alan di Vittorio<sup>3</sup>,
 
 
 <sup>1</sup> Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
