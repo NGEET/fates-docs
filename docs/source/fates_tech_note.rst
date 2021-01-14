@@ -2190,7 +2190,7 @@ Numerical implementation of the Medlyn stomatal conductance model
 Photosynthesis is calculated assuming there is negligible capacity to store :math:`CO_{2}` 
 and water vapor at the leaf surface so that：
 
-.. math:: A_{n} = \frac{c_{a}-c_{i}}{1.4r_{b}+1.6r_{s}P_{atm}} = \frac{c_{a}-c_{s}}{1.4r_{b}P_{atm}} = \frac{c_{s}-c_{i}}{1.6r_{s}P_{atm}}
+.. math:: A_{n} = \frac{c_{a}-c_{i}}{(1.4r_{b}+1.6r_{s})P_{atm}} = \frac{c_{a}-c_{s}}{1.4r_{b}P_{atm}} = \frac{c_{s}-c_{i}}{1.6r_{s}P_{atm}}
 
 The terms 1.4 and 1.6 are the ratios of diffusivity of :math:`CO_{2}` to :math:`H_{2}O` for the leaf 
 boundary layer resistance and stomatal resistance. The transpiration fluxes are related as:
@@ -2242,9 +2242,11 @@ Substitution of :math:`e_{s}` following :math:`D_{s} = e_{i}-e_{s}` gives an exp
 (:math:`r_{s}`) as a function of photosynthesis (:math:`A_{n}`), given here in terms of conductance with :math:`g_{s} =
 \frac{1}{r_{s}}` and :math:`g_{b} =\frac{1}{r_{b}}`
 
+.. math:: (g_{s})^{2} +  bg_{s} + c = 0
+
 where
 
-.. math:: b = -[2(b_{ft} \times \beta_{sw}+d)+\frac{m_{ft}d^{2}}{g_{b}D_{a}}]
+.. math:: b = -[2(b_{ft} \times \beta_{sw}+d)+\frac{(m_{ft})^{2}d^{2}}{g_{b}D_{a}}]
 
 .. math:: c = (b_{ft} \times \beta_{sw})^{2}+[2g_{0} \times \beta_{sw}+d(1-\frac{{m_{ft}}^{2}}{D_{a}})]d
 
