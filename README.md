@@ -11,8 +11,6 @@ https://fates-docs.readthedocs.io/en/latest/index.html
 
 ## Documentation Contributions
 
-Contributors looking to update the documentation will need to have a computer, prefferably a digital computer, with sphinx installed on their computer for testing.  Specifically the build Makefile will call "sphinx-build".
-
 Contributors will likely need to work in three files where the meat of the documentation for fates is held:
 
 1) Main Text: [docs/source/fates_tech_note.rst](https://github.com/rgknox/fates-docs/blob/master/docs/source/fates_tech_note.rst)
@@ -21,15 +19,56 @@ Contributors will likely need to work in three files where the meat of the docum
 
 3) The Root File: [docs/source/index.rst](https://github.com/rgknox/fates-docs/blob/master/docs/source/index.rst)
 
-To test contributions, perform a compilation from the docs/ folder.
+Contributors looking to update the documentation will need to have a computer, prefferably a digital computer, with sphinx installed on their computer for testing.  Specifically the build Makefile will call "sphinx-build".
 
-> make clean
+### Sphinx installation
 
-> make html
+An installation of `sphinx` and [`make`](https://www.gnu.org/software/make/) is necessary to compile contributions local so that user's may test that they are displaying correctly.  Sphinx is available for MacOS, Windows, and Linux distributions through a variety of package management tools, such as `conda`.  The installation instructions can be found here: https://www.sphinx-doc.org/en/master/usage/installation.html.  Installing via a `conda` environment is recommended so as be able to make sure that the necessary dependencies are appropriately installed.
 
-Then open the resulting local html code in your browser of choice.
+### Testing contributions
 
-> google-chrome docs/build/html/index.html
+To test contributions with sphinx, perform a compilation from the `fates-docs/docs/` folder. First remove any previous build output by calling via the command line:
+```
+$ make clean
+Removing everything under 'build'...
+```
+
+Then compile the document as a local html file:
+```
+$ make html
+```
+
+The output from this command should look something like this:
+```
+$ make html
+Running Sphinx v3.4.3
+making output directory... done
+building [mo]: targets for 0 po files that are out of date
+building [html]: targets for 8 source files that are out of date
+updating environment: [new config] 8 added, 0 changed, 0 removed
+reading sources... [100%] parteh/turnover                                                                                                                                                                                                     
+looking for now-outdated files... none found
+pickling environment... done
+checking consistency... done
+preparing documents... done
+writing output... [100%] parteh/turnover                                                                                                                                                                                                      
+generating indices... genindex done
+writing additional pages... search done
+copying images... [100%] images/growth_allometry_p2.png                                                                                                                                                                                       
+copying static files... done
+copying extra files... done
+dumping search index in English (code: en)... done
+dumping object inventory... done
+build succeeded.
+
+The HTML pages are in build/html.
+```
+
+Then open the resulting local html code in your browser of choice, such as `google-chrome`, and review the contributes for correctness:
+
+```
+google-chrome docs/build/html/index.html
+```
 
 ## Repository workflow for admins
 
@@ -76,7 +115,7 @@ Major versions are assumed to correspond to stable versions of the documentation
 
 ### Webhook settings
 
-The repository is linked to two different software services, [readthedocs](https://docs.readthedocs.io/en/stable/index.html) and [zenodo](https://help.zenodo.org/).  The first is used to host both the lastest and stable versions of the documentation on the web.  The latter is used to archive major documentation releases and to mint a DOI.  The instructions for linking the repository to zenodo are found [here](https://guides.github.com/activities/citable-code/).  Instructions for linking readthedocs to the repository are found [here](https://docs.readthedocs.io/en/stable/webhooks.html).
+The repository is linked to two different software services, [readthedocs](https://docs.readthedocs.io/en/stable/index.html) and [zenodo](https://help.zenodo.org/).  The first is used to host both the lastest and stable versions of the documentation on the web.  The latter is used to archive major documentation releases and to mint a DOI.  The instructions for linking the repository to zenodo are found [here](https://guides.github.com/activities/citable-code/).  Instructions for linking readthedocs to the repository are found [here](https://docs.readthedocs.io/en/stable/webhooks.html).  The github webhooks are found in the [repository settings](https://github.com/NGEET/fates-docs/settings/hooks).
 
 Webhooks are currently configured in the following manner:
 
