@@ -2670,9 +2670,9 @@ Plant Mortality
 ^^^^^^^^^^^^^^^^
 
 Total plant mortality per cohort :math:`M_{t,coh}`, (fraction
-year\ :math:`^{-1}`) is simulated as the sum of four additive terms,
+year\ :math:`^{-1}`) is simulated as the sum of six additive terms,
 
-.. math:: M_{t,coh}= M_{b,coh} + M_{cs,coh} + M_{hf,coh} + M_{f,coh},
+.. math:: M_{t,coh}= M_{b,coh} + M_{cs,coh} + M_{hf,coh} + M_{f,coh} + M_{s,coh} + M_{a,coh},
 
 where :math:`M_b` is the background mortality that is unaccounted by
 any of the other mortality rates and is fixed at 0.014. :math:`M_{cs}`
@@ -2711,8 +2711,25 @@ The threshold value of 10\ :math:`^{-6}` represents a state where the
 average soil moisture potential is within 10\ :math:`^{-6}` of the
 wilting point (a PFT specific parameter :math:`\theta_{w,ft}`).
 
-:math:`M_{hf,coh}` is the fire-induced mortality, as described in the
+:math:`M_{f,coh}` is the fire-induced mortality, as described in the
 fire modelling section.
+
+:math:`M_{s,coh}` and :math:`M_{a,coh}` are size- and age-dependent mortality respectively. These terms model a gradual increase in mortality rate with either cohort DBH (cm) or cohort age. We model :math:`M_{s,coh}` as:
+
+.. math::
+
+	 M_{s,coh} = \frac{1}{1 + e^{(-r_s * (DBH - p_s))}}
+
+where :math:`DBH` is diameter at breast height in cm, :math:`r_s` is the rate that mortality increases with DBH, and :math:`p_s` is the inflection point of the curve, i.e. the DBH at which annual mortality rate has increased to 50%. We model :math:`M_{a,coh}` as :
+
+.. math::
+
+         M_{a,coh} = \frac{1}{1 + e^{(-r_a * (age - p_a))}}
+
+where :math:`age` is cohort age in years, :math:`r_a` is the rate that mortality increases with age, and :math:`p_a` is the inflection point of the curve, i.e. the age at which annual mortality rate has increased to 50%.
+
+Cohort age is not tracked in default FATES. In order to have age-dependent mortality on, set the flag use_fates_cohort_age_tracking to .true. in the FATES namelist options. To turn on either size- or age-dependent mortality set the :math:`p` and :math:`r` parameters to sensible values in the FATES parameter file. 
+	 
 
 .. raw:: latex
 
