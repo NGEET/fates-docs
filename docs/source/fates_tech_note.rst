@@ -3192,4 +3192,168 @@ within the area affected by fire is a function of the ratio between
 | s}`             | parameter       |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
+Wood Harvest (The selective logging module)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Over half of all tropical forests have been cleared or logged, and almost half of standing 
+old-growth tropical forests are designated by national forest services for timber production 
+(:ref:`Sist et al., 2015<sistetal2015>`). Disturbances that result from logging are known to 
+cause forest degradation at the same magnitude as deforestation each year in terms of both 
+geographic extent and intensity, with widespread collateral damage to remaining trees, 
+vegetation and soils, leading to disturbance to water, energy, and carbon cycling, as well as 
+ecosystem integrity (:ref:`Keller et al., 2004 <kelleretal2004>`; :ref:`Asner et al., 2004 <asneretal2004>`).
+
+The selective logging module in FATES mimics the ecological, biophysical, 
+and biogeochemical processes following a logging event.  The module  
+(1) specifies the timing and areal extent of a logging event; 
+(2) calculates the fractions of trees that are damaged by direct felling, collateral damage, 
+and infrastructure damage, and adds these size-specific plant mortality types to FATES; 
+(3) splits the logged patch into disturbed and intact new patches; 
+(4) applies the calculated survivorship to cohorts in the disturbed patch;  
+and (5) transports harvested logs off-site by adding the remaining necromass 
+from damaged trees into coarse woody debris and litter pool.
+
+Logging practices
+-----------------
+
+The logging module struture and parameterization is based on detailed field and remote 
+sensing studies (:ref:`Putz et al., 2008<putzetal2008>`; :ref:`Asner et al., 2004 <asneretal2004>`; 
+:ref:`Pereira Jr et al., 2002 <Pereirajretal2002>`; :ref:`Asner et al., 2005 <asneretal2005>`; 
+:ref:`Feldpausch et al., 2005 <feldpauschetal2005>`).  Logging infrastructure including roads, 
+skids, trails, and log decks are represented (Figure 1.17.1).  The construction of log decks used 
+to store logs prior to road transport leads to large canopy openings but their contribution 
+to landscape-level gap dynamics is small. In contrast, the canopy gaps caused by tree felling 
+are small but their coverage is spatially extensive at the landscape scale. Variations in logging 
+practices significantly affect the level of disturbance to tropical forest following logging 
+(:ref:`Pereira Jr et al., 2002 <Pereirajretal2002>`; :ref:`Macpherson et al., 2012 <macphersonetal2012>`; 
+:ref:`Dykstra, 2002 <dykstraetal2002>`; :ref:`Putz et al., 2008 <putzetal2008>`. 
+
+Logging operations in the tropics are often carried out with little planning, and typically use 
+heavy machinery to access the forests accompanied by construction of excessive roads and skid trails, 
+leading to unnecessary tree fall and compaction of the soil.  We refer to these typical operations as 
+conventional logging (CL).   In contrast, reduced impact logging (RIL) is a practice with extensive 
+pre-harvest planning,where trees are inventoried and mapped out for the most efficient and 
+cost-effective harvest and seed trees are deliberately left on site to facilitate faster recovery. 
+Through planning, the construction of skid trails and roads, soil compaction and disturbance 
+can be minimized.  Vines connecting trees are cut and tree-fall directions are controlled to 
+reduce damages to surrounding trees.  Reduced impact logging results in consistently less disturbance 
+to forests than conventional logging 
+(:ref:`Pereira Jr et al. 2002 <Pereirajretal2002>`; :ref:`Putz et al. 2008 <putzetal2008>`).
+
+.. figure:: images/Logging_figure1.png
+
+Mortality associated with logging
+---------------------------------
+
+The FATES logging module was designed to represent a range of logging practices in field operations 
+at a landscape level. Once logging events are activated, we define three types of mortality 
+associated with logging practices: direct-felling mortality (:math:`lmort_{direct}`), 
+collateral mortality (:math:`lmort _{collateral}`), and mechanical mortality (:math:`lmort_{mechanical}`).  
+The direct felling mortality represents the fraction of trees selected for harvesting that are greater 
+or equal to a diameter threshold (this threshold is defined by the diameter at breast height (DBH) = 1.3 m 
+denoted as :math:`DBH_{min}`); collateral mortality denotes the fraction of adjacent trees 
+that killed by felling of the harvested trees; and the mechanical mortality represents the 
+fraction of trees killed by construction of log decks, skid trails and roads for accessing 
+the harvested trees, as well as storing and transporting logs offsite (Figure 1.17.1a). 
+In a logging operation, the loggers typically avoid large trees when they build log decks, skids, 
+and trails by knocking down relatively small trees as it is not economical to knock down large trees. 
+Therefore, we implemented another DBH threshold, :math:`DBH_{max_{infra}}`, so that only a fraction 
+of trees :math:`<=DBH_{max_{infra}}` (called mechanical damage fraction) are removed for 
+building infrastructure (:ref:`Feldpausch et al., 2005 <feldpauschetal2005>`). 
+
+Patch dynamics following logging disturbance
+--------------------------------------------
+
+To capture the disturbance mechanisms and degree of damage associated with logging practices 
+at the landscape level, we apply the mortality types following a workflow designed to correspond to 
+field operations. In FATES, as illustrated in Figure 1.17.2., individual trees of all plant functional types (PFTs) 
+in one patch are grouped into cohorts of similar-sized trees, whose size and population sizes evolve in time 
+through processes of recruitment, growth, and mortality.  For the purpose of reporting and visualizing the model state, 
+these cohorts are binned into a set of 13 fixed size classes in terms of the diameter at the breast height (DBH) 
+(i.e.,  0 - 5,  5 - 10, 10 - 15, 15 - 20, 20 - 30 , 30 - 40, 40 -  50, 50 - 60, 60 - 70, 70 - 80, 80 - 90, 
+90 - 100, and :math:`<=100 cm`). Cohorts are further organized into canopy and understory layers, 
+which are subject to different light conditions (Figure 1.17.2a). When logging activities occur, 
+the canopy trees and a portion of big understory trees lose their crown coverage through direct felling 
+for harvesting logs, or as a result of collateral and mechanical damages ((Figure 1.17.2b). The fractions of 
+(only the) canopy trees affected by the three mortality mechanisms are then summed up to specify the areal 
+percentages of an old (undisturbed) and a new (disturbed) patch caused by logging in the patch fission process 
+(Figure 1.17.2c).  After patch fission, the canopy layer over the disturbed patch is removed, 
+while that over the undisturbed patch stays untouched (Figure 1.17.2d). In the undisturbed patch, the survivorship of 
+understory trees is calculated using an understory death fraction consistent with whose default value corresponds 
+to that used for natural disturbance (i.e., 0.5598). To differentiate logging from natural disturbance, 
+a slightly elevated, logging-specific understory death fraction is applied in the disturbed patch instead at the 
+time of the logging event. Based on data from field surveys over logged forest plots in southern Amazon 
+(:ref:`Feldpausch et al., 2005 <feldpauschetal2005>`), understory death fraction corresponding to logging  
+is now set to be 0.65 as the default, but can be modified via the FATES parameter file (Figure 1.17.2e). 
+Therefore, the logging operations will change the forest from the undisturbed state shown in Figure 1.17.2a 
+to a disturbed state in Figure 1.17.2f in the logging module. It is worth mentioning that the newly generated 
+patches are tracked according to age since disturbance and will be merged with other patches of similar 
+canopy structure following the patch fusion processes in FATES in later time steps of a simulation, 
+pending the inclusion of separate land-use fractions for managed and unmanaged forest. 
+
+.. figure:: images/Logging_figure2.png
+
+Flow of necromass following logging disturbance
+-----------------------------------------------
+
+Logging operations affect forest structure and composition, and also carbon cycling 
+(:ref:`Palace et al., 2008 <palaceetal2008>`) by modifying the live biomass pools and flow of 
+necromass (Figure 1.17.3). Following a logging event, the logged trunk products from the harvested trees 
+are transported off-site (as an added carbon pool for resource management in the model), while their branches 
+enter the coarse woody debris (CWD) pool, and their leaves and fine roots enter the litter pool. Similarly, 
+trunks and branches of the dead trees caused by collateral and mechanical damages also become CWD, while their 
+leaves and fine roots become litter. Specifically, the densities of dead trees as a result of direct felling, 
+collateral, and mechanical damages in a cohort are calculated as follows:
+
+.. math:: D_{direct} = lmort_{direct} * n/A
+.. math:: D_{collateral} = lmort_{collateral} * n/A
+.. math:: D_{mechanical} = lmort_{mechanical} * n/A
+
+where :math:`A` stands for the area of the patch being logged, and :math:`n` is the number of individuals 
+in the cohort where the mortality types apply (i.e., as specified by the size thresholds, :math:`DBH_{min}`
+and :math:`DBH_{max_{infra}}`). For each cohort, we denote :math:`D_{indirect} = D_{collateral} + D_{mechanical}`
+and :math:`D_{total} = D_{direct} + D_{indirect}`, respectively.
+
+.. figure:: images/Logging_figure3.png
+
+Leaf litter (:math:`Litter_{leaf}, [kg C]`) and root litter (:math:`Litter_{root}, [kg C]`) at the cohort level 
+are then calculated as:
+
+.. math:: Litter_{leaf} = D_{total} * B_{leaf} * A
+.. math:: D_{leaf} = D_{total} * (B_{root} + B_{store}) * A
+
+where :math:`B_{leaf}`, :math:`B_{root}`, :math:`B_{store}` are live biomass in leaves and fine roots, and stored 
+biomass in the labile carbon reserve in all individual trees in the cohort of interest.
+
+Following the existing CWD structure in FATES (:ref:`Fisher et al., 2015 <Fisheretal2015>`), CWD in the logging module 
+is first separated into two categories: above-ground CWD and below-ground CWD. Within each category, four size classes 
+are tracked based on their source, following :ref:`Thonicke et al. (2010)<thonickeetal2010>`: trunks, large branches, 
+small branches and twigs. Above-ground CWD from trunks (:math:`CWD_{trunk_{agb}}, [kg C]`) and large branches/small 
+branches/twig (:math:`CWD_{branch_{agb}}, [kg C]`) are calculated as follows:
+
+.. math:: CWD_{trunk_{agb}} = D_{indiect} * AGB_{stem} * f_{trunk} * A
+.. math:: CWD_{branch_{agb}} = D_{total} * AGB_{stem} * f_{branch} * A
+
+where :math:`AGB_{stem}` is the amount of above ground stem biomass in the cohort, :math:`f_{trunk}` and :math:`f_{branch}` 
+represent the fraction of trunks and large branches/small branches/twig. Similarly, the below-ground CWD from 
+trunks (:math:`CWD_{trunk_{bg}}, [kg C]`) and branches/twig (:math:`CWD_{branch_{bg}}, [kg C]`) are calculated as follows:
+
+.. math:: CWD_{trunk_{bg}} = D_{total} * B_{root_{bg}} * f_{trunk} * A
+.. math:: CWD_{branch_{bg}} = D_{total} * B_{root_{bg}} * f_{branch} * A
+
+where :math:`B_{croot} [kg C]` is the amount of coarse root biomass in the cohort. Site-level total litter and CWD inputs 
+can then be obtained by integrating the corresponding pools over all the cohorts in the site. To ensure mass conservation, 
+
+.. math:: \delta_B= \delta_{Litter} + \delta_{CWD} + trunk_{product}    
+
+where :math:`\delta_B` is total loss of biomass due to logging,  :math:`\delta_{litter}` and :math:`\delta_{CWD}` are the 
+increments in litter and CWD pools, and :math:`trunk_{product}` represents harvested logs shipped offsite.
+
+Following the logging event, the forest structure and composition in terms of cohort distributions, as well as the live 
+biomass and necromass pools are updated.  Following this logging event update to forest structure, the native processes 
+simulating physiology, growth and competition for resources in and between cohorts resume. Since the canopy layer is 
+removed in the disturbed patch, the existing understory trees are promoted to the canopy layer, but, in general, 
+the canopy is incompletely filled in by these newly-promoted trees, and thus the canopy does not fully close. 
+Therefore, more light can penetrate and reach the understory layer in the disturbed patch, leading to increases 
+in light-demanding species in the early stage of regeneration, followed by a succession process in which shade 
+tolerant species dominate gradually.  
 

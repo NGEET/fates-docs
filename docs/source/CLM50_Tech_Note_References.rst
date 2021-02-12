@@ -112,6 +112,21 @@ Variability in leaf and litter optical properties: implications for BRDF
 model inversions using AVHRR, MODIS, and MISR. Remote Sens. Environ.
 63:243-257.
 
+.. _Asneretal2004:
+
+|br|
+
+Asner, G. P., Keller, M., Pereira, J. R., Zweede, J. C., and Silva, J. N. M. 2004. 
+Canopy damage and recovery after selective logging in amazonia: field and satellite 
+studies, Ecological Applications, 14, 280-298, 10.1890/01-6019.
+
+.. _Asneretal2005:
+
+|br|
+
+Asner, G. P., Knapp, D. E., Broadbent, E. N., Oliveira, P. J. C., Keller, M., and Silva, J. N. 2005.
+Selective Logging in the Brazilian Amazon, Science, 310, 480.
+
 .. _AxelssonAxelsson1986:
 
 |br|
@@ -631,6 +646,12 @@ Drewniak, B., Song, J., Prell, J., Kotamarthi, V.R., and Jacob, R. 2013.
 Modeling agriculture in the Community Land Model. Geosci. Model Dev.
 6:495-515. DOI:10.5194/gmd-6-495-2013.
 
+.. _dykstraetal2002:
+
+|br|
+
+Dykstra, D. P. 2002. Reduced impact logging: concepts and issues, Applying Reduced Impact Logging to Advance Sustainable Forest Management, 23-39.
+
 .. _Dunfieldetal1993:
 
 |br|
@@ -679,6 +700,12 @@ response to environmental conditions. pp. 549-587. In: O.L. Lange, P.S.
 Nobel, C.B. Osmond, and H. Zeigler (editors) Encyclopedia of Plant
 Physiology. Vol. 12B. Physiological Plant Ecology. II. Water Relations
 and Carbon Assimilation. Springer-Verlag, New York.
+
+.. _feldpauschetal2005:
+
+|br|
+
+Feldpausch, T. R., Jirka, S., Passos, C. A. M., Jasper, F., and Riha, S. J. 2005. When big trees fall: Damage and carbon export by reduced impact logging in southern Amazonia, Forest Ecology and Management, 219, 199-215, https://doi.org/10.1016/j.foreco.2005.09.0035.
 
 .. _Ferrari1999:
 
@@ -1755,6 +1782,12 @@ carbon and nitrogen dynamics in estimating net primary productivity for
 potential vegetation in North America. Global Biogeochem. Cycles
 6:101-124.
 
+.. _macphersonetal2012:
+
+|br|
+
+Macpherson, A. J., Carter, D. R., Schulze, M. D., Vidal, E., and Lentini, M. W. 2012. The sustainability of timber production from Eastern Amazonian forests, Land Use Policy, 29, 339-350, https://doi.org/10.1016/j.landusepol.2011.07.004.
+
 .. _Medlynetal2011:
 
 |br|
@@ -2091,6 +2124,12 @@ New York, 480 pp.
 
 Pelletier, J. D., P. D. Broxton, P. Hazenberg, X. Zeng, P. A. Troch, G. Y. Niu, Z. Williams, M. A. Brunke, and D. Gochis, 2016: A gridded global data set of soil, intact regolith, and sedimentary deposit thicknesses for regional and global land surface modeling. J. Adv. Mod. Earth Sys. 8:41-65.
 
+.. _pereirajretal2002:
+
+|br|
+
+Pereira Jr, R., Zweede, J., Asner, G. P., and Keller, M. 2002. Forest canopy damage and recovery in reduced-impact and conventional selective logging in eastern Para, Brazil, Forest Ecology and Management, 168, 77-89, http://dx.doi.org/10.1016/S0378-1127(01)00732-0.
+
 .. _peterson1986:
 
 |br|
@@ -2193,6 +2232,12 @@ millennial-scale deglaciation simulations. Geophys. Res. Lett. **
 |br|
 
 Purves, D.W. et al.,  2008. Predicting and understanding forest dynamics using a simple tractable model. Proceedings of the National Academy of Sciences 105.44, pp. 17018-17022.
+
+.. _putzetal2008:
+
+|br|
+
+Putz, F. E., Sist, P., Fredericksen, T., and Dykstra, D., 2008. Reduced-impact logging: Challenges and opportunities, Forest Ecology and Management, 256, 1427-1433, https://doi.org/10.1016/j.foreco.2008.03.036.
 
 .. _Qianetal2006:
 
