@@ -2718,13 +2718,13 @@ fire modelling section.
 
 .. math::
 
-	 M_{s,coh} = \frac{1}{1 + e^{-r_s * (DBH - p_s)})}
+	 M_{s,coh} = \frac{1}{1 + e^{(-r_s * (DBH - p_s))}}
 
 where :math:`DBH` is diameter at breast height in cm, :math:`r_s` is the rate that mortality increases with DBH, and :math:`p_s` is the inflection point of the curve, i.e. the DBH at which annual mortality rate has increased to 50%. We model :math:`M_{a,coh}` as :
 
 .. math::
 
-         M_{a,coh} = \frac{1}{1 + e^{-r_a * (age - p_a)})}
+         M_{a,coh} = \frac{1}{1 + e^{(-r_a * (age - p_a))}}
 
 where :math:`age` is cohort age in years, :math:`r_a` is the rate that mortality increases with age, and :math:`p_a` is the inflection point of the curve, i.e. the age at which annual mortality rate has increased to 50%.
 
