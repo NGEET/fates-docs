@@ -449,42 +449,42 @@ can be restarted, are as follows
 
    \captionof{table}{State variables of `patch' structure}
 
-+-------------+-------------+-------------+-------------+-------------+
-| Quantity    | Variable    | Units       | Indexed By  |             |
-|             | name        |             |             |             |
-+=============+=============+=============+=============+=============+
-| Area        | :math:`\it{ | m\ :math:`^ | -           |             |
-|             | A_{patch}}` | {2}`        |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Age         | :math:`age_ | years       | -           |             |
-|             | {patch}`    |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Seed        | :math:`seed_| KgC         | :math:`ft`  |             |
-|             | {patch}`    | m\ :math:`^ |             |             |
-|             |             | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Leaf Litter | :math:`l_{l | KgC         | :math:`ft`  |             |
-|             | itter,patch | m\ :math:`^ |             |             |
-|             | }`          | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Root Litter | :math:`r_{l | KgC         | :math:`ft`  |             |
-|             | itter,patch | m\ :math:`^ |             |             |
-|             | }`          | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| AG Coarse   | :math:`{CWD}| KgC         | Size Class  |             |
-| Woody       | _{A         | m\ :math:`^ | (lsc)       |             |
-| Debris      | G,patch}`   | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| BG Coarse   | :math:`{CWD}| KgC         | Size Class  |             |
-| Woody       | _{B         | m\ :math:`^ | (lsc)       |             |
-| Debris      | G,patch}`   | {-2}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Canopy      | :math:`S_{c | -           | Canopy      |             |
-| Spread      | ,patch}`    |             | Layer       |             |
-+-------------+-------------+-------------+-------------+-------------+
-| Column      | :math:`{l_{ | integer     | -           |             |
-| Index       | patch}}`    |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
++-------------+-------------+-------------+-------------+
+| Quantity    | Variable    | Units       | Indexed By  |
+|             | name        |             |             |
++=============+=============+=============+=============+
+| Area        | :math:`\it{ | m\ :math:`^ |             |
+|             | A_{patch}}` | {2}`        |             |
++-------------+-------------+-------------+-------------+
+| Age         | :math:`age_ | years       |             |
+|             | {patch}`    |             |             |
++-------------+-------------+-------------+-------------+
+| Seed        | :math:`seed_| KgC         | :math:`ft`  |
+|             | {patch}`    | m\ :math:`^ |             |
+|             |             | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| Leaf Litter | :math:`l_{l | KgC         | :math:`ft`  |
+|             | itter,patch | m\ :math:`^ |             |
+|             | }`          | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| Root Litter | :math:`r_{l | KgC         | :math:`ft`  |
+|             | itter,patch | m\ :math:`^ |             |
+|             | }`          | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| AG Coarse   | :math:`{CWD}| KgC         | Size Class  |
+| Woody       | _{A         | m\ :math:`^ | (lsc)       |
+| Debris      | G,patch}`   | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| BG Coarse   | :math:`{CWD}| KgC         | Size Class  |
+| Woody       | _{B         | m\ :math:`^ | (lsc)       |
+| Debris      | G,patch}`   | {-2}`       |             |
++-------------+-------------+-------------+-------------+
+| Canopy      | :math:`S_{c |             | Canopy      |
+| Spread      | ,patch}`    |             | Layer       |
++-------------+-------------+-------------+-------------+
+| Column      | :math:`{l_{ | integer     |             |
+| Index       | patch}}`    |             |             |
++-------------+-------------+-------------+-------------+
 
 
 Model Structure
@@ -2008,7 +2008,7 @@ respiration has occurred.
 | Parameter       | Parameter Name  | Units           | indexed by      |
 | Symbol          |                 |                 |                 |
 +=================+=================+=================+=================+
-| :math:`-K_{n,ft | Rate of         | none            | -               |
+| :math:`-K_{n,ft | Rate of         | none            |                 |
 | }`              | reduction of N  |                 |                 |
 |                 | through the     |                 |                 |
 |                 | canopy          |                 |                 |
@@ -2043,61 +2043,235 @@ Stomatal Conductance
 Fundamental stomatal conductance theory
 ---------------------------------------
 
-Stomatal conductance is unchanged in concept from the CLM4.5 approach.
-Leaf stomatal resistance is calculated from the Ball-Berry conductance
-model as described by :ref:`Collatz et al. (1991)<Collatzetal1991>` and implemented in
-a global climate model by :ref:`Sellers et al. 1996<sellers1996>`. The model
-relates stomatal conductance (i.e., the inverse of resistance) to net
-leaf photosynthesis, scaled by the relative humidity at the leaf surface
-and the CO\ :math:`_2` concentration at the leaf surface. The primary
-difference between the CLM implementation and that used by
+Within FATES, leaf-level stomatal conductance is representated by two main
+approaches. The first calculates stomatal conductance 
+(1/resistance) using the Ball-Berry model as implemented in
+CLM4.5 (http://www.cesm.ucar.edu/models/cesm1.2/clm/CLM45_Tech_Note.pdf) and
+described by :ref:`Collatz et al. (1991)<Collatzetal1991>` and 
+:ref:`Sellers et al. 1996<sellers1996>`. The model relates stomatal conductance 
+(i.e., the inverse of resistance) to net leaf photosynthesis, scaled by the 
+relative humidity at the leaf surfaceand the CO\ :math:`_2` concentration at the 
+leaf surface. The primary difference between the CLM implementation and that used by
 :ref:`Collatz et al. (1991)<Collatzetal1991>` and :ref:`Sellers et al. (1996)<sellers1996>` is
 that they used net photosynthesis (i.e., leaf photosynthesis minus leaf
 respiration) instead of gross photosynthesis. As implemented here,
 stomatal conductance equals the minimum conductance (:math:`b`) when
-gross photosynthesis (:math:`A`) is zero. Leaf stomatal resistance is
+gross photosynthesis (:math:`A`) is zero. Leaf stomatal conductance is
 
 .. math:: \frac{1}{r_{s}} = m_{ft} \frac{A}{c_s}\frac{e_s}{e_i}P_{atm}+b_{ft} \beta_{sw}
 
-where :math:`r_{s}` is leaf stomatal resistance (s m\ :math:`^2`
-:math:`\mu`\ mol\ :math:`^{-1}`), :math:`b_{ft}` is a plant functional
+where :math:`r_{s}` is leaf stomatal resistance (s m\ :math:`^2` leaf area
+:math:`\mu`\ mol :math:`H_{2}O^{-1}`), :math:`b_{ft}` in units of 
+:math:`\mu`\ mol :math:`H_{2}O` m\ :math:`^{-2}` leaf area s\ :math:`^{-1}` is a plant functional
 type dependent parameter equivalent to :math:`g_{0}` in the Ball-Berry
 model literature. This parameter is also scaled by the water stress
 index :math:`\beta_{sw}`. Similarly, :math:`m_{ft}` is the slope of the
-relationship between the assimilation, :math:`c_s` and humidty dependant
-term and the stomatal conductance, and so is equivalent to the
-:math:`g_{1}` term in the stomatal literature. :math:`A` is leaf
-photosynthesis (:math:`\mu`\ mol CO\ :math:`_2` m\ :math:`^{-2}`
-s\ :math:`^{-1}`), :math:`c_s` is the CO\ :math:`_2` partial pressure at
+relationship (i.e. stomatal slope, or the :math:`g_{1}` term in the stomatal literature) 
+between stomatal conductance and the stomatal index, comprised of the leaf assimilation 
+rate, :math:`A` (:math:`\mu`\ mol CO\ :math:`_2` m\ :math:`^{-2}` leaf area s\ :math:`^{-1}`), 
+:math:`c_s` is the CO\ :math:`_2` partial pressure at
 the leaf surface (Pa), :math:`e_s` is the vapor pressure at the leaf
 surface (Pa), :math:`e_i` is the saturation vapor pressure (Pa) inside
-the leaf at the vegetation temperature conductance (:math:`\mu`\ mol
-m\ :math:`^{-2}` s\ :math:`^{-1}`) when :math:`A` = 0 . Typical values
-are :math:`m_{ft}` = 9 for C\ :math:`_3` plants and :math:`m_{ft}` = 4
-for C\ :math:`_4` plants (
-:ref:`Collatz et al. 1991<Collatzetal1991>`, :ref:`Collatz, 1992<Collatzetal1992>`, :ref:`Sellers et al 1996<sellersetal1996>`).
-:ref:`Sellers et al. 1996<sellers1996>` used :math:`b` = 10000 for C\ :math:`_3`
-plants and :math:`b` = 40000 for C\ :math:`_4` plants. Here, :math:`b`
-was chosen to give a maximum stomatal resistance of 20000 s
-m\ :math:`^{-1}`. These terms are nevertheless plant strategy dependent,
-and have been found to vary widely with plant type
-:ref:`Medlyn et al. 2011<Medlynetal2011>`.
+the leaf at the vegetation temperature :math:`T_{v}` (K), and :math:`b_{ft}` 
+is the conductace (:math:`\mu`\ mol\ :math:`H_{2}O` m\ :math:`^{-2}` leaf area s\ :math:`^{-1}`)
+when :math:`A` = 0.
 
-Resistance is converted from units of s m\ :math:`^2 \mu`
-mol\ :math:`^{-1}` to s m\ :math:`^{-1}` as: 1 s m\ :math:`^{-1}` =
+The second (default) representation of stomatal conductance in FATES follows 
+the Unified Stomatal Optimization (USO) theory, otherwise known as
+the Medlyn model of stomatal conductance (:ref:`Medlyn et al. 2011<Medlynetal2011>`). 
+The Medlyn model calculates stomatal conductance (i.e., the inverse of resistance) based 
+on net leaf photosynthesis, the vapor pressure deficit, and the CO2 concentration at the 
+leaf surface. Leaf stomatal resistance is calculated as:
+
+.. math:: \frac{1}{r_{s}} = g_{s} = b_{ft} \beta_{sw}+1.6(1+\frac{m_{ft}}{\sqrt{D_{s}}})\frac{A_{n}}{C_{s}/{P_{atm}}}
+
+.. raw:: latex
+
+   \captionof{table}{Variables use in the Medlyn equation}
+
++-------------------+--------------------------+------------------------+------------+
+| Parameter Symbol  | Parameter Name           | Units                  | indexed by |
++===================+==========================+========================+============+
+| :math:`r_{s}`     | Leaf stomatal resistance | s m\ :math:`^{2}` leaf |            |
+|                   |                          | area :math:`\mu`\ mol  |            |
+|                   |                          | :math:`H_{2}O^{-1}`    |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`g_{s}`     | Leaf stomatal conductance| :math:`\mu`\mol        |            |
+|                   |                          | :math:`H_{2}O`         |            |
+|                   |                          | m\ :math:`^{2}` leaf   |            |
+|                   |                          | area s\ :math:`^{-1}`  |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`b_{ft}`    | Minimum stomatal         | :math:`\mu`\mol        |*ft*        |
+|                   | conductance or the       | :math:`H_{2}O`         |            |
+|                   | cuticular conductance    | m\ :math:`^{2}` leaf   |            |
+|                   |                          | area s\ :math:`^{-1}`  |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`\beta_{sw}`| Soil water stress factor | none                   |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`D_{s}`     | Vapor pressure deficit at| kPa                    |            |
+|                   | the leaf surface         |                        |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`m_{ft}`    | Stomatal slope           | kPa\                   |            |
+|                   |                          | :math:`^{0.5}`         |*ft*        |
++-------------------+--------------------------+------------------------+------------+
+| :math:`A_{n}`     | Leaf net photosynthesis  | :math:`\mu`\mol        |            |
+|                   |                          | :math:`CO_{2}` m\      |            |
+|                   |                          | :math:`^{-2}` leaf     |            |
+|                   |                          | area s\ :math:`^{-1}`  |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`C_{s}`     | :math:`CO_{2}` partial   | Pa                     |            |
+|                   | pressure at the leaf     |                        |            |
+|                   | surface                  |                        |            |
++-------------------+--------------------------+------------------------+------------+
+| :math:`P_{atm}`   | Atmospheric pressure     | Pa                     |            |
++-------------------+--------------------------+------------------------+------------+
+
+In both models leaf resistance is converted from units of s m\ :math:`^2 \mu`\
+mol\ :math:`H_{2}O^{-1}` to s m\ :math:`^{-1}` as: 1 s m\ :math:`^{-1}` =
 :math:`1\times 10^{-9}`\ R\ :math:`_{\rm{gas}} \theta_{\rm{atm}}P_{\rm{atm}}`
 (:math:`\mu`\ mol\ :math:`^{-1}` m\ :math:`^{2}` s), where
 R\ :math:`_{gas}` is the universal gas constant (J K\ :math:`^{-1}`
 kmol\ :math:`^{-1}`) and :math:`\theta_{atm}` is the atmospheric
 potential temperature (K).
 
+Both :math:`b_{ft}` and :math:`m_{ft}` are PFT-specific parameters. The default
+values for the Ball-Berry and Medlyn stomatal conductance model representations
+are provide below:
+
+.. raw:: latex
+
+   \captionof{table}{Variables use in the Medlyn equation}
+
++-----------------------------+-------------------------------------+--------------------------------------------+
+| PFT Name                    | Ball-Berry :math:`m_{ft}` (unitless)| Medlyn :math:`m_{ft}` (kPa\ :math:`^{0.5}`)|
++=============================+=====================================+============================================+
+| Broadleaf evergreen tropical| 8                                   | 4.1                                        |
+| tree                        |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Needleleaf evergreen        | 8                                   | 2.3                                        |
+| extratropical tree          |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Needleleaf colddecid        | 8                                   | 2.3                                        |
+| extratropical tree          |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf evergreen         | 8                                   | 4.1                                        |
+| extratropical tree          |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf hydrodecid        | 8                                   | 4.4                                        |
+| tropical tree               |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf colddecid         | 8                                   | 4.4                                        |
+| extratropical tree          |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf evergreen         | 8                                   | 4.7                                        |
+| extratropical shrub         |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf hydrodecid        | 8                                   | 4.7                                        |
+| extratropical shrub         |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Broadleaf colddecid         | 8                                   | 4.7                                        |
+| extratropical shrub         |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Arctic :math:`C_{3}`        | 8                                   | 2.2                                        |
+| grass                       |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| Cool :math:`C_{3}`          | 8                                   | 5.3                                        |
+| grass                       |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+| :math:`C_{4}`               | 8                                   | 1.6                                        |
+| grass                       |                                     |                                            |
++-----------------------------+-------------------------------------+--------------------------------------------+
+
+For both the Ball-Berry and Medlyn stomatal models the default :math:`b_{ft}` is 
+1000 for all PFTs.
+
+Numerical implementation of the Medlyn stomatal conductance model
+-----------------------------------------------------------------------
+Photosynthesis is calculated assuming there is negligible capacity to store :math:`CO_{2}` 
+and water vapor at the leaf surface so that：
+
+.. math:: A_{n} = \frac{c_{a}-c_{i}}{(1.4r_{b}+1.6r_{s})P_{atm}} = \frac{c_{a}-c_{s}}{1.4r_{b}P_{atm}} = \frac{c_{s}-c_{i}}{1.6r_{s}P_{atm}}
+
+The terms 1.4 and 1.6 are the ratios of diffusivity of :math:`CO_{2}` to :math:`H_{2}O` for the leaf 
+boundary layer resistance and stomatal resistance. The transpiration fluxes are related as:
+
+.. math:: \frac{e_{a}-e_{i}}{r_{b}+r_{s}} = \frac{e_{a}-e_{s}}{r_{b}} = \frac{e_{s}-e_{i}}{r_{s}}
+
+.. math:: e_{a} = \frac{P_{atm}q_{s}}{0.622}
+
++-------------------+-----------------------------+------------------+------------+
+| Parameter Symbol  | Parameter Name              | Units            | indexed by |
++===================+=============================+==================+============+
+| :math:`c_{a}`     | Atmospheric :math:`CO_{2}`  |                  |            |
+|                   | pressure                    | Pa               |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`c_{i}`     | Internal leaf :math:`CO_{2}`| Pa               |            |
+|                   | partial pressure            |                  |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`r_{b}`     | Leaf boundary layer         | s m\ :math:`^2`  |            |
+|                   | resistance                  | leaf area        |            |
+|                   |                             | :math:`\mu`\ mol |            |
+|                   |                             | :math:`H_{2}O`\  |            |
+|                   |                             | :math:`^{-1}`    |            |
+|                   |                             |                  |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`e_{a}`     | Vapor pressure of air       | Pa               |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`e_{i}`     | Saturation vapor pressure   | Pa               |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`e_{s}`     | Vapor pressure at the leaf  | Pa               |            |
+|                   | surface                     |                  |            |
++-------------------+-----------------------------+------------------+------------+
+| :math:`q_{s}`     | Specific humidity of canopy | kg kg            |            |
+|                   | air                         | :math:`^{-1}`    |            |
++-------------------+-----------------------------+------------------+------------+
+
+In the Medlyn model, an initial guess of :math:`c_{i}` is obtained assuming the ratio between 
+:math:`c_{i}` and :math:`c_{a}` (0.7 for :math:`C_{3}` plants and 0.4 for :math:`C_{4}` plants) 
+to calculate :math:`A_n` based on :ref:`Farquhar 1980<Farquharetal1980>`. Solving for :math:`c_{s}`:
+
+.. math:: c_{s} = c_{a}-1.4r_{b}P_{atm}A_{n}
+
+:math:`e_{s}` can be represented as:
+
+.. math:: e_{s} = \frac{e_{a}r_{s}+e_{i}r_{b}}{r_{b}+r_{s}}
+
+Where :math:`e_{i}` is a function of temperature
+
+Substitution of :math:`e_{s}` following :math:`D_{s} = e_{i}-e_{s}` gives an expression for stomatal resistance
+(:math:`r_{s}`) as a function of photosynthesis (:math:`A_{n}`), given here in terms of conductance with :math:`g_{s} =
+\frac{1}{r_{s}}` and :math:`g_{b} =\frac{1}{r_{b}}`
+
+.. math:: (g_{s})^{2} +  bg_{s} + c = 0
+
+where
+
+.. math:: b = -[2(b_{ft} \times \beta_{sw}+d)+\frac{(m_{ft})^{2}d^{2}}{g_{b}D_{a}}]
+
+.. math:: c = (b_{ft} \times \beta_{sw})^{2}+[2g_{0} \times \beta_{sw}+d(1-\frac{{m_{ft}}^{2}}{D_{a}})]d
+
+and
+
+.. math:: d = \frac{1.6A_{n}}{c_{s}/P_{atm}}
+
+.. math:: D_{a} = \frac{e_{i}-e_{a}}{1000}
+
+Stomatal conductance is the larger of the two roots that satisfies the quadratic equation. 
+Values for :math:`c_{i}` are given by:
+
+.. math:: c_{i} = c_{a} - (1.4r_{b}+1.6r_{s})P_{atm}A_{n}
+
+The equations for :math:`c_{i} , c_{s} , r_{s}`, and :math:`A_{n}` are solved iteratively until :math:`c_{i}` converges. 
+Iteration will be exited if convergence criteria is met or if at least five iterations are completed.
+
+
 Resolution of stomatal conductance theory in the FATES canopy structure
 -----------------------------------------------------------------------
 
 The stomatal conductance is calculated, as with photosynthesis, for each
-canopy, PFT and leaf layer. The CLM code requires a single canopy
+canopy, PFT and leaf layer. The HLM code requires a single canopy
 conductance estimate to be generated from the multi-layer multi-PFT
-array. In previous iterations of the CLM, sun and shade-leaf specific
+array. In previous iterations of the HLM, sun and shade-leaf specific
 values have been reported and then averaged by their respective leaf
 areas. In this version, the total canopy condutance
 :math:`G_{s,canopy}`, is calculated as the sum of the cohort-level
@@ -2114,25 +2288,18 @@ cohort.
 
 .. raw:: latex
 
-   \captionof{table}{Parameters needed for stomatal conductance model.  }
-
-+------------------+--------------------------+-------+------------+
-| Parameter Symbol | Parameter Name           | Units | indexed by |
-+==================+==========================+=======+============+
-| :math:`b_{ft}`   | Slope of Ball-Berry term | none  | *ft*       |
-+------------------+--------------------------+-------+------------+
-| :math:`m_{ft}`   | Slope of Ball-Berry term | none  | *ft*       |
-+------------------+--------------------------+-------+------------+
-
    \bigskip 
 
+   
 Control of Leaf Area Index
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The leaf area :math:`A_{leaf}` (m:math:`^{-2}`) of each cohort is
+The leaf area :math:`A_{leaf}` (m\ :math:`^{2}`) of each cohort is
 calculated from leaf biomass :math:`C_{leaf,coh}` (kgC
 individual\ :math:`^{-1}`) and specific leaf area (SLA, m\ :math:`^2` kg
-C\ :math:`^{-1}`). Leaf biomass :math:`C_{leaf,coh}` is controlled by the processes of phenology, allocation and turnover, described in detail in the PARTEH submodule.
+C\ :math:`^{-1}`). Leaf biomass :math:`C_{leaf,coh}` is controlled by the 
+processes of phenology, allocation and turnover, described in detail in the 
+PARTEH submodule.
 
 .. math:: A_{leaf,coh} = C_{leaf,coh} \cdot SLA_{ft}
 
@@ -2198,12 +2365,12 @@ the greatly reduced maintenance and turnover requirements.
 | Parameter       | Parameter Name  | Units           | indexed by      |
 | Symbol          |                 |                 |                 |
 +=================+=================+=================+=================+
-| :math:`\iota_l` | Fraction by     | none            | -               |
+| :math:`\iota_l` | Fraction by     | none            |                 |
 |                 | which leaf mass |                 |                 |
 |                 | is reduced next |                 |                 |
 |                 | year            |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| :math:`L_{trim, | Minimum         | -               |                 |
+| :math:`L_{trim, | Minimum         | none            |                 |
 | min}`           | fraction to     |                 |                 |
 |                 | which leaf mass |                 |                 |
 |                 | can be reduced  |                 |                 |
@@ -2374,7 +2541,7 @@ for this carbon accounting scheme.
 | Parameter       | Parameter Name  | Units           | indexed by      |
 | Symbol          |                 |                 |                 |
 +=================+=================+=================+=================+
-| :math:`n_{crit, | Threshold of    | none            | -               |
+| :math:`n_{crit, | Threshold of    | none            |                 |
 | cold}`          | cold days for   |                 |                 |
 |                 | senescence      |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
@@ -2446,7 +2613,7 @@ of one plant functional type over the seed pool.
 |                 | mass            | :math:`^{-2}`   |                 |
 |                 |                 |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| :math:`\alpha_{ | Proportional    | -               |                 |
+| :math:`\alpha_{ | Proportional    | none            |                 |
 | sgerm}`         | germination     |                 |                 |
 |                 | rate            |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
@@ -2456,10 +2623,10 @@ of one plant functional type over the seed pool.
 |                 |                 | y\ :math:`^{-1}`|                 |
 |                 |                 |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| :math:`\phi`    | Decay rate of   | none            | FT              |
+| :math:`\phi`    | Decay rate of   | none            | *ft*            |
 |                 | viable seeds    |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| :math:`R_{frac, | Fraction of     | none            | FT              |
+| :math:`R_{frac, | Fraction of     | none            | *ft*            |
 | ft}`            | :math:`C_{bal}` |                 |                 |
 |                 | devoted to      |                 |                 |
 |                 | reproduction    |                 |                 |
