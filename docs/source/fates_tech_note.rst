@@ -5,22 +5,29 @@ Technical Documentation for FATES
 ===================================
 
 Authors of FATES code and technical documentation. 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-^^^^^^^^^^^^^^^^^^^
-Rosie A. Fisher<sup>1,2</sup>, Ryan G. Knox<sup>3</sup>, Charles D. Koven<sup>3</sup>, Gregory Lemieux<sup>3</sup>, Chonggang Xu<sup>4</sup>, Brad Christofferson<sup>5</sup>, Jacquelyn Shuman <sup>1</sup>,  Maoyi Huang<sup>6</sup>, Erik Kluzek<sup>1</sup>, Jessica F. Needham<sup>3</sup>, Jennifer Holm<sup>3</sup>, Marlies Kovenock <sup>7</sup>, Abigail L. S. Swann<sup>7</sup>, Stefan Muszala, Shawn P. Serbin<sup>8</sup>, Qianyu Li<sup>8</sup>, Mariana Verteinstein<sup>1</sup>, Anthony P. Walker<sup>1</sup>, Alan di Vittorio<sup>3</sup>,
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`1`, Alan di Vittorio :sup:`3`,
 
+:sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
 
-<sup>1</sup> Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
-<sup>2</sup> Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique, Toulouse, France
-<sup>3</sup> Climate and Ecosystem Sciences Division, Lawrence Berkeley National Lab, Berkeley, CA, USA
-<sup>4</sup> Earth and Environmental Sciences Division, Los Alamos National Laboratory, Los Alamos, NM, USA
-<sup>5</sup> Department of Biology, University of Texas, Rio Grande Valley, Edinburg, TX, USA
-<sup>6</sup> Atmospheric Sciences and Global Change Division, Pacific Northwest National Laboratory, Richland, WA, USA
-<sup>7</sup> Department of Biology, University of Washington, Seattle, WA, USA
-<sup>8</sup> Environmental and Climate Sciences Department, Brookhaven National Laboratory, Upton, NY, USA
-<sup>9</sup> Jet Propulsion Laboratory, Pasadena, CA, USA
-<sup>10</sup> Climate Change Science Institute, Environmental Sciences Division, Oak Ridge National Laboratory, Oak Ridge, TN, USA
+:sup:`2` Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique, Toulouse, France
 
+:sup:`3` Climate and Ecosystem Sciences Division, Lawrence Berkeley National Lab, Berkeley, CA, USA
+
+:sup:`4` Earth and Environmental Sciences Division, Los Alamos National Laboratory, Los Alamos, NM, USA
+
+:sup:`5` Department of Biology, University of Texas, Rio Grande Valley, Edinburg, TX, USA
+
+:sup:`6` Atmospheric Sciences and Global Change Division, Pacific Northwest National Laboratory, Richland, WA, USA
+
+:sup:`7` Department of Biology, University of Washington, Seattle, WA, USA
+
+:sup:`8` Environmental and Climate Sciences Department, Brookhaven National Laboratory, Upton, NY, USA
+
+:sup:`9` Jet Propulsion Laboratory, Pasadena, CA, USA
+
+:sup:`10` Climate Change Science Institute, Environmental Sciences Division, Oak Ridge National Laboratory, Oak Ridge, TN, USA
 
 
 FATES is the "Functionally Assembled Terrestrial Ecosystem Simulator". It is an external module which can run within a given "Host Land Model" (HLM). Currently (November 2017) implementations are supported in both the Community Land Model of the Community Terrestrial Systems Model (CLM-CTSM) and in the Energy Exascale Earth Systems Model's Land Model (E3SM-LM).
