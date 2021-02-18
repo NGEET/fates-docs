@@ -4,16 +4,26 @@
 Technical Documentation for FATES
 ===================================
 
+FATES is the "Functionally Assembled Terrestrial Ecosystem Simulator". It is an external module which can run within a given "Host Land Model" (HLM). Currently (November 2017) implementations are supported in both the Community Land Model of the Community Terrestrial Systems Model (CLM-CTSM) and in the Energy Exascale Earth Systems Model's Land Model (E3SM-LM).
+
+FATES was derived from the CLM Ecosystem Demography model (CLM(ED)), which was documented in:
+
+Fisher, R. A., Muszala, S., Verteinstein, M., Lawrence, P., Xu, C., McDowell, N. G., Knox, R. G., Koven, C., Holm, J., Rogers, B. M., Spessa, A., Lawrence, D., and Bonan, G.: Taking off the training wheels: the properties of a dynamic vegetation model without climate envelopes, CLM4.5(ED), Geosci. Model Dev., 8, 3593-3619, https://doi.org/10.5194/gmd-8-3593-2015, 2015.
+
+and this technical note was first published as an appendix to that paper. 
+
+https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
+
 Authors of FATES code and technical documentation. 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`1`, Alan di Vittorio :sup:`3`,
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andrej :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`1`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`
 
 :sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
 
 :sup:`2` Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique, Toulouse, France
 
-:sup:`3` Climate and Ecosystem Sciences Division, Lawrence Berkeley National Lab, Berkeley, CA, USA
+:sup:`3` Climate and Ecosystem Sciences Division, Lawrence Berkeley National Laboratory, Berkeley, CA, USA
 
 :sup:`4` Earth and Environmental Sciences Division, Los Alamos National Laboratory, Los Alamos, NM, USA
 
@@ -25,20 +35,14 @@ Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gr
 
 :sup:`8` Environmental and Climate Sciences Department, Brookhaven National Laboratory, Upton, NY, USA
 
-:sup:`9` Jet Propulsion Laboratory, Pasadena, CA, USA
+:sup:`9` Energy and Environment Directorate, Pacific Northwest National Laboratory, Richland, WA, USA
 
-:sup:`10` Climate Change Science Institute, Environmental Sciences Division, Oak Ridge National Laboratory, Oak Ridge, TN, USA
+:sup:`10` Jet Propulsion Laboratory, Pasadena, CA, USA
+
+:sup:`11` Climate Change Science Institute, Environmental Sciences Division, Oak Ridge National Laboratory, Oak Ridge, TN, USA
 
 
-FATES is the "Functionally Assembled Terrestrial Ecosystem Simulator". It is an external module which can run within a given "Host Land Model" (HLM). Currently (November 2017) implementations are supported in both the Community Land Model of the Community Terrestrial Systems Model (CLM-CTSM) and in the Energy Exascale Earth Systems Model's Land Model (E3SM-LM).
 
-FATES was derived from the CLM Ecosystem Demography model (CLM(ED)), which was documented in:
-
-Fisher, R. A., Muszala, S., Verteinstein, M., Lawrence, P., Xu, C., McDowell, N. G., Knox, R. G., Koven, C., Holm, J., Rogers, B. M., Spessa, A., Lawrence, D., and Bonan, G.: Taking off the training wheels: the properties of a dynamic vegetation model without climate envelopes, CLM4.5(ED), Geosci. Model Dev., 8, 3593-3619, https://doi.org/10.5194/gmd-8-3593-2015, 2015.
-
-and this technical note was first published as an appendix to that paper. 
-
-https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
 
 Introduction
 ^^^^^^^^^^^^^^^^^^^
