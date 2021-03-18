@@ -1,5 +1,6 @@
 .. _rst_FATES:
 
+
 Technical Documentation for FATES
 ===================================
 
@@ -12,6 +13,36 @@ Fisher, R. A., Muszala, S., Verteinstein, M., Lawrence, P., Xu, C., McDowell, N.
 and this technical note was first published as an appendix to that paper. 
 
 https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
+
+Authors of FATES code and technical documentation. 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andrej :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`1`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`
+
+:sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
+
+:sup:`2` Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique, Toulouse, France
+
+:sup:`3` Climate and Ecosystem Sciences Division, Lawrence Berkeley National Laboratory, Berkeley, CA, USA
+
+:sup:`4` Earth and Environmental Sciences Division, Los Alamos National Laboratory, Los Alamos, NM, USA
+
+:sup:`5` Department of Biology, University of Texas, Rio Grande Valley, Edinburg, TX, USA
+
+:sup:`6` Atmospheric Sciences and Global Change Division, Pacific Northwest National Laboratory, Richland, WA, USA
+
+:sup:`7` Department of Biology, University of Washington, Seattle, WA, USA
+
+:sup:`8` Environmental and Climate Sciences Department, Brookhaven National Laboratory, Upton, NY, USA
+
+:sup:`9` Energy and Environment Directorate, Pacific Northwest National Laboratory, Richland, WA, USA
+
+:sup:`10` Jet Propulsion Laboratory, Pasadena, CA, USA
+
+:sup:`11` Climate Change Science Institute, Environmental Sciences Division, Oak Ridge National Laboratory, Oak Ridge, TN, USA
+
+
+
 
 Introduction
 ^^^^^^^^^^^^^^^^^^^
