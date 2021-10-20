@@ -4,7 +4,7 @@
 Technical Documentation for FATES
 ===================================
 
-FATES is the "Functionally Assembled Terrestrial Ecosystem Simulator". It is an external module which can run within a given "Host Land Model" (HLM). Currently (November 2017) implementations are supported in both the Community Land Model of the Community Terrestrial Systems Model (CLM-CTSM) and in the Energy Exascale Earth Systems Model's Land Model (E3SM-LM).
+FATES is the "Functionally Assembled Terrestrial Ecosystem Simulator". It is an external module which can run within a given "Host Land Model" (HLM). Currently (November 2017) implementations are supported in both the Community Land Model of the Community Terrestrial Systems Model (CLM-CTSM) and in the Energy Exascale Earth Systems Model (E3SM) Land Model (ELM).
 
 FATES was derived from the CLM Ecosystem Demography model (CLM(ED)), which was documented in:
 
@@ -52,7 +52,7 @@ The Ecosystem Demography ('ED'), concept within FATES is derived from the work o
 and is a cohort model of vegetation competition and co-existence, allowing a representation of the biosphere which accounts for the division of the land surface into successional stages, and for competition for light between height structured cohorts of representative trees of various plant functional types. 
 
 The implementation of the Ecosystem Demography
-concept within FATES links the surface flux and canopy physiology concepts in the CLM/E3SM
+concept within FATES links the surface flux and canopy physiology concepts in the CLM/ELM
 with numerous additional developments necessary to accommodate the new
 model also documented here. These include a version of the SPITFIRE
 (Spread and InTensity of Fire) model of :ref:`Thonicke et al. (2010)<thonickeetal2010>`, and an adoption of the concept of
