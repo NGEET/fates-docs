@@ -17,7 +17,7 @@ https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
 Authors of FATES code and technical documentation. 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andrej :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`1`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`
 
 :sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
 
@@ -792,9 +792,13 @@ area as:
 .. math:: A_{canopy} = \sum_{coh=1}^{nc,patch}{A_{crown,coh}.n_{coh}}
 
 where :math:`nc_{patch}` is the number of cohorts in a given patch. If
-the area of all crowns :math:`A_{canopy}` (m:math:`^{-2}`) is larger
-than the total ground area of a patch (:math:`A_{patch}`), then some
+the area of all crowns :math:`A_{canopy}` (:math:`m^{2}`) is larger
+than the total ground area of a patch (:math:`A_{patch}`), which
+typically happens at the end of the day, after growth and updated crown
+allometry is resolved in the model, then some
 fraction of each cohort is demoted to the understorey.
+
+.. figure:: images/Sorting_Schematic.png
 
 Under these circumstances, the `extra` crown area :math:`A_{loss}`
 (i.e., :math:`A_{canopy}` - :math:`A_p`) is moved into the understorey.
@@ -825,9 +829,7 @@ because 1) the crown area predicted for a cohort to lose may be larger
 than the total crown area of the cohort, which requires iterative
 solutions, and 2) on some occasions (e.g. after fire, or if the parameter which sets the disturbed area as a function of the fractional crown area of canopy tree mortality is less than one), the canopy may
 open up and require ‘promotion’ of cohorts from the understorey, and 3)
-canopy area may change due to the variations of canopy spread values (
-
-:math:`S_{c,patch,cl}`, see the section below for details) when
+canopy area may change due to the variations of canopy spread values (:math:`S_{c,patch,cl}`, see the section below for details) when
 
 fractions of cohorts are demoted or promoted. Further details can be
 found in the code references in the footnote.
@@ -2025,7 +2027,40 @@ that has the same form as that for stem respiration, but uses vertically
 resolved soil temperature instead of canopy temperature. In the CLM4.5,
 only coarse and not fine root respriation varies as a function of soil
 depth, and we maintain this assumption here, although it may be altered
-in later versions. The growth respiration, :math:`R_{g,coh}` is a fixed
+in later versions.
+
+The source of maintenance respiration is the plant's carbon storage
+pool, which is updated daily.  For plants that are in long-term
+negative carbon balance, FATES assumes a tradoff between reduced
+maintenance respiration expenditures and increased carbon-starvation
+mortality (see section 'Plant Mortality'). This reduction of
+maintenance respiration during carbon starvation is consistent with
+observations of trees under acute carbon stress (Sevanto et al.,
+2014). Because the physiologic basis and form of this process is
+poorly constrained, we use heuristic functions here to define these
+processes. First, we define a target carbon storage pool (:math:`\grave{C}_{store,coh}`):
+
+.. math:: \grave{C}_{store,coh} = r_{store} \grave{C}_{leaf,coh}
+
+where :math:`r_{store}` is a pft-specific parameter that linearly relates the target
+storage pool to the target leaf biomass :math:`\grave{C}_{leaf,coh}`. If a given plant
+is unable to achieve its target carbon storage because of having a
+negative NPP at any given time, then its actual storage pool
+:math:`C_{store,coh}` will drop below the target storage pool :math:`\grave{C}_{store,coh}`. Then FATES
+sets the fractional rate of maintenance respiration (R) on the ratio of :math:`C_{store,coh}` to :math:`\grave{C}_{leaf,coh}`:
+
+.. math:: R = \left\{ \begin{array}{ll}
+   (1-q^{(C_{store,coh}/\grave{C}_{leaf,coh})})/(1-q)& C_{store,coh}<\grave{C}_{leaf,coh}\\
+   &\\
+   1& C_{store,coh} >= \grave{C}_{leaf,coh}\\
+   \end{array} \right.
+
+   
+where :math:`q` is a parameter that governs the curvature of the
+respiration reduction function. This parameter is specific to a given
+PFT. 
+   
+The growth respiration, :math:`R_{g,coh}` is a fixed
 fraction :math:`f_{gr}` of the carbon remaining after maintenance
 respiration has occurred.
 
@@ -2059,9 +2094,14 @@ respiration has occurred.
 | :math:`R_{cn,ro | CN ratio of     | gC/gN           | *ft*            |
 | ot,ft}`         | root matter     |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| :math:`f_{gr}`  | Growth          | none            |                 |
+| :math:`f_{gr}`  | Growth          | none            | *ft*            |
 |                 | Respiration     |                 |                 |
 |                 | Fraction        |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`q`       | Low-Storage     | none            | *ft*            |
+|                 | Maintenance     |                 |                 |
+|                 | Respiration     |                 |                 |
+|                 | Reduction Param.|                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
 .. raw:: latex
@@ -2864,26 +2904,79 @@ layer :math:`z`, derived from the CLM(BGC) model.
 
    \bigskip 
 
+Disturbance
+^^^^^^^^^^^^^^^^
+FATES allows disturbance through three processes: (1) mortality of
+canopy trees, (2) fire, (3) anthropogenic disturbance.  Each of these
+is discussed in more detail below.  For the case of canopy tree
+mortality, some fraction of the crown area :math:`f_d` of deceased trees is used
+to generate newly-disturbed patch area, while the rest :math:`(1-f_d)` remains in
+the existing patch.  Thus varying :math:`f_d` from zero to 1 can lead
+to three different cases of how mortlaity leads to disturbance.  If
+:math:`f_d=1`, then all canopy area is converted into newly-disturbed
+patch area, and a fraction of understory trees equal to the ratio of
+dying-tree crown are a to the patches area are moved to the newly-disturbed patch, at
+which time they are promoted to the canopy of the new patch; this is
+labeled below as the 'Pure ED' case.  For those trees that are moved
+to the new patch, some fraction of these will die due to impacts from
+the disturbance process itself, this fraction :math:`i_d` is currently
+a global parameter for all individual-tree disturbance processes, with
+a default value of 0.55983.  If
+:math:`f_d=0`, then no disturbance occurs and all mortality is
+accomodated by promotion of trees from the understory to the canopy
+within a patch; this is the structure of the PPA formulation as
+described in :ref:`Purves et al. 2008<purves2008>`, and is labelled
+below as 'Pure PPA'. If :math:`0>f_d>1`, then some both processes of
+promotion within a patch and promotion into a new patch occur.  A
+special case of this is when all trees that would be moved into the
+new patch are killed in the process, thus guaranteeing that
+newly-disturbed patches are devoid of any surviving trees; this is
+blabelled below as the 'bare-ground intermediate case'.
+
+.. figure:: images/Disturbance_schematic.png
+
+
 Plant Mortality
 ^^^^^^^^^^^^^^^^
 
 Total plant mortality per cohort :math:`M_{t,coh}`, (fraction
-year\ :math:`^{-1}`) is simulated as the sum of six additive terms,
+year\ :math:`^{-1}`) is simulated as the sum of several additive terms,
 
-.. math:: M_{t,coh}= M_{b,coh} + M_{cs,coh} + M_{hf,coh} + M_{f,coh} + M_{s,coh} + M_{a,coh},
+.. math:: M_{t,coh}= M_{b,coh} + M_{cs,coh} + M_{hf,coh} + M_{f,coh} +
+	  M_{i,coh} + M_{fr,coh} + M_{s,coh} + M_{a,coh},
 
 where :math:`M_b` is the background mortality that is unaccounted by
-any of the other mortality rates and is fixed at 0.014. :math:`M_{cs}`
+any of the other mortality rates and is fixed at a constant
+PFT-dependent rate in the parameter file.
+
+:math:`M_{cs}`
 is the carbon starvation derived mortality, which is a function of the
 non-structural carbon storage term :math:`C_{store,coh}` and the
-PFT-specific ‘target’ carbon storage, :math:`l_{targ,ft}`, as follows:
+‘target’ leaf biomass, :math:`\grave{C}_{leaf,coh}`, as follows:
 
-.. math:: M_{cs,coh}= \rm{max} \left(0.0, S_{m,ft} \left(0.5 -  \frac{C_{store,coh}}{l_{targ,ft}C_{leaf}}\right)\right)
-
-where :math:`S_{m,ft}` is the `stress mortality` parameter, or the
-fraction of trees in a landscape that die when the mean condition of a
-given cohort triggers mortality. This parameter is needed to scale from
+.. math:: M_{cs} = \left\{ \begin{array}{ll}
+   M_{cs,max} (1-C_{store,coh}/\grave{C}_{leaf,coh})& C_{store,coh}<\grave{C}_{leaf,coh}\\
+   &\\
+   0& C_{store,coh} >= \grave{C}_{leaf,coh}\\
+   \end{array} \right.
+	  
+where :math:`M_{cs,max}` is the maximum rate of carbon storage mortality parameter, or the
+maximum rate of trees in a landscape that will die when their carbon
+stores are exhausted. This parameter is needed to scale from
 individual-level mortality simulation to grid-cell average conditions.
+
+Thus FATES implicitly assumes that there is a critical storage
+pool :math:`C_{store,coh,critical}=\grave{C}_{leaf,coh}` that sets the
+total-plant storage level where mortality begins; the implied
+parameter :math:`C_{store,coh,critical}/\grave{C}_{leaf,coh}=1` could be made explicit, but we left this as an
+implicit parameter here due to the generally weak data constraints on
+it at present. Because both the increase in mortality and the decrease
+in respiration (see section 'Respiration') begin when :math:`C_{store,coh}`
+drops below :math:`\grave{C}_{leaf,coh}`, and :math:`\grave{C}_{store,coh} = r_{store} \grave{C}_{leaf,coh}`, the parameter
+:math:`r_{store}-1`,  thus sets the size of the carbon
+storage buffer that determines how much cumulative negative NPP a
+plant can experience before it begins to suffer from carbon
+starvation.
 
 Mechanistic simulation of hydraulic failure is not undertaken on account
 of it’s mechanistic complexity (see :ref:`McDowell et al. 2013<Mcdowelletal2013>` for
@@ -2911,6 +3004,9 @@ wilting point (a PFT specific parameter :math:`\theta_{w,ft}`).
 
 :math:`M_{f,coh}` is the fire-induced mortality, as described in the
 fire modelling section.
+
+Impact mortality M_{i,coh} occurs to understory trees that are kille
+dduring the process of disturbance, as described above.
 
 :math:`M_{s,coh}` and :math:`M_{a,coh}` are size- and age-dependent mortality respectively. These terms model a gradual increase in mortality rate with either cohort DBH (cm) or cohort age. We model :math:`M_{s,coh}` as:
 
@@ -3170,11 +3266,12 @@ set of expressions (from :ref:`Thonicke et al. 2010<Thonickeetal2010>` Appendix 
 
 :math:`\Gamma_{opt}` is the residence time of the fire, and
 :math:`d_{miner}` is the mineral damping coefficient
-(=0.174:math:`S_e^{-0.19}` , where :math:`S_e` is 0.01 and so =
+(=0.174 :math:`S_e^{-0.19}` , where :math:`S_e` is 0.01 and so =
 :math:`d_{miner}` 0.41739).
 
 Fuel Consumption
 ----------------
+
 
 The fuel consumption (fraction of biomass pools) of each dead biomass
 pool in the area affected by fire on a given day (:math:`f_{c,dead,fc}`)
@@ -3261,12 +3358,18 @@ respectively).
 
 .. math:: ros_{b}=ros_{f}e^{-0.012W}
 
-The minor axis to major axis ratio :math:`l_{b}` of the ellipse is
+The minor axis to major axis ratio (i.e. the length-to-breadth ratio) :math:`l_{b}` of the ellipse is
 determined by the windspeed. If the windspeed (:math:`W`) is less than
-16.67 ms\ :math:`^{-1}` then :math:`l_{b}=1`. Otherwise (Eqn 12 and 13,
-:ref:`Thonicke et al. 2010<Thonickeetal2010>`)
+16.67 m min\ :math:`^{-1}` (i.e., 1 km hr :math:`^{-1}`) then :math:`l_{b}=1`. Otherwise (Eqn 12 and 13,
+:ref:`Thonicke et al. 2010<Thonickeetal2010>`, Eqn 79 and 80 Canadian
+Forest Fire Behavior Prediction System Ont.Inf.Rep. ST-X-3, 1992,
+as corrected in errata reported in Information Report GLC-X-10 by Bottom et al., 2009)
 
-.. math:: l_{b}=\textrm{min}\Big(8,f_{tree}(1.0+8.729(1.0-e^{-0.108W})^{2.155})+(f_{grass}(1.1+3.6W^{0.0464}))\Big)
+.. math:: l_{b}= \left\{ \begin{array}{ll}
+	  1.0+8.729(1.0-e^{-0.108W})^{2.155},   & f_{tree} > 0.55 \\
+	     &\\
+	1.1*(3.6W^{0.0464}), & f_{tree} <= 0.55 \\
+	  \end{array} \right\}  
 
 :math:`f_{grass}` and :math:`f_{tree}` are the fractions of the patch
 surface covered by grass and trees respectively.
@@ -3465,10 +3568,8 @@ To capture the disturbance mechanisms and degree of damage associated with loggi
 at the landscape level, we apply the mortality types following a workflow designed to correspond to 
 field operations. In FATES, as illustrated in Figure 1.17.2., individual trees of all plant functional types (PFTs) 
 in one patch are grouped into cohorts of similar-sized trees, whose size and population sizes evolve in time 
-through processes of recruitment, growth, and mortality.  For the purpose of reporting and visualizing the model state, 
-these cohorts are binned into a set of 13 fixed size classes in terms of the diameter at the breast height (DBH) 
-(i.e.,  0 - 5,  5 - 10, 10 - 15, 15 - 20, 20 - 30 , 30 - 40, 40 -  50, 50 - 60, 60 - 70, 70 - 80, 80 - 90, 
-90 - 100, and :math:`<=100 cm`). Cohorts are further organized into canopy and understory layers, 
+through processes of recruitment, growth, and mortality.  As described
+abve, cohorts are organized into canopy and understory layers, 
 which are subject to different light conditions (Figure 1.17.2a). When logging activities occur, 
 the canopy trees and a portion of big understory trees lose their crown coverage through direct felling 
 for harvesting logs, or as a result of collateral and mechanical damages ((Figure 1.17.2b). The fractions of 
@@ -3477,7 +3578,7 @@ percentages of an old (undisturbed) and a new (disturbed) patch caused by loggin
 (Figure 1.17.2c).  After patch fission, the canopy layer over the disturbed patch is removed, 
 while that over the undisturbed patch stays untouched (Figure 1.17.2d). In the undisturbed patch, the survivorship of 
 understory trees is calculated using an understory death fraction consistent with whose default value corresponds 
-to that used for natural disturbance (i.e., 0.5598). To differentiate logging from natural disturbance, 
+to that used for natural disturbance (:math:`i_d`, 0.559). To differentiate logging from natural disturbance, 
 a slightly elevated, logging-specific understory death fraction is applied in the disturbed patch instead at the 
 time of the logging event. Based on data from field surveys over logged forest plots in southern Amazon 
 (:ref:`Feldpausch et al., 2005 <feldpauschetal2005>`), understory death fraction corresponding to logging  
@@ -3490,6 +3591,7 @@ pending the inclusion of separate land-use fractions for managed and unmanaged f
 
 .. figure:: images/Logging_figure2.png
 
+	    
 Flow of necromass following logging disturbance
 -----------------------------------------------
 
@@ -3555,3 +3657,15 @@ Therefore, more light can penetrate and reach the understory layer in the distur
 in light-demanding species in the early stage of regeneration, followed by a succession process in which shade 
 tolerant species dominate gradually.  
 
+The above describes the case where the canopy is closed (by treees) prior to
+logging.  If this is not the case, some amount of non-tree-occupied
+canopy area is also moved to the newly-disturbed patch so as to
+maintain the composition of the undisturbed patch or patches in their original
+state (albeit in covering a smaller area). 
+
+.. figure:: images/logging_schematic_mixed_open_closed_canopy.png
+
+After logging occurs, the patches that have been disturbed are tracked
+as belonging to secondary lands, and are not fused with patches on
+primary lands. This allows primary and secondary land areas to be
+tracked, with possibly different ecological dynamics occuring on each.
