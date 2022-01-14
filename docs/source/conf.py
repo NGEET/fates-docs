@@ -173,3 +173,7 @@ numfig_format = {'figure': 'Figure %s',
                  'code-block': 'Code %s',
                  'section': '%s',
                 }
+
+imgmath_image_format = 'png'
+imgmath_font_size    = 4 
+imgmath_dvipng_args  = ['-gamma', '1.5', '-D', '300', '-bg', 'Transparent']
