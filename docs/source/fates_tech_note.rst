@@ -777,15 +777,19 @@ to know the spatial extent of tree crowns. Crown area,
 :math:`A_{crown}`, m\ :sup:`2`, is defined as
 
 
-.. math:: A_{crown,coh}  = \pi (dbh_{coh} S_{c,patch,cl})^{1.56}
+.. math:: A_{crown,coh}  =  S_{c,patch,cl}.dbh_{coh}^{(p_{e,leaf}-p_{e,leaf-crown})}
 
-where :math:`A_{crown}` is the crown area of a single tree canopy
+where :math:`A_{crown,coh}` is the crown area of a single tree canopy
 (m\ :sup:`2`) and :math:`S_{c,patch,cl}` is the ‘canopy spread’
-parameter (m cm\ :sup:`1`) of this canopy layer, which is assigned as a
-function of canopy space filling, discussed below. In contrast to
-:ref:`Purves et al. 2008<purves2008>` , we use an exponent, identical to that
-for leaf biomass, of 1.56, not 2.0, such that tree leaf area index does
-not change as a function of diameter.
+parameter (unitless) of this canopy layer, which is assigned as a
+function of canopy space filling, discussed below. :math:`S_{c,patch,cl}` is effectively
+a normalisation constant in the power law describing the relationship of crown area 
+to dbh. However, this is not constant but varies by the canopy areae to ground area fraction.  
+In contrast to
+:ref:`Purves et al. 2008<purves2008>` , by default we use an exponent, identical to that
+for leaf biomass, :math:`p_{e,leaf}`, not 2.0, such that tree leaf area index does
+not change as a function of diameter. The option is also available to modify
+the exponent using the difference parameter, :math:`p_{e,leaf-crown}`.
 
 To determine whether the canopy is closed, we calculate the total canopy
 area as:
@@ -857,25 +861,26 @@ other in space, or the total canopy area :math:`A_{canopy}`. However
 circularity. :math:`S_{c}` is thus solved iteratively through time.
 
 Each daily model step, :math:`A_{canopy}` and the fraction of the
-gridcell occupied by tree canopies in each canopy layer
+gridcell occupied by tree crowns in the top canopy layer
+is calculated (based on :math:`S_{c}` from the previous timestep): 
 
-(:math:`A_{f,cl}` = :math:`A_{canopy,cl}`/:math:`A_{patch}`) is
+(:math:`A_{f,1}` = :math:`A_{canopy,1}`/:math:`A_{site}`)
 
-calculated based on :math:`S_{c}` from the previous timestep. If
-:math:`A_{f}` is greater than a threshold value :math:`A_{t}`,
-:math:`S_{c}` is increased by a small increment :math:`i`. The threshold
-:math:`A_{t}` is, hypothetically, the canopy fraction at which light
+If :math:`A_{f,1}` is greater than a threshold value :math:`A_{t}`,
+:math:`S_{c}` is increased by a small increment :math:`i`, where :math:`i
+= i_p \left\{ S_{c,\rm{max}} - S_{c,\rm{min}} \right\}` (see bleow for definitions).    
+The threshold :math:`A_{t}` is, hypothetically, the canopy fraction at which light
 competition begins to impact on tree growth. This is less than 1.0 owing
-to the non-perfect spatial spacing of tree canopies. If :math:`A_{f,cl}`
+to the non-perfect spatial spacing of tree canopies. If :math:`A_{f,1}`
 is greater than :math:`A_{t}`, then :math:`S_{c}` is reduced by an
 increment :math:`i`, to reduce the spatial extent of the canopy, thus.
 
 .. math::
 
-   S_{c,patch,cl,t+1} = \left\{ \begin{array}{ll}
-   S_{c,patch,cl,t} + i& \textrm{for $A_{f,cl} < A_{t}$}\\
+   S_{c,t+1} = \left\{ \begin{array}{ll}
+   S_{c,t} + i& \textrm{for $A_{f,cl} < A_{t}$}\\
    &\\
-   S_{c,patch,cl,t} - i& \textrm{for $A_{f,cl} > A_{t}$}\\
+   S_{c,t} - i& \textrm{for $A_{f,cl} > A_{t}$}\\
    \end{array} \right.
 
 The values of :math:`S_{c}` are bounded to upper and lower limits. The
@@ -885,17 +890,17 @@ largest canopy extent :math:`S_{c,max}`
 
 .. math::
 
-   S_{c,patch,cl} = \left\{ \begin{array}{ll}
-   S_{c,min}& \textrm{for } S_{c,patch,cl}< S_{c,\rm{min}}\\
+   S_{c} = \left\{ \begin{array}{ll}
+   S_{c,min}& \textrm{for } S_{c}< S_{c,\rm{min}}\\
    &\\
-   S_{c,max}& \textrm{for } S_{c,patch,cl} > S_{c,\rm{max}}\\
+   S_{c,max}& \textrm{for } S_{c} > S_{c,\rm{max}}\\
    \end{array} \right.
 
-This iterative scheme requires two additional parameters (:math:`i` and
-:math:`A_{t}`). :math:`i` affects the speed with which canopy spread
-(and hence leaf are index) increase as canopy closure is neared.
+This iterative scheme requires two additional parameters (:math:`i_p` and
+:math:`A_{t}`). :math:`i_p` takes a value between 0 and 1 and affects the 
+speed with which canopy spread, :math:`S_c` changes.
 However, the model is relatively insensitive to the choice of either
-:math:`i` or :math:`A_{t}`.
+:math:`i_p` or :math:`A_{t}`.
 
 Definition of Leaf and Stem Area Profile
 ----------------------------------------
