@@ -249,7 +249,7 @@ height-structured cohorts, we calculate the relativized differences in
 height (:math:`h_{coh}`, m) between two cohorts of the same pft,
 :math:`p` and :math:`q` as
 
-.. math:: d_{hite,p,q} = \frac{\mathrm{abs}.(h_{p-}h_{q})}{\frac{1}{2}(h_{p}+h_{q})}
+.. math:: d_{hite,p,q} = \frac{\mathrm{abs}(h_{p-}h_{q})}{\frac{1}{2}(h_{p}+h_{q})}
 
 If :math:`d_{hite,p,q}` is smaller than some threshold :math:`t_{ch}`,
 and they are of the same plant functional type, the two cohorts are
@@ -424,18 +424,18 @@ restarted. The state variables of a cohort are as follows:
 | Plant           | :math:`{\it{ft} | integer         |                 |
 | Functional Type | _{coh}}`        |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| Number of       | :math:`n_{coh}` | n per           |                 |
-| Individuals     |                 | 10000m\ :math:` |                 |
-|                 |                 | ^{-2}`          |                 |
+| Number of       | :math:`n_{coh}` | n \             |                 |
+| Individuals     |                 | :math:`ha^{-1}` |                 |
+|                 |                 |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 | Height          | :math:`h_{coh}` | m               |                 |
 +-----------------+-----------------+-----------------+-----------------+
 | Diameter        | :math:`\it{dbh_ | cm              |                 |
 |                 | {coh}}`         |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| Carbon Mass     | :math:`{C_{(o   | Kg              | leaf, fine-root |
-|                 | ,coh)}}`        | plant\          | sapwood,        |
-|                 |                 | :math:`^{-1}`   | storage,        |
+| Carbon Mass     | :math:`{C_{(o   | Kg \            | leaf, fine-root |
+|                 | ,coh)}}`        | :math:`plant^   | sapwood,        |
+|                 |                 | {-1}`           | storage,        |
 |                 |                 |                 | structural,     |
 |                 |                 |                 | reproductive    |
 +-----------------+-----------------+-----------------+-----------------+
