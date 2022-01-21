@@ -447,7 +447,7 @@ restarted. The state variables of a cohort are as follows:
 +-----------------+-----------------+-----------------+-----------------+
 | Leaf memory     | :math:`{l_{memo |                 | Leaf mass when  |
 |                 | ry,coh}}`       | Kg plant\       | leaves are      |
-|                 |                 | :sup:`1`        | dropped         |
+|                 |                 | :sup:`-1`       | dropped         |
 +-----------------+-----------------+-----------------+-----------------+
 | Phenological    | :math:`{S_{phen | integer         | 1=leaves off.   |
 | Status          | ,coh}}`         |                 | 2=leaves on     |
@@ -491,23 +491,23 @@ can be restarted, are as follows
 |             | {patch}`    |             |             |
 +-------------+-------------+-------------+-------------+
 | Seed        | :math:`seed_| KgC m\      | :math:`ft`  |
-|             | {patch}`    | :sup:`2`    |             |
+|             | {patch}`    | :sup:`-2`   |             |
 |             |             |             |             |
 +-------------+-------------+-------------+-------------+
 | Leaf Litter | :math:`l_{l | KgC m\      | :math:`ft`  |
-|             | itter,patch | :sup:`2`    |             |
+|             | itter,patch | :sup:`-2`   |             |
 |             | }`          |             |             |
 +-------------+-------------+-------------+-------------+
 | Root Litter | :math:`r_{l | KgC m\      | :math:`ft`  |
-|             | itter,patch | :sup:`2`    |             |
+|             | itter,patch | :sup:`-2`   |             |
 |             | }`          |             |             |
 +-------------+-------------+-------------+-------------+
 | AG Coarse   | :math:`{CWD}| KgC m\      | Size Class  |
-| Woody       | _{A         | :sup:`2`    | (lsc)       |
+| Woody       | _{A         | :sup:`-2`   | (lsc)       |
 | Debris      | G,patch}`   |             |             |
 +-------------+-------------+-------------+-------------+
 | BG Coarse   | :math:`{CWD}| KgC m\      | Size Class  |
-| Woody       | _{B         | :sup:`2`    | (lsc)       |
+| Woody       | _{B         | :sup:`-2`   | (lsc)       |
 | Debris      | G,patch}`   |             |             |
 +-------------+-------------+-------------+-------------+
 | Canopy      | :math:`S_{c |             | Canopy      |
