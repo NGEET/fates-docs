@@ -7,3 +7,4 @@ docs/source/_build/
 # Silly mac osx files
 .DS_Store
 
+*.swp

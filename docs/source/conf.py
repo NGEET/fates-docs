@@ -26,7 +26,7 @@ author = u'FATES Development Team'
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'd2.0.0'
+release = u'd2.0.1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -173,3 +173,7 @@ numfig_format = {'figure': 'Figure %s',
                  'code-block': 'Code %s',
                  'section': '%s',
                 }
+
+imgmath_image_format = 'png'
+imgmath_font_size    = 4 
+imgmath_dvipng_args  = ['-gamma', '1.5', '-D', '300', '-bg', 'Transparent']

@@ -249,7 +249,7 @@ height-structured cohorts, we calculate the relativized differences in
 height (:math:`h_{coh}`, m) between two cohorts of the same pft,
 :math:`p` and :math:`q` as
 
-.. math:: d_{hite,p,q} = \frac{\mathrm{abs}.(h_{p-}h_{q})}{\frac{1}{2}(h_{p}+h_{q})}
+.. math:: d_{hite,p,q} = \frac{\mathrm{abs}(h_{p-}h_{q})}{\frac{1}{2}(h_{p}+h_{q})}
 
 If :math:`d_{hite,p,q}` is smaller than some threshold :math:`t_{ch}`,
 and they are of the same plant functional type, the two cohorts are
@@ -285,7 +285,7 @@ or plant types, they remain as separate entities. Thus
 for patch :math:`m`,\ :math:`d_{c}` is the diameter class.
 :math:`d_{c,min}` and :math:`d_{c,max}` are the lower and upper
 boundaries for the :math:`d_{c}` diameter class. :math:`B_{ag,coh}` and
-:math:`n_{coh}` depict the biomass (KgC m\ :math:`^{-2}`) and the number
+:math:`n_{coh}` depict the biomass (KgC m\ :sup:`-2`) and the number
 of individuals of each cohort respectively. A difference matrix between
 patches :math:`m` and :math:`n` is thus calculated as
 
@@ -424,30 +424,30 @@ restarted. The state variables of a cohort are as follows:
 | Plant           | :math:`{\it{ft} | integer         |                 |
 | Functional Type | _{coh}}`        |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| Number of       | :math:`n_{coh}` | n per           |                 |
-| Individuals     |                 | 10000m\ :math:` |                 |
-|                 |                 | ^{-2}`          |                 |
+| Number of       | :math:`n_{coh}` | n ha\ :sup:`-2` |                 |
+| Individuals     |                 |                 |                 |
+|                 |                 |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 | Height          | :math:`h_{coh}` | m               |                 |
 +-----------------+-----------------+-----------------+-----------------+
 | Diameter        | :math:`\it{dbh_ | cm              |                 |
 |                 | {coh}}`         |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| Carbon Mass     | :math:`{C_{(o   | Kg              | leaf, fine-root |
-|                 | ,coh)}}`        | plant\          | sapwood,        |
-|                 |                 | :math:`^{-1}`   | storage,        |
+| Carbon Mass     | :math:`{C_{(o   |                 | leaf, fine-root |
+|                 | ,coh)}}`        | Kg plant\       | sapwood,        |
+|                 |                 | :sup:`-1`       | storage,        |
 |                 |                 |                 | structural,     |
 |                 |                 |                 | reproductive    |
 +-----------------+-----------------+-----------------+-----------------+
-| Nutrient Mass   | :math:`{N_{(o   | Kg              | Optional        |
-|                 | ,s,coh)}}`      | plant\ :math:`^ | depending on    |
-|                 |                 | {-1}`           | hypothesis.     |
+| Nutrient Mass   | :math:`{N_{(o   |                 | Optional        |
+|                 | ,s,coh)}}`      | Kg plant\       | depending on    |
+|                 |                 | :sup:`-1`       | hypothesis.     |
 |                 |                 |                 | See PARTEH      |
 |                 |                 |                 | documentation.  |
 +-----------------+-----------------+-----------------+-----------------+
-| Leaf memory     | :math:`{l_{memo | KgC             | Leaf mass when  |
-|                 | ry,coh}}`       | plant\ :math:`^ | leaves are      |
-|                 |                 | {-1}`           | dropped         |
+| Leaf memory     | :math:`{l_{memo |                 | Leaf mass when  |
+|                 | ry,coh}}`       | Kg plant\       | leaves are      |
+|                 |                 | :sup:`-1`       | dropped         |
 +-----------------+-----------------+-----------------+-----------------+
 | Phenological    | :math:`{S_{phen | integer         | 1=leaves off.   |
 | Status          | ,coh}}`         |                 | 2=leaves on     |
@@ -484,31 +484,31 @@ can be restarted, are as follows
 | Quantity    | Variable    | Units       | Indexed By  |
 |             | name        |             |             |
 +=============+=============+=============+=============+
-| Area        | :math:`\it{ | m\ :math:`^ |             |
-|             | A_{patch}}` | {2}`        |             |
+| Area        | :math:`\it{ | m\ :sup:`2` |             |
+|             | A_{patch}}` |             |             |
 +-------------+-------------+-------------+-------------+
 | Age         | :math:`age_ | years       |             |
 |             | {patch}`    |             |             |
 +-------------+-------------+-------------+-------------+
-| Seed        | :math:`seed_| KgC         | :math:`ft`  |
-|             | {patch}`    | m\ :math:`^ |             |
-|             |             | {-2}`       |             |
+| Seed        | :math:`seed_| KgC m\      | :math:`ft`  |
+|             | {patch}`    | :sup:`-2`   |             |
+|             |             |             |             |
 +-------------+-------------+-------------+-------------+
-| Leaf Litter | :math:`l_{l | KgC         | :math:`ft`  |
-|             | itter,patch | m\ :math:`^ |             |
-|             | }`          | {-2}`       |             |
+| Leaf Litter | :math:`l_{l | KgC m\      | :math:`ft`  |
+|             | itter,patch | :sup:`-2`   |             |
+|             | }`          |             |             |
 +-------------+-------------+-------------+-------------+
-| Root Litter | :math:`r_{l | KgC         | :math:`ft`  |
-|             | itter,patch | m\ :math:`^ |             |
-|             | }`          | {-2}`       |             |
+| Root Litter | :math:`r_{l | KgC m\      | :math:`ft`  |
+|             | itter,patch | :sup:`-2`   |             |
+|             | }`          |             |             |
 +-------------+-------------+-------------+-------------+
-| AG Coarse   | :math:`{CWD}| KgC         | Size Class  |
-| Woody       | _{A         | m\ :math:`^ | (lsc)       |
-| Debris      | G,patch}`   | {-2}`       |             |
+| AG Coarse   | :math:`{CWD}| KgC m\      | Size Class  |
+| Woody       | _{A         | :sup:`-2`   | (lsc)       |
+| Debris      | G,patch}`   |             |             |
 +-------------+-------------+-------------+-------------+
-| BG Coarse   | :math:`{CWD}| KgC         | Size Class  |
-| Woody       | _{B         | m\ :math:`^ | (lsc)       |
-| Debris      | G,patch}`   | {-2}`       |             |
+| BG Coarse   | :math:`{CWD}| KgC m\      | Size Class  |
+| Woody       | _{B         | :sup:`-2`   | (lsc)       |
+| Debris      | G,patch}`   |             |             |
 +-------------+-------------+-------------+-------------+
 | Canopy      | :math:`S_{c |             | Canopy      |
 | Spread      | ,patch}`    |             | Layer       |
@@ -545,7 +545,7 @@ in the first timestep is the same as the area of the notional ecosystem
 :math:`A_{tot}`. The model has no meaningful spatial dimension, but we
 assign a notional area such that the values of ‘:math:`n_{coh}`’ can be
 attributed. The default value of :math:`A_{tot}` is one hectare (10,000
-m\ :math:`^{2}`), but the model will behave identically irrepective of
+m\ :sub:`2`), but the model will behave identically irrepective of
 the value of this parameter.
 
 .. math:: n_{coh,0} = S_{init}A_{patch}
@@ -573,7 +573,7 @@ The diameter of each cohort is then specified according to the height-diameter a
 |                 | height          |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 | :math:`S_{init}`| Initial         | Individuals     |                 |
-|                 | Planting        | m\ :math:`^{-2}`|                 |
+|                 | Planting        | m\ :sup:`-2`    |                 |
 |                 | density         |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
@@ -661,7 +661,7 @@ The following table details the different allometric relationships that governs 
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
    | Reference                                               | Function                                                                                 |
    +=========================================================+==========================================================================================+
-   | Diameter to Height                                                                                                                                 |
+   | **Diameter to Height**                                                                                                                             |
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
    | Power Function                                          | :math:`h = p_1 \cdot d_*^{p_2}`                                                          |
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
@@ -671,8 +671,9 @@ The following table details the different allometric relationships that governs 
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
    | :ref:`Martinez Cano et al (2019)<MartinezCanoetal2019>` | :math:`h = (p_1 \cdot d_*^{p_2}) / (p_3+ d_*^{p_2})`                                     |
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
+   |                                                                                                                                                    |
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
-   | Target Above Ground Biomass                                                                                                                        |
+   | **Target Above Ground Biomass**                                                                                                                    |
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
    | :ref:`Saldarriaga et al. (1998)<Saldarriaga1988>`       | :math:`\grave{C}_{agb} = f_{agb} \cdot p_1 \cdot h^{p_2} \cdot d^{p_3} \cdot \rho^{p_4}` |
    +---------------------------------------------------------+------------------------------------------------------------------------------------------+
@@ -773,18 +774,22 @@ upper layers.
 
 To determine whether a second canopy layer is required, the model needs
 to know the spatial extent of tree crowns. Crown area,
-:math:`A_{crown}`, m\ :math:`^{2}`, is defined as
+:math:`A_{crown}`, m\ :sup:`2`, is defined as
 
 
-.. math:: A_{crown,coh}  = \pi (dbh_{coh} S_{c,patch,cl})^{1.56}
+.. math:: A_{crown,coh}  =  S_{c,patch,cl}.dbh_{coh}^{(p_{e,leaf}-p_{e,leaf-crown})}
 
-where :math:`A_{crown}` is the crown area of a single tree canopy
-(m:math:`^{-2}`) and :math:`S_{c,patch,cl}` is the ‘canopy spread’
-parameter (m cm^-1) of this canopy layer, which is assigned as a
-function of canopy space filling, discussed below. In contrast to
-:ref:`Purves et al. 2008<purves2008>` , we use an exponent, identical to that
-for leaf biomass, of 1.56, not 2.0, such that tree leaf area index does
-not change as a function of diameter.
+where :math:`A_{crown,coh}` is the crown area of a single tree canopy
+(m\ :sup:`2`) and :math:`S_{c,patch,cl}` is the ‘canopy spread’
+parameter (unitless) of this canopy layer, which is assigned as a
+function of canopy space filling, discussed below. :math:`S_{c,patch,cl}` is effectively
+a normalisation constant in the power law describing the relationship of crown area 
+to dbh. However, this is not constant but varies by the canopy areae to ground area fraction.  
+In contrast to
+:ref:`Purves et al. 2008<purves2008>` , by default we use an exponent, identical to that
+for leaf biomass, :math:`p_{e,leaf}`, not 2.0, such that tree leaf area index does
+not change as a function of diameter. The option is also available to modify
+the exponent using the difference parameter, :math:`p_{e,leaf-crown}`.
 
 To determine whether the canopy is closed, we calculate the total canopy
 area as:
@@ -792,7 +797,7 @@ area as:
 .. math:: A_{canopy} = \sum_{coh=1}^{nc,patch}{A_{crown,coh}.n_{coh}}
 
 where :math:`nc_{patch}` is the number of cohorts in a given patch. If
-the area of all crowns :math:`A_{canopy}` (:math:`m^{2}`) is larger
+the area of all crowns :math:`A_{canopy}` (m\ :sup:`2`) is larger
 than the total ground area of a patch (:math:`A_{patch}`), which
 typically happens at the end of the day, after growth and updated crown
 allometry is resolved in the model, then some
@@ -830,7 +835,6 @@ than the total crown area of the cohort, which requires iterative
 solutions, and 2) on some occasions (e.g. after fire, or if the parameter which sets the disturbed area as a function of the fractional crown area of canopy tree mortality is less than one), the canopy may
 open up and require ‘promotion’ of cohorts from the understorey, and 3)
 canopy area may change due to the variations of canopy spread values (:math:`S_{c,patch,cl}`, see the section below for details) when
-
 fractions of cohorts are demoted or promoted. Further details can be
 found in the code references in the footnote.
 
@@ -838,7 +842,7 @@ Horizontal Canopy Spread
 -------------------------
 
 :ref:`Purves et al. 2008<purves2008>` estimated the ratio between canopy and
-stem diameter :math:`c_{p}` as 0.1 m cm\ :math:`^{-1}` for canopy trees
+stem diameter :math:`c_{p}` as 0.1 m cm\ :sup:`-1` for canopy trees
 in North American forests, but this estimate was made on trees in closed
 canopies, whose shape is subject to space competition from other
 individuals. Sapling trees have no constraints in their horizontal
@@ -857,25 +861,26 @@ other in space, or the total canopy area :math:`A_{canopy}`. However
 circularity. :math:`S_{c}` is thus solved iteratively through time.
 
 Each daily model step, :math:`A_{canopy}` and the fraction of the
-gridcell occupied by tree canopies in each canopy layer
+gridcell occupied by tree crowns in the top canopy layer
+is calculated (based on :math:`S_{c}` from the previous timestep): 
 
-(:math:`A_{f,cl}` = :math:`A_{canopy,cl}`/:math:`A_{patch}`) is
+(:math:`A_{f,1}` = :math:`A_{canopy,1}`/:math:`A_{site}`)
 
-calculated based on :math:`S_{c}` from the previous timestep. If
-:math:`A_{f}` is greater than a threshold value :math:`A_{t}`,
-:math:`S_{c}` is increased by a small increment :math:`i`. The threshold
-:math:`A_{t}` is, hypothetically, the canopy fraction at which light
+If :math:`A_{f,1}` is greater than a threshold value :math:`A_{t}`,
+:math:`S_{c}` is increased by a small increment :math:`i`, where :math:`i
+= i_p \left\{ S_{c,\rm{max}} - S_{c,\rm{min}} \right\}` (see bleow for definitions).    
+The threshold :math:`A_{t}` is, hypothetically, the canopy fraction at which light
 competition begins to impact on tree growth. This is less than 1.0 owing
-to the non-perfect spatial spacing of tree canopies. If :math:`A_{f,cl}`
+to the non-perfect spatial spacing of tree canopies. If :math:`A_{f,1}`
 is greater than :math:`A_{t}`, then :math:`S_{c}` is reduced by an
 increment :math:`i`, to reduce the spatial extent of the canopy, thus.
 
 .. math::
 
-   S_{c,patch,cl,t+1} = \left\{ \begin{array}{ll}
-   S_{c,patch,cl,t} + i& \textrm{for $A_{f,cl} < A_{t}$}\\
+   S_{c,t+1} = \left\{ \begin{array}{ll}
+   S_{c,t} + i& \textrm{for $A_{f,cl} < A_{t}$}\\
    &\\
-   S_{c,patch,cl,t} - i& \textrm{for $A_{f,cl} > A_{t}$}\\
+   S_{c,t} - i& \textrm{for $A_{f,cl} > A_{t}$}\\
    \end{array} \right.
 
 The values of :math:`S_{c}` are bounded to upper and lower limits. The
@@ -885,17 +890,17 @@ largest canopy extent :math:`S_{c,max}`
 
 .. math::
 
-   S_{c,patch,cl} = \left\{ \begin{array}{ll}
-   S_{c,min}& \textrm{for } S_{c,patch,cl}< S_{c,\rm{min}}\\
+   S_{c} = \left\{ \begin{array}{ll}
+   S_{c,min}& \textrm{for } S_{c}< S_{c,\rm{min}}\\
    &\\
-   S_{c,max}& \textrm{for } S_{c,patch,cl} > S_{c,\rm{max}}\\
+   S_{c,max}& \textrm{for } S_{c} > S_{c,\rm{max}}\\
    \end{array} \right.
 
-This iterative scheme requires two additional parameters (:math:`i` and
-:math:`A_{t}`). :math:`i` affects the speed with which canopy spread
-(and hence leaf are index) increase as canopy closure is neared.
+This iterative scheme requires two additional parameters (:math:`i_p` and
+:math:`A_{t}`). :math:`i_p` takes a value between 0 and 1 and affects the 
+speed with which canopy spread, :math:`S_c` changes.
 However, the model is relatively insensitive to the choice of either
-:math:`i` or :math:`A_{t}`.
+:math:`i_p` or :math:`A_{t}`.
 
 Definition of Leaf and Stem Area Profile
 ----------------------------------------
@@ -923,12 +928,12 @@ layer and functional type. This means that to generate the
 each cohort into leaf layers. First, we determine how many leaf layers
 are occupied by a single cohort, by calculating the ‘tree LAI’ as the
 total leaf area of each cohort divided by its crown area (both in
-m\ :math:`^{2}`)
+m\ :sup:`2`)
 
 .. math:: \mathit{tree}_{lai,coh} = \frac{C_{leaf,coh}\cdot\mathrm{sla}_{ft}}{A_{crown,coh}}
 
 where :math:`\mathrm{sla}_{ft}` is the specific leaf area in
-m\ :math:`^{2}` KgC\ :math:`^{-1}` and :math:`C_{leaf}` is in kGC per plant.
+m\ :sup:`2` KgC\ :sup:`-1` and :math:`C_{leaf}` is in KgC per plant.
 
 Stem area index (SAI) is ratio of the total area of all woody stems on a
 plant to the area of ground covered by the plant. During winter in
@@ -947,7 +952,7 @@ is complex and not particularly amenable to the use of, for example,
 assumptions of random distribution in space that are typically used to
 calculate leaf area from light interception.
 :ref:`Kucharik et al. 1998<kucharik1998>` estimated that SAI visible from an
-LAI2000 sensor was around 0.5 m^2 m^-2. Low et al. 2001
+LAI2000 sensor was around 0.5 m\ :sup:`2` m\ :sup:`-2`. Low et al. 2001
 estimate that the wood area index for Ponderosa Pine forest is
 0.27-0.33. The existing CLM(CN) algorithm sets the minimum SAI at 0.25
 to match MODIS observations, but then allows SAI to rise as a function
@@ -958,8 +963,8 @@ woody biomass, to at very least provide a mechanistic link between the
 existence of wood and radiation absorbed by it. The non-linearity
 between how much woody area exists and how much radiation is absorbed is
 provided by the radiation absorption algorithm. Specifically, the SAI of
-an individual cohort (:math:`\mathrm{tree}_{sai,coh}`, m\ :math:`^{2}`
-m\ :math:`^{-2}`) is calculated as follows,
+an individual cohort (:math:`\mathrm{tree}_{sai,coh}`, m\ :sup:`2`
+m\ :sup:`-2`) is calculated as follows,
 
 .. math:: \mathrm{tree}_{sai,coh} = k_{sai}\cdot C_{struc,coh} ,
 
@@ -1092,48 +1097,48 @@ The resulting exposed (:math:`elai, esai`) and total
 and are used in the radiation interception and photosynthesis algorithms
 described later.
 
-+-------------+-------------+-------------+-------------+-------------+
-| Parameter   | Parameter   | Units       | Notes       | Indexed by  |
-| Symbol      | Name        |             |             |             |
-+=============+=============+=============+=============+=============+
-| :math:`     | Thickness   | m\ :math:`^ |             |             |
-| \delta_     | of single   | {-2}`\ m\ : |             |             |
-| {vai}`      | canopy      | math:`^{-2}`|             |             |
-|             | layer       |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| :math:`C_e` | Competitive | none        |             |             |
-|             | Exclusion   |             |             |             |
-|             | Parameter   |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| :math:`c_{p | Minimum     | m\ :math:`^ |             |             |
-| ,min}`      | canopy      | {2}`        |             |             |
-|             | spread      | cm\ :math:` |             |             |
-|             |             | ^{-1}`      |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| :math:`c_{p | Competitive | m\ :math:`^ |             |             |
-| ,max}`      | Exclusion   | {2}`        |             |             |
-|             | Parameter   | cm\ :math:` |             |             |
-|             |             | ^{-1}`      |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| :math:`i`   | Incremental | m\ :math:`^ |             |             |
-|             | change in   | {2}`        |             |             |
-|             | :math:`c_p` | cm\ :math:` |             |             |
-|             |             | ^{-1}`      |             |             |
-|             |             | y\ :math:`^ |             |             |
-|             |             | {-1}`       |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| :math:`A_t` | Threshold   | none        |             |             |
-|             | canopy      |             |             |             |
-|             | closure     |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| :math:`f_{c | Crown       | none        |             | :math:`ft`  |
-| rown,ft}`   | fraction    |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
-| :math:`k_{s | Stem area   | m^2 KgC^-1  |             |             |
-| ai}`        | per unit    |             |             |             |
-|             | woody       |             |             |             |
-|             | biomass     |             |             |             |
-+-------------+-------------+-------------+-------------+-------------+
++----------------------+-------------+---------------+-------------+-------------+
+| Parameter            | Parameter   | Units         | Notes       | Indexed by  |
+| Symbol               | Name        |               |             |             |
++======================+=============+===============+=============+=============+
+| :math:`\delta_{vai}` | Thickness   | m\ :sup:`2`   |             |             |
+|                      | of single   | m\ :sup:`-2`  |             |             |
+|                      | canopy      |               |             |             |
+|                      | layer       |               |             |             |
++----------------------+-------------+---------------+-------------+-------------+
+| :math:`C_e`          | Competitive | none          |             |             |
+|                      | Exclusion   |               |             |             |
+|                      | Parameter   |               |             |             |
++----------------------+-------------+---------------+-------------+-------------+
+| :math:`c_{p          | Minimum     | m\ :sup:`2`   |             |             |
+| ,min}`               | canopy      | cm\ :sup:`-1` |             |             |
+|                      | spread      |               |             |             |
+|                      |             |               |             |             |
++----------------------+-------------+---------------+-------------+-------------+
+| :math:`c_{p          | Competitive | m\ :sup:`2`   |             |             |
+| ,max}`               | Exclusion   | cm\ :sup:`-1` |             |             |
+|                      | Parameter   |               |             |             |
+|                      |             |               |             |             |
++----------------------+-------------+---------------+-------------+-------------+
+| :math:`i`            | Incremental | m\ :sup:`2`   |             |             |
+|                      | change in   | cm\ :sup:`-1` |             |             |
+|                      | :math:`c_p` | y\ :sup:`-1`  |             |             |
+|                      |             |               |             |             |
+|                      |             |               |             |             |
+|                      |             |               |             |             |
++----------------------+-------------+---------------+-------------+-------------+
+| :math:`A_t`          | Threshold   | none          |             |             |
+|                      | canopy      |               |             |             |
+|                      | closure     |               |             |             |
++----------------------+-------------+---------------+-------------+-------------+
+| :math:`f_{c          | Crown       | none          |             | :math:`ft`  |
+| rown,ft}`            | fraction    |               |             |             |
++----------------------+-------------+---------------+-------------+-------------+
+| :math:`k_{sai}`      | Stem area   | m\ :sup:`2`   |             |             |
+|                      | per unit    | KgC\ :sup:`-1`|             |             |
+|                      | woody       |               |             |             |
+|                      | biomass     |               |             |             |
++----------------------+-------------+---------------+-------------+-------------+
 
 
 Radiation Transfer
