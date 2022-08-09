@@ -3676,7 +3676,8 @@ primary lands. This allows primary and secondary land areas to be
 tracked, with possibly different ecological dynamics occuring on each.
 
 
-**S1 - Description of FATES-Hydro**
+Plant Hydraulic module
+-----------------
 by Junyan Ding 
 Aug 7th. 2022
 
@@ -3748,8 +3749,8 @@ and the vulnerability curve (Manzoni et al. 2013, Christoffersen et al.
 2016).
 
 The plant hydrodynamic representation and numerical solver scheme within
-FATES-HYDRO follows Christoffersen et al. (2016). We made a few
-modifications to accommodate the multi-soil layers and improve the
+FATES-HYDRO follows Christoffersen et al. (2016). A few
+modifications are made to accommodate the multi-soil layers and improve the
 numerical stability. First, to accommodate the multi-soil layers, we
 have sequentially solved the Richards' equation for each individual soil
 layers, with each layer-specific solution proportional to each layer's
@@ -3767,7 +3768,7 @@ the Van Genuchten model (Van Genuchten 1980, July and Horton 2004) and
 the Campbell model (Campbell 1974) as an alternatives to describe the PV
 curves.
 
-In this study, we use the Van Genuchten model because of two advantages:
+The Van Genuchten model has two advantages:
 1) it is simple, with only three parameters needed for both curves, and
 2) it is mechanistically based, with both the P-V curve and
 vulnerability curve derived from a pipe model thus are connected through
