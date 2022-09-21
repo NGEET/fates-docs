@@ -3692,56 +3692,49 @@ rhizosphere. The root distribution is based on Zeng's (2001) two
 parameter power law function which takes into account the regolith
 depth:
 
-   :math:`Y_{i} = \frac{0.5(e^{- r_{a}z_{li}} + e^{- r_{b}z_{li}}) - 0.5(e^{- r_{a}z_{ui}} + e^{- r_{b}z_{ui}})}{1 - 0.5(e^{- r_{a}z} + e^{- r_{b}z})}`\ :sub:`,`
-   (Eq 1)
+.. :math::`Y_{i} = \frac{0.5(e^{- r_{a}z_{li}} + e^{- r_{b}z_{li}}) - 0.5(e^{- r_{a}z_{ui}} + e^{- r_{b}z_{ui}})}{1 - 0.5(e^{- r_{a}z} + e^{- r_{b}z})}`
 
-where *Y\ i* is the fraction of fine or coarse roots in the *i*\ th soil
-layer, *r\ a* and *r\ b* are the two parameters that determine the
-vertical root distribution, *Z\ li* is the depth of the lower boundary
-of the *i*\ th soil layer, and *Z\ ui* is the depth of the upper
-boundary of the *i*\ th soil layer, and *Z* is the total regolith depth.
+
+where :math:`Y_{i} ` is the fraction of fine or coarse roots in the :math:`i`th soil
+layer, :math:`r_a` and :math:`r_b` are the two parameters that determine the
+vertical root distribution, :math:`z_{li}` is the depth of the lower boundary
+of the :math:`i` th soil layer, and :math:`z_{ui}` is the depth of the upper
+boundary of the :math:`i` th soil layer, and :math:`z` is the total regolith depth.
 The vertical root distribution affects water uptake by the hydrodynamic
 model by distributing the total amount of root, and thus root
 resistance, through the soils.
 
 The total transpiration of a tree is the product of total leaf area (LA)
-and the transpiration rate per unit leaf area (J). In this version of
+and the transpiration rate per unit leaf area :math:`J`. In this version of
 FATES-Hydro, we adopt the model developed by Vesala et al. (2017) to
 take into account the effect of leaf water potential on the within-leaf
 relative humidity and transpiration rate:
 
-.. math::
+.. :math::`E = LA \cdot J`
+.. :math::`J = \rho_{atm}\frac{(q_{l} - q_{s})}{1/g_{s} + r_{b}}`
+.. :math::`q_{l} = \exp(\frac{k_{LWP} \cdot LWP \cdot V_{H2O}}{R \cdot T}) \cdot q_{sat}`
 
-   {E = LA \cdot J\text{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }(\text{Eq\ 2a})
-   }{J = \rho_{atm}\frac{(q_{l} - q_{s})}{1/g_{s} + r_{b}}\text{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }(\text{Eq\ 2b})
-   }{q_{l} = \exp(\frac{k_{LWP} \cdot LWP \cdot V_{H2O}}{R \cdot T}) \cdot q_{sat}\text{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }(\text{Eq\ 2c})}
-
-where E is the total transpiration of a tree, LA is the total leaf area
-(m\ :sup:`2`), J is the transpiration per unit leaf area (kg
-s\ :sup:`-1` m\ :sup:`-2`), |image1|\ is the density of atmospheric air
-(kg m\ :sup:`-3`), |image2| is the within-leaf specific humidity(kg/kg),
-|image3| is the atmosphere specific humidity (kg/kg), |image4|\ is the
-stoma conductance per unit leaf area, |image5|\ is the leaf boundary
-layer resistance(s m\ :sup:`-1`), |image6| is a scaling coefficient
-(unitless), which can vary between 1 and 7, and here we use a value of
-3; LWP is the leaf water potential (Mpa), |image7|\ is the molar volume
-of water (18 × 10\ :sup:`-6` m\ :sup:`3` mol\ :sup:`-1`), *R* is the
-universal gas constant, and T is the leaf temperature (K).
+Where, :math:`E` is the total transpiration of a tree, :math:`LA [m2]` is the total leaf area, :math:`J [kg/s/m2]` is the transpiration per unit leaf area, :math:`\rho [kg/m3]` is the density of atmospheric air, :math:`q_l [kg/kg]` is the within-leaf specific humidity,
+:math:`q_s [kg/kg]` is the atmosphere specific humidity, :math:`g_s [m/s]` is the
+stoma conductance per unit leaf area, :math:`r_b [s/m]` is the leaf boundary
+layer resistance, :math:`k_{lwp}` is a unitless scaling coefficient, which can vary between 1 and 7, and here we use a value of
+3; :math:`LWP [Mpa]` is the leaf water potential, :math:`V_{H2O} [1.8e-6 m3/mol]` is the constant molar volume, :math:`R` is the
+universal gas constant, and :math:`T [K]` is the leaf temperature.
 
 The sap flow from absorbing roots to the canopy through each compartment
 of the tree along the flow path way (absorbing roots, transport roots,
 stem, and leaf) is computed according to Darcy’s law in terms of the
 plant sapwood water conductance, the water potential gradient:
 
-:math:`Q_{i} = - K_{i}\lbrack\rho_{w}g(z_{i} - z_{i + 1}) + (\Psi_{i} - \Psi_{i + 1})\rbrack`
-(Eq 3)
+.. :math::`Q_{i} = - K_{i}\lbrack\rho_{w}g(z_{i} - z_{i + 1}) + (\Psi_{i} - \Psi_{i + 1})\rbrack`
 
-where |image8|\ is the density of water; |image9| is the height of the
-compartment(m); |image10| is the height of the next compartment down the
-flow path (m); |image11|\ is the water potential of the
-compartment(Mpa); |image12| is the water potential of the next
-compartment down the flow path(Mpa); and |image13| is the hydraulic
-conductance of the compartment (kg/Mpa/m/s). The hydraulic conductance
+
+where :math:`\rho_{w}` is the density of water; :math:`z_{i} [m]` is the height of the
+compartment; :math:`z_{i + 1} [m]` is the height of the next compartment down the
+flow path; :math:`\Psi_{i} [Mpa]` is the water potential of the
+compartment; :math:`\Psi_{i+1} [Mpa]` is the water potential of the next
+compartment down the flow path; and :math:`g [kg/Mpa/m/s]` is the hydraulic
+conductance of the compartment . The hydraulic conductance
 of the compartments is by the water potential and maximum hydraulic
 conductance of the compartment through the pressure-volume (P-V) curve
 and the vulnerability curve (Manzoni et al. 2013, Christoffersen et al.
@@ -3773,58 +3766,50 @@ The Van Genuchten model has two advantages:
 vulnerability curve derived from a pipe model thus are connected through
 the three shared parameters:
 
-.. math::
+.. :math::`\Psi = \frac{1}{- \alpha} \cdot \left( \frac{1}{Se^{1/m}} - 1 \right)^{1/n}`
+.. :math::`FMC = \left( 1 - \left( \frac{( - \alpha \cdot \Psi)^{n}}{1 + ( - \alpha \cdot \Psi)^{n}} \right)^{m} \right)^{2}`
 
-   {\Psi = \frac{1}{- \alpha} \cdot \left( \frac{1}{Se^{1/m}} - 1 \right)^{1/n}\text{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }(\text{Eq\ 4a})
-   }{FMC = \left( 1 - \left( \frac{( - \alpha \cdot \Psi)^{n}}{1 + ( - \alpha \cdot \Psi)^{n}} \right)^{m} \right)^{2}\text{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }(\text{Eq\ 4b})}
-
-where |image14|\ is the water potential of the media (xylem in this
-case) (Mpa); |image15|\ is the fraction of xylem conductivity,
-K/K\ :sub:`max`, (unitless); |image16| is a scaling parameter for air
-entering point (Mpa\ :sup:`-1`), |image17|\ is the dimensionless
-standardized relative water content as |image18| with\ |image19|,
-|image20| ,\ |image21|\ are volumetric water content (m\ :sup:`3`
-m\ :sup:`-3`), residual volumetric water content, and saturated
-volumetric water content correspondingly; and *m* and *n* are
+where :math:`\Psi [Mpa]` is the water potential of the media (xylem in this
+case); :math:`FMC [K/K_{max}]` is the fraction of xylem conductivity; :math:`? [/Mpa]` is a scaling parameter for air
+entering point, :math:`?` is the dimensionless
+standardized relative water content as :math:`?` with :math:`?`,
+:math:`?` and :math:`? [m3/m3]` are volumetric water content, residual volumetric water content, and saturated
+volumetric water content correspondingly; and :math:`m` and :math:`n` are
 dimensionless (xylem conduits) size distribution parameters.
 
 The stomatal conductance is modelled in the form of Ball-Berry
 conductance model (Ball et al. 1987, Oleson et al. 2013, Fisher et al.
 2015):
 
-   :math:`g_{s} = m\frac{A_{n}}{c_{s}/P_{atm}}\frac{e_{s}}{e_{i}} + b\beta_{t}`
-   , (Eq 5)
+.. :math::`g_{s} = m\frac{A_{n}}{c_{s}/P_{atm}}\frac{e_{s}}{e_{i}} + b\beta_{t}`
 
-where *m* and *b* are parameters equivalent to slope and intercept in
+
+where :math:`m` and :math:`b` are parameters equivalent to slope and intercept in
 the Ball-Berry model correspondingly. These terms are plant strategy
 dependent and can vary widely with plant functional types (Medlyn et al.
-2011). The parameter *b* is also scaled by the water stress index
-*β\ t*. *A*\ :sub:`n` is the net carbon assimilation rate (µmol CO2
-m\ :sup:`−2` s\ :sup:`−1`) based on Farquhar’s (1980) formula. This term
-is also constrained by water stress index *β\ t* in the way that the
-V\ :sub:`cmax,25` is scaled by *β\ t* as V\ :sub:`cmax,25`\ *β\ t*
-(Fisher et al. 2018). *c\ s* is the CO\ :sub:`2` partial pressure at the
-leaf surface (Pa), *e\ s* is the vapor pressure at the leaf surface
-(Pa), *e\ i* is the saturation vapor pressure (Pa) inside the leaf at a
-given vegetation temperature when *A\ n* = 0.
+2011). The parameter :math:`b` is also scaled by the water stress index :math:`\beta_t`.
+:math:`A_n [umol CO2/m2/s]` is the net carbon assimilation rate based on Farquhar’s (1980) formula. This term
+is also constrained by water stress index :math:`\beta_t` in the way that the :math:`V_{cmax,25}` is scaled by :math:`\beta_t` as :math:`V_{cmax,25}\beta_t` (Fisher et al. 2018). :math:`c_s [Pa]` is the CO2 partial pressure at the
+leaf surface, :math:`e_s [Pa]` is the vapor pressure at the leaf surface, :math:`e_i [Pa]` is the saturation vapor pressure inside the leaf at a
+given vegetation temperature when :math:`A_n = 0`.
 
 The water stress index, a proxy for stomatal closure in response to
 desiccation, is determined by the leaf water potential adopted from the
 FMCgs term from Christoffersen et al. (2016):
 
-   :math:`\beta_{t} = \left\lbrack 1 + (\frac{\Psi_{l}}{P50_{gs}})^{ags} \right\rbrack^{- 1}`
-   (Eq 6)
+.. :math::`\beta_{t} = \left\lbrack 1 + (\frac{\Psi_{l}}{P50_{gs}})^{ags} \right\rbrack^{- 1}`
 
-where *Ψ\ l* is the leaf water potential (MPa), *P50\ gs* is the leaf
-water potential of 50% stomatal closure, and *a\ gs* governs the
-steepness of the function. For a given set of *a\ gs* , the *P50\ gs*
+
+where :math:`\Psi_l [MPa]` is the leaf water potential, :math:`P50_{gs} [MPa]` is the leaf
+water potential of 50% stomatal closure, and :math:`a_{gs}` governs the
+steepness of the function. For a given set of :math:`a_{gs}` , the :math:`P50_{gs}`
 controls the degree of hydraulic vulnerability segmentation
 (Christoffersen et al. 2016, Powell et al. 2017). A more negative
-*P50\ gs* means that, during leaf dry down from full turgor, the
+:math:`P50_{gs}` means that, during leaf dry down from full turgor, the
 stomatal aperture stays open and thus allows the transpiration rate to
 remain high and xylem to dry out, which thus can maintain high
 photosynthetic rates at the risk of exposing xylem to embolism and thus
-plant mortality. Conversely, a plant with a less negative *P50\ gs* will
+plant mortality. Conversely, a plant with a less negative :math:`p50_{gs}` will
 close stomata quickly during leaf dry down, thus limiting transpiration
 and the risk of xylem embolism and mortality associated with it.
 
