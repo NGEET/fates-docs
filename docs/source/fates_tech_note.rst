@@ -3677,7 +3677,7 @@ tracked, with possibly different ecological dynamics occuring on each.
 
 
 Plant Hydraulic module
------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 
 For each plant cohort, the hydraulic module tracks water flow along a
