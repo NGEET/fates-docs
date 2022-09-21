@@ -3714,12 +3714,12 @@ relative humidity and transpiration rate:
 .. :math:: J = \rho_{atm}\frac{(q_{l} - q_{s})}{1/g_{s} + r_{b}}
 .. :math:: q_{l} = \exp(\frac{k_{LWP} \cdot LWP \cdot V_{H2O}}{R \cdot T}) \cdot q_{sat}
 
-Where, :math:`E` is the total transpiration of a tree, :math:`LA` [m2] is the total leaf area, :math:`J [kg/s/m2]` is the transpiration per unit leaf area, :math:`\rho [kg/m3]` is the density of atmospheric air, :math:`q_l [kg/kg]` is the within-leaf specific humidity,
-:math:`q_s [kg/kg]` is the atmosphere specific humidity, :math:`g_s [m/s]` is the
-stoma conductance per unit leaf area, :math:`r_b [s/m]` is the leaf boundary
+Where, :math:`E` is the total transpiration of a tree, :math:`LA` [m2] is the total leaf area, :math:`J` [kg/s/m2] is the transpiration per unit leaf area, :math:`\rho` [kg/m3] is the density of atmospheric air, :math:`q_l` [kg/kg] is the within-leaf specific humidity,
+:math:`q_s` [kg/kg] is the atmosphere specific humidity, :math:`g_s` [m/s] is the
+stoma conductance per unit leaf area, :math:`r_b` [s/m] is the leaf boundary
 layer resistance, :math:`k_{lwp}` is a unitless scaling coefficient, which can vary between 1 and 7, and here we use a value of
-3; :math:`LWP [Mpa]` is the leaf water potential, :math:`V_{H2O} [1.8e-6 m3/mol]` is the constant molar volume, :math:`R` is the
-universal gas constant, and :math:`T [K]` is the leaf temperature.
+3; :math:`LWP` [Mpa] is the leaf water potential, :math:`V_{H2O}` [1.8e-6 m3/mol] is the constant molar volume, :math:`R` is the
+universal gas constant, and :math:`T` [K] is the leaf temperature.
 
 The sap flow from absorbing roots to the canopy through each compartment
 of the tree along the flow path way (absorbing roots, transport roots,
@@ -3729,11 +3729,11 @@ plant sapwood water conductance, the water potential gradient:
 .. :math:: Q_{i} = - K_{i}\lbrack\rho_{w}g(z_{i} - z_{i + 1}) + (\Psi_{i} - \Psi_{i + 1})\rbrack
 
 
-where :math:`\rho_{w}` is the density of water; :math:`z_{i} [m]` is the height of the
-compartment; :math:`z_{i + 1} [m]` is the height of the next compartment down the
-flow path; :math:`\Psi_{i} [Mpa]` is the water potential of the
-compartment; :math:`\Psi_{i+1} [Mpa]` is the water potential of the next
-compartment down the flow path; and :math:`g [kg/Mpa/m/s]` is the hydraulic
+where :math:`\rho_{w}` is the density of water; :math:`z_{i}` [m] is the height of the
+compartment; :math:`z_{i + 1}` [m] is the height of the next compartment down the
+flow path; :math:`\Psi_{i}` [MPa] is the water potential of the
+compartment; :math:`\Psi_{i+1}` [MPa] is the water potential of the next
+compartment down the flow path; and :math:`g` [kg/MPa/m/s] is the hydraulic
 conductance of the compartment . The hydraulic conductance
 of the compartments is by the water potential and maximum hydraulic
 conductance of the compartment through the pressure-volume (P-V) curve
@@ -3769,11 +3769,11 @@ the three shared parameters:
 .. :math:: \Psi = \frac{1}{- \alpha} \cdot \left( \frac{1}{Se^{1/m}} - 1 \right)^{1/n}
 .. :math:: FMC = \left( 1 - \left( \frac{( - \alpha \cdot \Psi)^{n}}{1 + ( - \alpha \cdot \Psi)^{n}} \right)^{m} \right)^{2}
 
-where :math:`\Psi [Mpa]` is the water potential of the media (xylem in this
-case); :math:`FMC [K/K_{max}]` is the fraction of xylem conductivity; :math:`? [/Mpa]` is a scaling parameter for air
+where :math:`\Psi` [MPa] is the water potential of the media (xylem in this
+case); :math:`FMC [K/K_{max}]` is the fraction of xylem conductivity; :math:`?` [/MPa] is a scaling parameter for air
 entering point, :math:`?` is the dimensionless
 standardized relative water content as :math:`?` with :math:`?`,
-:math:`?` and :math:`? [m3/m3]` are volumetric water content, residual volumetric water content, and saturated
+:math:`?` and :math:`?` [m3/m3] are volumetric water content, residual volumetric water content, and saturated
 volumetric water content correspondingly; and :math:`m` and :math:`n` are
 dimensionless (xylem conduits) size distribution parameters.
 
@@ -3788,9 +3788,9 @@ where :math:`m` and :math:`b` are parameters equivalent to slope and intercept i
 the Ball-Berry model correspondingly. These terms are plant strategy
 dependent and can vary widely with plant functional types (Medlyn et al.
 2011). The parameter :math:`b` is also scaled by the water stress index :math:`\beta_t`.
-:math:`A_n [umol CO2/m2/s]` is the net carbon assimilation rate based on Farquhar’s (1980) formula. This term
+:math:`A_n` [umol CO2/m2/s] is the net carbon assimilation rate based on Farquhar’s (1980) formula. This term
 is also constrained by water stress index :math:`\beta_t` in the way that the :math:`V_{cmax,25}` is scaled by :math:`\beta_t` as :math:`V_{cmax,25}\beta_t` (Fisher et al. 2018). :math:`c_s [Pa]` is the CO2 partial pressure at the
-leaf surface, :math:`e_s [Pa]` is the vapor pressure at the leaf surface, :math:`e_i [Pa]` is the saturation vapor pressure inside the leaf at a
+leaf surface, :math:`e_s [Pa]` is the vapor pressure at the leaf surface, :math:`e_i` [Pa] is the saturation vapor pressure inside the leaf at a
 given vegetation temperature when :math:`A_n = 0`.
 
 The water stress index, a proxy for stomatal closure in response to
@@ -3799,7 +3799,7 @@ FMCgs term from Christoffersen et al. (2016):
 
 .. :math:: \beta_{t} = \left\lbrack 1 + (\frac{\Psi_{l}}{P50_{gs}})^{ags} \right\rbrack^{- 1}
 
-where :math:`\Psi_l [MPa]` is the leaf water potential, :math:`P50_{gs} [MPa]` is the leaf
+where :math:`\Psi_l` [MPa] is the leaf water potential, :math:`P50_{gs}` [MPa] is the leaf
 water potential of 50% stomatal closure, and :math:`a_{gs}` governs the
 steepness of the function. For a given set of :math:`a_{gs}` , the :math:`P50_{gs}`
 controls the degree of hydraulic vulnerability segmentation
