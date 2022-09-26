@@ -3770,10 +3770,11 @@ the three shared parameters:
 .. math:: FMC = \left( 1 - \left( \frac{( - \alpha \cdot \Psi)^{n}}{1 + ( - \alpha \cdot \Psi)^{n}} \right)^{m} \right)^{2}
 
 where :math:`\Psi` [MPa] is the water potential of the media (xylem in this
-case); :math:`FMC [K/K_{max}]` is the fraction of xylem conductivity; :math:`?` [/MPa] is a scaling parameter for air
-entering point, :math:`?` is the dimensionless
-standardized relative water content as :math:`?` with :math:`?`,
-:math:`?` and :math:`?` [m3/m3] are volumetric water content, residual volumetric water content, and saturated
+case); :math:`FMC [K/K_{max}]` is the fraction of xylem conductivity; :math:`\alpha` [/MPa] is a scaling parameter for air
+entering point, :math:`Se` is the dimensionless
+standardized relative water content as :
+.. math:: \Se =\frac{theta-theta_{r}}{theta_{sat}-theta_{r}} 
+where :math:`\theta`, :math:`\theta_{r}` and :math:`\theta_{sat}` [m3/m3] are volumetric water content, residual volumetric water content, and saturated
 volumetric water content correspondingly; and :math:`m` and :math:`n` are
 dimensionless (xylem conduits) size distribution parameters.
 
