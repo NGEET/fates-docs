@@ -17,7 +17,7 @@ https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
 Authors of FATES code and technical documentation. 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding:sup:`12`
 
 :sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
 
@@ -41,7 +41,7 @@ Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gr
 
 :sup:`11` Climate Change Science Institute, Environmental Sciences Division, Oak Ridge National Laboratory, Oak Ridge, TN, USA
 
-
+:sup:`12` Earth & Biological Sciences, Pacific Northwest National Laboratory, Richland, WA, USA
 
 
 Introduction
@@ -3674,3 +3674,185 @@ After logging occurs, the patches that have been disturbed are tracked
 as belonging to secondary lands, and are not fused with patches on
 primary lands. This allows primary and secondary land areas to be
 tracked, with possibly different ecological dynamics occuring on each.
+
+
+Plant Hydraulic module
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+For each plant cohort, the hydraulic module tracks water flow along a
+soil–plant–atmosphere continuum of a representative individual tree
+based on hydraulic laws, and updates the water content and potential of
+leaves, stem, and roots with a 30 minutes model time step. Water flow
+from each soil layer within the root zone into the plant root system is
+calculated as a function of the hydraulic conductance as determined by
+root biomass and root traits such as specific root length, and the
+difference in water potential between the absorbing roots and the
+rhizosphere. The root distribution is based on Zeng's (2001) two
+parameter power law function which takes into account the regolith
+depth:
+
+.. math:: Y_{i} = \frac{0.5(e^{- r_{a}z_{li}} + e^{- r_{b}z_{li}}) - 0.5(e^{- r_{a}z_{ui}} + e^{- r_{b}z_{ui}})}{1 - 0.5(e^{- r_{a}z} + e^{- r_{b}z})}
+
+
+where :math:`Y_{i}` is the fraction of fine or coarse roots in the :math:`i` th soil
+layer, :math:`r_a` and :math:`r_b` are the two parameters that determine the
+vertical root distribution, :math:`z_{li}` is the depth of the lower boundary
+of the :math:`i` th soil layer, and :math:`z_{ui}` is the depth of the upper
+boundary of the :math:`i` th soil layer, and :math:`z` is the total regolith depth.
+The vertical root distribution affects water uptake by the hydrodynamic
+model by distributing the total amount of root, and thus root
+resistance, through the soils.
+
+The total transpiration of a tree is the product of total leaf area (LA)
+and the transpiration rate per unit leaf area :math:`J`. In this version of
+FATES-Hydro, we adopt the model developed by Vesala et al. (2017) to
+take into account the effect of leaf water potential on the within-leaf
+relative humidity and transpiration rate:
+
+.. math:: E = LA \cdot J
+.. math:: J = \rho_{atm}\frac{(q_{l} - q_{s})}{1/g_{s} + r_{b}}
+.. math:: q_{l} = \exp(\frac{k_{LWP} \cdot LWP \cdot V_{H2O}}{R \cdot T}) \cdot q_{sat}
+
+Where, :math:`E` is the total transpiration of a tree, :math:`LA` [m2] is the total leaf area, :math:`J` [kg/s/m2] is the transpiration per unit leaf area, :math:`\rho` [kg/m3] is the density of atmospheric air, :math:`q_l` [kg/kg] is the within-leaf specific humidity,
+:math:`q_s` [kg/kg] is the atmosphere specific humidity, :math:`g_s` [m/s] is the
+stoma conductance per unit leaf area, :math:`r_b` [s/m] is the leaf boundary
+layer resistance, :math:`k_{lwp}` is a unitless scaling coefficient, which can vary between 1 and 7, and here we use a value of
+3; :math:`LWP` [Mpa] is the leaf water potential, :math:`V_{H2O}` [1.8e-6 m3/mol] is the constant molar volume, :math:`R` is the
+universal gas constant, and :math:`T` [K] is the leaf temperature.
+
+The sap flow from absorbing roots to the canopy through each compartment
+of the tree along the flow path way (absorbing roots, transport roots,
+stem, and leaf) is computed according to Darcy’s law in terms of the
+plant sapwood water conductance, the water potential gradient:
+
+.. math:: Q_{i} = - K_{i}\lbrack\rho_{w}g(z_{i} - z_{i + 1}) + (\Psi_{i} - \Psi_{i + 1})\rbrack
+
+
+where :math:`\rho_{w}` is the density of water; :math:`z_{i}` [m] is the height of the
+compartment; :math:`z_{i + 1}` [m] is the height of the next compartment down the
+flow path; :math:`\Psi_{i}` [MPa] is the water potential of the
+compartment; :math:`\Psi_{i+1}` [MPa] is the water potential of the next
+compartment down the flow path; and :math:`g` [kg/MPa/m/s] is the hydraulic
+conductance of the compartment . The hydraulic conductance
+of the compartments is by the water potential and maximum hydraulic
+conductance of the compartment through the pressure-volume (P-V) curve
+and the vulnerability curve (Manzoni et al. 2013, Christoffersen et al.
+2016).
+
+The plant hydrodynamic representation and numerical solver scheme within
+FATES-HYDRO follows Christoffersen et al. (2016). A few
+modifications are made to accommodate the multi-soil layers and improve the
+numerical stability. First, to accommodate the multi-soil layers, we
+have sequentially solved the Richards' equation for each individual soil
+layers, with each layer-specific solution proportional to each layer's
+contribution to the total root-soil conductance. Second, to improve the
+numerical stability, we have linearly interpolated the PV curve beyond
+the residual and saturated tissue water content to avoid the rare cases
+of overshooting in the numerical scheme under very dry or wet
+conditions. Third, Christoffersen et al. (2016) used three phases to
+describe the PV curves: 1) dehydration phases representing capillary
+water (sapwood only), 2) elastic cell drainage (positive turgor), and 3)
+continued drainage after cells have lost turgor. Due to the
+discontinuity of the curve between these three phases, it leads to some
+numerical instability. To resolve this instability, FATES-HYDRO added
+the Van Genuchten model (Van Genuchten 1980, July and Horton 2004) and
+the Campbell model (Campbell 1974) as an alternatives to describe the PV
+curves.
+
+The Van Genuchten model has two advantages:
+1) it is simple, with only three parameters needed for both curves, and
+2) it is mechanistically based, with both the P-V curve and
+vulnerability curve derived from a pipe model thus are connected through
+the three shared parameters:
+
+.. math:: \Psi = \frac{1}{- \alpha} \cdot \left( \frac{1}{Se^{1/m}} - 1 \right)^{1/n}
+.. math:: FMC = \left( 1 - \left( \frac{( - \alpha \cdot \Psi)^{n}}{1 + ( - \alpha \cdot \Psi)^{n}} \right)^{m} \right)^{2}
+
+where :math:`\Psi` [MPa] is the water potential of the media (xylem in this
+case); :math:`FMC [K/K_{max}]` is the fraction of xylem conductivity; :math:`\alpha` [/MPa] is a scaling parameter for air
+entering point, :math:`Se` is the dimensionless
+standardized relative water content as:
+
+.. math:: Se =\frac{theta-theta_{r}}{theta_{sat}-theta_{r}} 
+
+where :math:`\theta`, :math:`\theta_{r}` and :math:`\theta_{sat}` [m3/m3] are volumetric water content, residual volumetric water content, and saturated
+volumetric water content correspondingly; and :math:`m` and :math:`n` are
+dimensionless (xylem conduits) size distribution parameters.
+
+The stomatal conductance is modelled in the form of Ball-Berry
+conductance model (Ball et al. 1987, Oleson et al. 2013, Fisher et al.
+2015):
+
+.. math:: g_{s} = m\frac{A_{n}}{c_{s}/P_{atm}}\frac{e_{s}}{e_{i}} + b\beta_{t}
+
+
+where :math:`m` and :math:`b` are parameters equivalent to slope and intercept in
+the Ball-Berry model correspondingly. These terms are plant strategy
+dependent and can vary widely with plant functional types (Medlyn et al.
+2011). The parameter :math:`b` is also scaled by the water stress index :math:`\beta_t`.
+:math:`A_n` [umol CO2/m2/s] is the net carbon assimilation rate based on Farquhar’s (1980) formula. This term
+is also constrained by water stress index :math:`\beta_t` in the way that the :math:`V_{cmax,25}` is scaled by :math:`\beta_t` as :math:`V_{cmax,25}\beta_t` (Fisher et al. 2018). :math:`c_s` [Pa] is the CO2 partial pressure at the
+leaf surface, :math:`e_s` [Pa] is the vapor pressure at the leaf surface, :math:`e_i` [Pa] is the saturation vapor pressure inside the leaf at a
+given vegetation temperature when :math:`A_n = 0`.
+
+The water stress index, a proxy for stomatal closure in response to
+desiccation, is determined by the leaf water potential adopted from the
+FMCgs term from Christoffersen et al. (2016):
+
+.. math:: \beta_{t} = \left\lbrack 1 + (\frac{\Psi_{l}}{P50_{gs}})^{ags} \right\rbrack^{- 1}
+
+where :math:`\Psi_l` [MPa] is the leaf water potential, :math:`P50_{gs}` [MPa] is the leaf
+water potential of 50% stomatal closure, and :math:`a_{gs}` governs the
+steepness of the function. For a given set of :math:`a_{gs}` , the :math:`P50_{gs}`
+controls the degree of hydraulic vulnerability segmentation
+(Christoffersen et al. 2016, Powell et al. 2017). A more negative
+:math:`P50_{gs}` means that, during leaf dry down from full turgor, the
+stomatal aperture stays open and thus allows the transpiration rate to
+remain high and xylem to dry out, which thus can maintain high
+photosynthetic rates at the risk of exposing xylem to embolism and thus
+plant mortality. Conversely, a plant with a less negative :math:`p50_{gs}` will
+close stomata quickly during leaf dry down, thus limiting transpiration
+and the risk of xylem embolism and mortality associated with it.
+
+References
+
+Ball, J. Timothy, Ian E. Woodrow, and Joseph A. Berry. 1987. "A model
+predicting stomatal conductance and its contribution to the control of
+photosynthesis under different environmental conditions." Progress in
+photosynthesis research. Springer, Dordrecht, 221-224.
+
+Campbell, G.S., 1974. A simple method for determining unsaturated
+conductivity from moisture retention data. *Soil science*, *117*\ (6),
+pp.311-314.
+
+Christoffersen, Bradley O et al. 2016. “Linking Hydraulic Traits to
+Tropical Forest Function in a Size-Structured and Trait-Driven Model
+(TFS v . 1-Hydro ).” : 4227–55.
+
+Fisher, R. a. et al. 2015. “Taking off the Training Wheels: The
+Properties of a Dynamic Vegetation Model without Climate Envelopes,
+CLM4.5(ED).” *Geoscientific Model Development* 8(11): 3593–3619.
+
+Jury, W.A. and Horton, R., 2004. *Soil physics*. John Wiley & Sons.
+
+Manzoni, S., 2014. Integrating plant hydraulics and gas exchange along
+the drought-response trait spectrum. *Tree physiology*, *34*\ (10),
+pp.1031-1034.
+
+Oleson, Keith W et al. 2013. “Technical Description of Version 4.5 of
+the Community Land Model (CLM) Coordinating.” In *Natl. Cent. Atmos.
+Res. Tech. Note*, Natl. Cent. for Atmos. Res., Boulder, Colo.
+
+Van Genuchten, M.T., 1980. A closed‐form equation for predicting the
+hydraulic conductivity of unsaturated soils. *Soil science society of
+America journal*, *44*\ (5), pp.892-898.
+
+Vesala, T., Sevanto, S., Gronholm, T., Salmon, Y., Nikinmaa, E., Hari,
+P., & Holtta, T. 2017. “Effect of leaf water potential on internal
+humidity and CO2 dissolution: Reverse transpiration and improved water
+use efficiency under negative pressure.” *Frontiers in Plant
+Science*, **8**, 54.
+
+Zeng, Xubin. 2001. “Global Vegetation Root Distribution for Land
+Modeling.” *Journal of Hydrometeorology* 2(5): 525–30.
