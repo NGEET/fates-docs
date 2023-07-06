@@ -17,7 +17,7 @@ https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
 Authors of FATES code and technical documentation. 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding:sup:`12`
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding :sup:`12`, Shijie Shu :sup:`3`
 
 :sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
 
@@ -3856,3 +3856,188 @@ Science*, **8**, 54.
 
 Zeng, Xubin. 2001. “Global Vegetation Root Distribution for Land
 Modeling.” *Journal of Hydrometeorology* 2(5): 525–30.
+
+
+
+
+FATES Reduced Complexity Configurations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The full FATES model has a high degree of structural complexity, with
+interactions between processes acting at short timescales such as
+photosynthesis and processes acting at longer timescales such as
+competition and community restructuring.  In order to better isolate
+different processes, allow for cleaner experimental design, and
+facilitate calibration and testing of different model components,
+FATES includes a number of reduced-complexity configurations.  A
+summary of these configurations is shown in table :ref:`reduced_complexity_table`.
+
+.. _reduced_complexity_table:
+
+.. list-table:: FATES reduced-complexity modes
+   :widths: 25 25 25 25 25 25
+   :header-rows: 1
+   :stub-columns: 0
+
+   * - Mode
+     - How to enable
+     - Vegetation  structure
+     - Leaf Area Index
+     - Photosynthesis and Physiology
+     - Competition between PFTs for canopy space
+   * - **Primarily site-level modes**
+     - 
+     - 
+     - 
+     - 
+     - 
+   * - Static Stand Structure (ST3)
+     - ``use_fates_ed_st3 = .true.``
+     - Fixed after initialization
+     - Fixed after initialization
+     - Active
+     - No
+   * - Prescribed Physiology
+     - ``use_fates_ed_prescribed_phys = .true.``
+     - Active
+     - Inactive
+     - Prescribed NPP per unit crown area and mortality rate
+     - Active if multiple PFTs present
+   * - **Primarily large-scale modes**
+     - 
+     - 
+     - 
+     - 
+     - 
+   * - Satellite Phenology mode (FATES-SP)
+     - ``use_fates_sp = .true.``
+     - Simplified: 1 patch per PFT and one cohort per patch
+     - Prescribed via dynamic dataset
+     - Active
+     - No
+   * - No competition mode, with prescribed biogeography (FATES-nocomp)
+     - ``use_fates_nocomp = .true., use_fates_fixed_biogeog = .true.``
+     - Active
+     - Active
+     - Active
+     - No competition: Each PFT allotted a total fixed areas based on
+       input dataset
+   * - No competition mode, without prescribed biogeography
+     - ``use_fates_nocomp = .true., use_fates_fixed_biogeog = .false.``
+     - Active
+     - Active
+     - Active
+     - No competition: Each PFT allotted the same area everywhere
+   * - Prescribed biogeography 
+     - ``use_fates_fixed_biogeog = .true.``
+     - Active
+     - Active
+     - Active
+     - Active, put PFTs only allowed to grow where they are present in
+       input dataset
+   * - Full FATES 
+     - 
+     - Active
+     - Active
+     - Active
+     - Active
+
+Each of these modes is described in more detail below. We here
+separate them into those that are primarily intended for site-scale
+simulations and those that are primarily intended for large-scale
+simulations; However we note that all modes have valid use-cases for both
+site-scale and large-scale simulations.
+
+Primarily site-level FATES reduced complexity modes
+--------------------------------------------------------------------
+
+Two reduced complexity configurations are designed primarily for
+site-level testing.  These are Static Stand Structure mode and
+Prescribed Physiology mode, which enable only the fast-timesale and
+slow-timescale processes, respectively.
+
+Static Stand Structure Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This mode turns of all growth and mortality processes. It is best used
+with an inventory initialization to set the initial stand structure as
+has been observed at a given location.  By turning off growth and
+mortality, this mode cuts all feedbacks between fast and slow
+processes, and thus can be used to look at changes to physiological
+processes or parameters conditional on a given ecosystem structure, or
+alternately can be used to calibrate physiological dynamics at a
+specific site given known ecosystem structure. Note that leaf
+phenology is also disabled in this mode, and thus a user may want to
+accomplish similar goals using the Satellite Phenology mode for sites
+with strong phenological cycles.
+
+Prescribed Physiology Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This mode ignores all prognositc physiology calculatino,and instead
+allows the user to assert growth and mortality rates in the canopy and
+understory.  Growth rates are specified via a parameter that governs
+the NPP per unit crown area.  The crown area scaling is to align
+overall growth trajectories as plants grow in size with the full FATES
+model: since both light interception and maintenance respiration
+(assuming the leaf biomass allometric exponent is the same as that for
+crown area) scale with leaf and crown area, this implies an NPP scaling with crown area
+as well. Thus this mode allows testign the effects of different ways
+of organizing the canopy, or other slow-timescale processes,
+conditional on some known growth and mortality rates.
+
+Primarily large-scale FATES reduced complexity modes
+--------------------------------------------------------------------
+
+The primarily large-scale reduced complexity modes are designed to
+allow separation of processes in support of model complexity
+hierarchies and global calibration efforts.  A schematic of these
+configurations is below:
+   
+.. figure:: images/fates_reduced_complexity_modes_slide1.pdf 
+
+Satellite Phenology (FATES-SP) Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+THi sis the simples of the large-scale configurations, and reverts the
+behavior of the model as close as possible to the existing CLM-SP and
+ELM-SP configurations.  In this mode, FATES is given information
+about the static areal coverage of each PFT, as well as time-varying
+information about LAI and canopy height in the model. FATES uses this
+information to construct a canopy structure with a single patch per
+PFT and a single cohort per patch, whose stem diameter corresponds
+allometrically to the canopy height, and whose number density allows
+the cohort to fill the patch given the allometric crown area per
+plant.  Leaf biomass is dynamically calculated to achieve the
+specified LAI for each PFT.  
+
+No competition with prescribed biogeography (nocomp) mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In this mode, all processes are active except for light competition
+between PFTs. Each PFT is given a total patch area to grow on, but
+unlike FATES-SP mode, disturbance can occur on each patch and thus the
+space allocated to each PFT may be split into one
+or more patches based on disturbance history.  Each patch has a PFT
+label, and only that PFT is allowed to grow on the patch. Cohorts of
+agiven PFT compete against each other for canopy access and thus
+light.
+
+No competition without prescribed biogeography mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This mode is imilar to the 'nocomp' mode described above, but instead
+of each PFT being allocated areas based on a PFT map read from an
+input surface dataset, each PFT is allocated the same area on all
+gridcells. Thus it can be used for specific experiemnts looking at PFT
+differences across climate gradients.
+
+Prescribed biogeography with competition mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In this mode, PFTs compete against each other, but a given PFT is only
+allowed to grow and exist in places where it has some coverage in an
+input surface datset.  Thus, for example, boreal plants are not
+allowed to grow in the tropics and vice-versa, but competition betwen
+various plants that coexist in the surface datset can occur. This mode
+may also be used to impose biogeographic differences between,
+e.g. neotropical versus African and/or Asian tropical forest PFTs.
+
+
+Full FATES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+All processes are active.
