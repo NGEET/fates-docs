@@ -17,11 +17,12 @@ https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
 Authors of FATES code and technical documentation. 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding :sup:`12`, Shijie Shu :sup:`3`
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding :sup:`12`, Shijie Shu :sup:`3`, Marcos Longo :sup:`3`, Adrianna Foster :sup:`1`, Adam Hanbury-Brown :sup:`13`, Lara Kueppers :sup:`13`, Jeffrey Q. Chambers :sup:`13`, Sam Levis :sup:`1`, Zachary Robbins :sup:`4`, Claire Zarakas :sup:`7`
+
 
 :sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
 
-:sup:`2` Centre Européen de Recherche et de Formation Avancée en Calcul Scientifique, Toulouse, France
+:sup:`2` Center for International Climate Research (CICERO), Oslo, Norway
 
 :sup:`3` Climate and Ecosystem Sciences Division, Lawrence Berkeley National Laboratory, Berkeley, CA, USA
 
@@ -31,7 +32,7 @@ Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gr
 
 :sup:`6` Atmospheric Sciences and Global Change Division, Pacific Northwest National Laboratory, Richland, WA, USA
 
-:sup:`7` Department of Biology, University of Washington, Seattle, WA, USA
+:sup:`7` University of Washington, Seattle, WA, USA
 
 :sup:`8` Environmental and Climate Sciences Department, Brookhaven National Laboratory, Upton, NY, USA
 
@@ -43,6 +44,7 @@ Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gr
 
 :sup:`12` Earth & Biological Sciences, Pacific Northwest National Laboratory, Richland, WA, USA
 
+:sup:`13` University of California, Berkeley
 
 Introduction
 ^^^^^^^^^^^^^^^^^^^
@@ -3992,7 +3994,7 @@ allow separation of processes in support of model complexity
 hierarchies and global calibration efforts.  A schematic of these
 configurations is below:
    
-.. figure:: images/fates_reduced_complexity_modes_slide1.pdf 
+.. figure:: images/fates_reduced_complexity_modes_slide1.png 
 
 Satellite Phenology (FATES-SP) Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
