@@ -3860,7 +3860,72 @@ Zeng, Xubin. 2001. “Global Vegetation Root Distribution for Land
 Modeling.” *Journal of Hydrometeorology* 2(5): 525–30.
 
 
+Crown Damage Module
+^^^^^^^^^^^^^^^^^^^^^^
+The crown damage module represents crown damage as a reduction in crown area and the biomass of tissues in the crown (leaves, sapwood, storage, structural and reproductive tissues), implemented via changes to allometric relationships. Damage currently does not change the height of cohorts or the biomass of the stem. 
 
+We treat damage as a categorical variable with each cohort associated with a ‘damage class’ that describes its degree of crown loss. Damage classes can be set in the parameter file via damage_bin_edges, which sets the lower bin edges for the percentage of crown loss in each damage class. Damage classes do not need to be evenly spaced. Damage class is an argument to allometric equations and is used to reduce the biomass of crown tissues. For example: 
+
+.. math:: bl = bl * (1 - crown_reduction)
+	  
+where :math:`bl` is leaf biomass.
+
+We reduce sapwood and structural tissues in proportion to their branch fraction.
+
+.. math::  bsap = bsap - (bsap * agb_frac *  branch_frac * crown_reduction)
+where :math:`bsap` is sapwood biomass, :math:`agb_frac` is aboveground biomass fraction and :math:`branch_frac` is the branch fraction. Branch fraction is calculated as the sum of the first three coarse woody debris pools (i.e. excluding the main stem).
+
+Damage is not currently linked to explicit drivers. The timing of damage events is set by the damage_event_code parameter - described in table  :ref:`_crown_damage_event_table`.
+
+.. _crown_damage_event_table:
+
+.. list-table:: Crown damage event codes
+   :widths: 25 25 
+   :header-rows: 1
+   :stub-columns: 0
+
+   * - Event code
+     - Description
+   * - 1
+     - Damage is off
+   * - 2
+     - Damage occurs on the first time step
+   * - 3
+     - Damage occurs every day (not recommended)
+   * - 4
+     - Damage occurs once a month (on the first day)
+   * - negative number
+     - Damage occurs annually on the specified day of the year
+   * - YYYYMMDD
+     - Damage occurs on a given date.
+
+The damage_frac parameter determines what proportion of a cohort is damaged with each damage event. Part of the cohort remains with its current damage class, while the damaged portion of the cohort is equally divided into cohorts with higher damage classes. In the figure below an intial cohort of 1000 individuals has a 10% damage rate and there are  five damage classes including undamage. As a result 25 individuals are moved into each of the four higher damage classes.    
+
+.. figure:: images/Damage_1.png 
+
+
+Recovery from crown damage is set via the damage_recovery_scalar parameter. A value of one means that during daily allocation of NPP, no recovery occurs and damaged cohorts will allocate all available carbon to growth along their altered allometric trajectories. A value of 1 means that cohorts will use all available carbon to regrow damaged tissues, at the expense of dbh growth. The maximum number of individuals of a cohort that can recover in each timestep :math:`(n_max)` is a function of the available allocatable carbon to grow with :math:`(C_b)` and the change in carbon between the damage class i and i-1 :math:`(C_r)`:
+
+.. math::
+
+n_max = n_i * C_b / C_r
+
+Where :math:`n_i` is the initial number density of the cohort. The number of plants that recover is then :math:`n_max * f_r` where :math:`f_r` is the damage_recovery_scalar parameter.
+
+
+
+.. figure:: images/Damage_2.png 
+
+Crown damage in FATES can lead to mortality via carbon starvation. However, to capture mortality associated with crown loss from mechanisms not currently in FATES (e.g. pathogen entry) an additional mortality term describes an increase in mortality with crown loss :math:`M_{d,coh}`.  
+
+ 
+.. math::
+
+	 M_{d,coh} = \frac{1}{1 + e^{(-r_d * (damage - p_d))}}
+
+where :math:`damage` is the fraction of crown loss, :math:`r_d` is the rate that mortality increases with crown loss, and :math:`p_d` is the inflection point of the curve, i.e. the crown loss at which annual mortality rate has increased to 50%.
+       
+For an application of the FATES crown damage module see :ref:`Needham et al. (2022)<Needhametal2022>`.  
 
 FATES Reduced Complexity Configurations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

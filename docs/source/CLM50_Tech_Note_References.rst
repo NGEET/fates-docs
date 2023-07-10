@@ -1859,6 +1859,16 @@ fraction absorbed PAR from year one of MODIS data. Remote Sens. Environ.
 
 .. _Neffetal2005:
 
+|br:|
+
+Needham, J.F., Arellano, G., Davies, S.J., Fisher, R.A., Hammer, V.,
+Knox, R., Mitre, D., Muller-Landau, H.C., Zuleta, D., Koven, C.D. 2022.
+Tree crown damage and its effects on forest carbon cycling in a tropical forest.
+Global Change Biology 28:5560-5574. DOI:10.1111/gcb.16318
+
+
+.. _Needhametal2022:
+
 |br|
 
 Neff, J.C., Harden, J.W. and Gleixner, G. 2005. Fire effects on soil
