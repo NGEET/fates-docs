@@ -3916,9 +3916,9 @@ cohorts with higher damage classes. In the figure below there are five damage cl
 .. figure:: images/Damage_1.png 
 
 
-Recovery from crown damage is set via the ``damage_recovery_scalar`` parameter. A value of one means that during daily
+Recovery from crown damage is set via the ``damage_recovery_scalar`` parameter. A value of zero means that during daily
 allocation of NPP, no recovery occurs and damaged cohorts will allocate all available carbon to growth along their 
-altered allometric trajectories. A value of 1 means that cohorts will use all available carbon to regrow damaged tissues,
+altered allometric trajectories. A value of one means that cohorts will use all available carbon to regrow damaged tissues,
 at the expense of dbh growth. The maximum number of individuals of a cohort that can recover in each timestep (:math:`nmax`) is
 a function of the available allocatable carbon to grow with (:math:`C_b`) and the change in carbon between 
 the damage class :math:`i` and :math:`i-1` (:math:`C_r`):
