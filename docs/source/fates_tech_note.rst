@@ -3872,16 +3872,17 @@ in each damage class. Damage classes do not need to be evenly spaced. Damage cla
 is used to reduce the biomass of crown tissues. For example: 
 
 .. math:: bl = bl * (1 - crownreduction)
-	  
+
 where :math:`bl` is leaf biomass.
 
 We reduce sapwood and structural tissues in proportion to their branch fraction.
 
 .. math::  bsap = bsap - (bsap * agbfrac *  branchfrac * crownreduction)
+
 where :math:`bsap` is sapwood biomass, :math:`agbfrac` is aboveground biomass fraction and :math:`branchfrac` is the branch fraction. 
 Branch fraction is calculated as the sum of the first three coarse woody debris pools (i.e. excluding the main stem).
 
-Damage is not currently linked to explicit drivers. The timing of damage events is set by the damage_event_code parameter - described in table  
+Damage is not currently linked to explicit drivers. The timing of damage events is set by the ``damage_event_code`` parameter - described in table
 :ref:`crown_damage_event_table`.
    
 .. _crown_damage_event_table:
@@ -3906,26 +3907,26 @@ Damage is not currently linked to explicit drivers. The timing of damage events 
    * - YYYYMMDD
      - Damage occurs on a given date.
 
-The damage_frac parameter determines the proportion of a cohort that is damaged with each damage event. 
+The ``damage_frac`` parameter determines the proportion of a cohort that is damaged with each damage event.
 Part of the cohort keeps its current damage class, while the damaged portion of the cohort is equally divided into 
 cohorts with higher damage classes. In the figure below there are five damage classes including undamaged and 
-damage_frac is set to 0.1. Of the intial cohort of 1000 individuals 
+``damage_frac`` is set to ``0.1``. Of the intial cohort of 1000 individuals
 25 individuals are therefore moved into each of the four higher damage classes.    
 
 .. figure:: images/Damage_1.png 
 
 
-Recovery from crown damage is set via the damage_recovery_scalar parameter. A value of one means that during daily
+Recovery from crown damage is set via the ``damage_recovery_scalar`` parameter. A value of one means that during daily
 allocation of NPP, no recovery occurs and damaged cohorts will allocate all available carbon to growth along their 
-altered allometric trajectories. A value of 1 means that cohorts will use all available carbon to regrow damaged tissues, 
+altered allometric trajectories. A value of 1 means that cohorts will use all available carbon to regrow damaged tissues,
 at the expense of dbh growth. The maximum number of individuals of a cohort that can recover in each timestep (:math:`nmax`) is
 a function of the available allocatable carbon to grow with (:math:`C_b`) and the change in carbon between 
-the damage class i and i-1 (:math:`C_r`):
+the damage class :math:`i` and :math:`i-1` (:math:`C_r`):
 
 .. math:: nmax = n_i * C_b / C_r
 
-Where n_i is the initial number density of the cohort. The number of plants that recover is 
-then :math:`nmax * fr` where :math:`fr` is the damage_recovery_scalar parameter.
+Where :math:`n_i` is the initial number density of the cohort. The number of plants that recover is
+then :math:`nmax * fr` where :math:`fr` is the ``damage_recovery_scalar`` parameter.
 
 
 
