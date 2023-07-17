@@ -1859,7 +1859,7 @@ fraction absorbed PAR from year one of MODIS data. Remote Sens. Environ.
 
 .. _Neffetal2005:
 
-|br:|
+|br|
 
 Needham, J.F., Arellano, G., Davies, S.J., Fisher, R.A., Hammer, V.,
 Knox, R., Mitre, D., Muller-Landau, H.C., Zuleta, D., Koven, C.D. 2022.
