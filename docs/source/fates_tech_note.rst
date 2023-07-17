@@ -3867,7 +3867,7 @@ the crown (leaves, sapwood, storage, structural and reproductive tissues),
 implemented via changes to allometric relationships. Damage currently does not change the height of cohorts or the biomass of the stem. 
 
 We treat damage as a categorical variable with each cohort associated with a ‘damage class’ that describes its degree of crown loss. 
-Damage classes can be set in the parameter file via damage_bin_edges, which sets the lower bin edges for the percentage of crown loss 
+Damage classes can be set in the parameter file via :literal:`damage_bin_edges`, which sets the lower bin edges for the percentage of crown loss
 in each damage class. Damage classes do not need to be evenly spaced. Damage class is an argument to allometric equations and 
 is used to reduce the biomass of crown tissues. For example: 
 
