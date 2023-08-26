@@ -512,9 +512,6 @@ can be restarted, are as follows
 | Woody       | _{B         | :sup:`-2`   | (lsc)       |
 | Debris      | G,patch}`   |             |             |
 +-------------+-------------+-------------+-------------+
-| Canopy      | :math:`S_{c |             | Canopy      |
-| Spread      | ,patch}`    |             | Layer       |
-+-------------+-------------+-------------+-------------+
 | Column      | :math:`{l_{ | integer     |             |
 | Index       | patch}}`    |             |             |
 +-------------+-------------+-------------+-------------+
@@ -4112,6 +4109,12 @@ of each PFT being allocated areas based on a PFT map read from an
 input surface dataset, each PFT is allocated the same area on all
 gridcells. Thus it can be used for specific experiemnts looking at PFT
 differences across climate gradients.
+
+In no competition with and without prescribed biogeography cohorts
+can be initialised based on a given dbh, rather than spun up from 
+bare ground, by setting the fates_recruit_init_density parameter
+to a negative number, which is then interpreted as initial dbh. 
+
 
 Prescribed biogeography with competition mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
