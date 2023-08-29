@@ -776,12 +776,12 @@ to know the spatial extent of tree crowns. Crown area,
 :math:`A_{crown}`, m\ :sup:`2`, is defined as
 
 
-.. math:: A_{crown,coh}  =  S_{c,patch,cl}.dbh_{coh}^{(p_{e,leaf}-p_{e,leaf-crown})}
+.. math:: A_{crown,coh}  =  S_{c}.dbh_{coh}^{(p_{e,leaf}-p_{e,leaf-crown})}
 
 where :math:`A_{crown,coh}` is the crown area of a single tree canopy
-(m\ :sup:`2`) and :math:`S_{c,patch,cl}` is the ‘canopy spread’
-parameter (unitless) of this canopy layer, which is assigned as a
-function of canopy space filling, discussed below. :math:`S_{c,patch,cl}` is effectively
+(m\ :sup:`2`) and :math:`S_{c}` is the ‘canopy spread’
+parameter (unitless), which is assigned as a
+function of canopy space filling, discussed below. :math:`S_{c}` is effectively
 a normalisation constant in the power law describing the relationship of crown area 
 to dbh. However, this is not constant but varies by the canopy areae to ground area fraction.  
 In contrast to
@@ -833,7 +833,7 @@ because 1) the crown area predicted for a cohort to lose may be larger
 than the total crown area of the cohort, which requires iterative
 solutions, and 2) on some occasions (e.g. after fire, or if the parameter which sets the disturbed area as a function of the fractional crown area of canopy tree mortality is less than one), the canopy may
 open up and require ‘promotion’ of cohorts from the understorey, and 3)
-canopy area may change due to the variations of canopy spread values (:math:`S_{c,patch,cl}`, see the section below for details) when
+canopy area may change due to the variations of canopy spread values (:math:`S_{c}`, see the section below for details) when
 fractions of cohorts are demoted or promoted. Further details can be
 found in the code references in the footnote.
 
