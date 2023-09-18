@@ -1674,6 +1674,18 @@ Lombardozzi, D.L., Bonan, G.B., Smith, N.G., Dukes, J.S. 2015. Temperature
 acclimation of photosynthesis and respiration: A key uncertainty in the
 carbon cycle-climate feedback. Geophys. Res. Lett. 42:8624-8631.
 
+.. _Longoetal2019a:
+
+|br|
+
+Longo, M., Knox, R.G., Medvigy,  D.M., Levine, N.M., Dietze, M.C.,
+Kim, Y., Swann, A.L.S., Zhang, K., Rollinson, C.R., Bras,  R.L.,
+Wofsy,  S.C., and Moorcroft, P.R., 2019. The biophysics, ecology,
+and biogeochemistry of functionally diverse, vertically and
+horizontally heterogeneous ecosystems: the Ecosystem Demography
+model, version 2.2 – part 1: Model description.
+Geosci. Model Dev. 12: 4309–4346, doi:10.5194/gmd-12-4309-2019.
+
 .. _Lovelandetal2000:
 
 |br|
@@ -2032,7 +2044,7 @@ National Center for Atmospheric Research, Boulder, CO, 169 pp.
 
 Oleson, K.W., et al. 2013. Technical description of version 4.5 of the
 Community Land Model (CLM). NCAR Technical Note NCAR/TN-503+STR,
-National Center for Atmospheric Research, Boulder, CO, 420 pp.
+National Center for Atmospheric Research, Boulder, CO, 420 pp, doi:10.5065/D6RR1W7M.
 
 .. _Olson1963:
 
