@@ -2671,7 +2671,7 @@ abscission (i.e., when PFT lost all leaves), and :math:`t_\mathrm{Flush,coh}` (:
 as the time since last "out-of-leafless-state" flushing event. We then apply the set of rules
 described in the figure below.
 
-.. figure:: images/PhenologyDecisionTreeHard.png
+.. figure:: images/PhenologyDecisionTreeSemi.png
 
 **Note**. The semi-deciduous implementation is still experimental, and may be revised as
 more experiments are carried out and more data become available.
