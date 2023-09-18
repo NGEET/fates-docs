@@ -2460,8 +2460,53 @@ the greatly reduced maintenance and turnover requirements.
 Phenology
 ^^^^^^^^^^^^^^^^^^^^
 
-Cold Deciduous Phenology
-------------------------
+In deciduous plant functional types, the target leaf biomass
+(:math:`C_\mathrm{leaf,coh}`) can be  regulated through
+the leaf elongation factor (:math:`\varepsilon_\mathrm{leaf,PFT}`), a
+non-dimensional, fractional quantity (i.e., :math:`0 \ge \varepsilon_\mathrm{leaf,PFT} \ge 1`)
+that quantifies the degree of environmental stress (cold or drought) experienced by the PFT
+environmental conditions (temperature or moisture):
+
+.. math:: C_\mathrm{leaf,coh} = \varepsilon_\mathrm{leaf,coh} \, C^{\odot}_\mathrm{leaf,coh},
+
+where (:math:`C^{\odot}_\mathrm{leaf,coh}`) is the leaf biomass given size
+and PFT when the cohort does not experience any stress. Importantly,
+:math:`C^{\star}_\mathrm{leaf,coh}` is not the absolute maximum leaf biomass given size, as
+it can be still impacted by crown damage or canopy trimming.
+
+Two categories of deciduous PFTs are currently implemented in FATES, **cold deciduous** (summergreen) and
+**drought deciduous** (raingreen). Cold deciduous plants are always *hard-deciduous*, meaning
+that :math:`\varepsilon_\mathrm{leaf,coh}` can only be either 0 (leaves completely abscised) or
+1 (PFTs will fully flush leaves provided that enough carbon storage is available). For drought-deciduous
+PFTs, two strategies are available, *hard-deciduous* phenology, akin to the cold deciduous, and
+the *semi-deciduous* phenology, where :math:`\varepsilon_\mathrm{leaf,coh}` can be any fraction between
+0 and 1 (inclusive), which allows plants to partially abscise or partially flush leaves when drought
+conditions are moderate. For evergreen PFTs, :math:`\varepsilon_\mathrm{leaf,coh} = 1` at all times.
+
+In addition to leaf phenology, in FATES it is possible to simulate active flushing
+and abscission of fine roots and stems in response to environmental conditions. In
+the case of fine roots, the main purpose is to reduce the maintenance
+of high-turnover tissues when plants are not assimilating carbon. In the
+case of stems, phenology is intended to be used for grass PFTs only, with the
+goal of avoiding numerical instabilities when running plant hydraulics (FATES-Hydro).
+
+Fine-root and stem phenologies are controlled by PFT-specific drop fraction
+parameters, namely :math:`\nu_\mathrm{root,PFT}` (FATES parameter ``fates_phen_fnrt_drop_fraction``)
+and :math:`\nu_\mathrm{stem,PFT}` (FATES parameter ``fates_phen_stem_drop_fraction``). Both
+parameters range from 0 (perennial) to 1 (tissue phenology tracks leaf phenology), and are
+used to determine elongation-factor-equivalent values for these tissues after the elongation
+factor for leaves is determined:
+
+.. math::   \begin{array}{l}
+               \varepsilon_{\mathrm{root,PFT}} = 1 - \left( 1 - \varepsilon_{\mathrm{leaf,PFT}} \right) \, \nu_{\mathrm{root,PFT}}, \\
+               \varepsilon_{\mathrm{stem,PFT}} = 1 - \left( 1 - \varepsilon_{\mathrm{leaf,PFT}} \right) \, \nu_{\mathrm{stem,PFT}}.
+            \end{array}
+
+In the next sections, we describe how :math:`\varepsilon_\mathrm{leaf,coh}` is
+defined for non-evergreen PFTs.
+
+Cold Deciduous Leaf Phenology
+-----------------------------
 
 Cold Leaf-out timing
 ~~~~~~~~~~~~~~~~~~~~
@@ -2472,36 +2517,32 @@ verified against satellite data and is one of the only globally verified
 and published models of leaf-out phenology. This model differs from the
 phenology model in the CLM4.5. The model simulates leaf-on date as a
 function of the number of growing degree days (GDD), defined by the sum
-of mean daily temperatures (:math:`T_{day}` :math:`^{o}`\ C) above a
-given threshold :math:`T_{g}` (0 :math:`^{o}`\ C).
+of mean daily temperatures (:math:`T_\mathrm{day}` :math:`\phantom{.}^{\circ}\mathrm{C}`) above a
+given threshold :math:`T_{g}` (:math:`0^{\circ}\mathrm{C}`).
 
-.. math:: GDD=\sum \textrm{max}(T_{day}-T_{g},0)
+.. math:: \mathrm{GDD} = \sum \max{\left(T_\mathrm{day}-T_{g},0\right)}
 
-Budburst occurs when :math:`GDD` exceeds a threshold
-(:math:`GDD_{crit}`). The threshold is modulated by the number of
-chilling days experienced (NCD) where the mean daily temperature falls
-below a threshold determined by `Botta et al. 2000<botta2000>` as
-5\ :math:`^{o}`\ C. A greater number of chilling days means that fewer
-growing degree days are required before budburst:
+Budburst occurs when :math:`\mathrm{GDD}` exceeds a threshold
+(:math:`\mathrm{GDD}_\mathrm{crit}`). The threshold is modulated by the number of
+chilling days experienced (:math:`\mathrm{NCD}`) where the mean daily temperature falls
+below a threshold determined by :ref:`Botta et al. 2000<botta2000>` as :math:`5^{\circ}\mathrm{C}`.
+A greater number of chilling days means that fewer growing degree days are required before budburst:
 
-.. math:: GDD_{crit}=a+be^{c.NCD}
+.. math:: \mathrm{GDD}_\mathrm{crit}=a+b\,\exp{\left(c\,\mathrm{NCD}\right)}
 
-where a = -68, b= 638 and c=-0.01 `Botta et al. 2000<botta2000>`. In the
-Northern Hemisphere, counting of degree days begins on 1st January, and
-of chilling days on 1st November. The calendar opposite of these dates
-is used for points in the Southern Hemisphere.
+where :math:`a = -68`, :math:`b= 638` and :math:`c=-0.01` (:ref:`Botta et al. 2000<botta2000>`).
+In the Northern Hemisphere, counting of degree days begins on 1st January, and of
+chilling days on 1st November. In the Southern Hemisphere, we use 1st July (growing degree days)
+and 1st May (chilling days) instead.
 
 If the growing degree days exceed the critical threshold, leaf-on is
-triggered by a change in the gridcell phenology status flag
-:math:`S_{phen,grid}` where ‘2’ indicates that leaves should come on and
-‘1’ indicates that they should fall.
+triggered by a change in the leaf elongation factor:
 
-.. math::
-
-   \begin{array}{ll}
-   S_{phen,grid} = 2
-   &\textrm{ if } S_{phen,grid} = 1\textrm{ and } GDD_{grid} \ge GDD_{crit} \\
-   \end{array}
+.. math::   \varepsilon_\mathrm{leaf,PFT}(t) =
+               \begin{cases}
+                  1 & \textrm{, if } \varepsilon_\mathrm{leaf,PFT}(t-1) = 0 \textrm{ and } \mathrm{GDD}(t) \ge \mathrm{GDD}_\mathrm{crit} \\
+                  \varepsilon_\mathrm{leaf,PFT}(t-1) & \textrm{, otherwise}
+               \end{cases}
 
 Cold Leaf-off timing
 ~~~~~~~~~~~~~~~~~~~~
@@ -2511,16 +2552,15 @@ The leaf-off model is taken from the Sheffield Dynamic Vegetation Model
 :ref:`Sitch et al. 2003<sitch2003>` and IBIS
 :ref:`Foley et al. 1996<Foley1996>` models. The average daily
 temperatures of the previous 10 day period are stored. Senescence is
-triggered when the number of days with an average temperature below
-7.5\ :math:`^{o}` (:math:`n_{colddays}`) rises above a threshold values
-:math:`n_{crit,cold}`, set at 5 days.
+triggered when the number of days with an average temperature below :math:`7.5^{\circ}\mathrm{C}`
+(:math:`n_\mathrm{colddays}`) rises above a threshold values
+:math:`n_{\mathrm{crit},\mathrm{cold}}`, set at 5 days.
 
-.. math::
-
-   \begin{array}{ll}
-   S_{phen,grid} = 1
-   &\textrm{ if } S_{phen,grid} = 2\textrm{ and } n_{colddays} \ge n_{crit,cold} \\
-   \end{array}
+.. math::   \varepsilon_\mathrm{leaf,PFT}(t) =
+               \begin{cases}
+                  0 & \textrm{, if} \varepsilon_\mathrm{leaf,PFT}(t-1) = 1 \textrm{ and } n_\mathrm{colddays}(t) \ge n_\mathrm{crit,cold} \\
+                  \varepsilon_\mathrm{leaf,PFT}(t-1) & \textrm{, otherwise}
+               \end{cases}
 
 Global implementation modifications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2542,69 +2582,184 @@ Further to this rule, we introduce a ‘buffer’ time periods after leaf-on
 of 30 days, so that cold-snap periods in the spring cannot trigger a
 leaf senescence. The 30 day limit is an arbitrary limit. In addition, we
 constrain growing degree day accumulation to the second half of the year
-(Jult onwards in the Northern hemisphere, or Jan-June in the Southern)
-and only allow GDD accumulation while the leaves are off.
+(July-December in the Northern hemisphere, or January-June in the Southern
+Hemisphere) and only allow GDD accumulation while the leaves are off.
 
-Drought-deciduous Phenology: TBD
--------------------------------- 
+Drought-deciduous leaf phenology (hard-deciduous)
+-------------------------------------------------
 
-In the current version of the model, a drought deciduous algorithm
-exists, but is not yet operational, due to issue detected in the existing
-CN and soil moisture modules, which also affect the behaviour of the
-native ED drought deciduous model. This is a priority to address before
-the science tag is released.
+The hard-, drought-deciduous phenology in FATES is based on CLM-4
+(:ref:`Dahlin et al. 2015<Dahlinetal2015>`; :ref:`Oleson et al. 2013<Olesonetal2013>`).
+Both leaf flushing (growth) and leaf abscission (senescence) are controlled by
+the plant available water (:math:`\psi_\mathrm{PFT,grid}` :math:`\mathrm{mm}`),
+a PFT-specific variable that is defined as the 10-day running average of the
+soil matric potential across the rooting zone:
 
-Carbon Dynamics of deciduous plants
------------------------------------ 
+.. math:: \psi_\mathrm{PFT,grid}\left(t\right) = \frac{1}{10} \,
+   \left[ \sum_{t'=t-9}^{t} \left( \frac{\displaystyle \sum_{k=k_\mathrm{root,PFT}}^{N_\mathrm{soil}-1} \psi\left(z_k,t'\right) \, r_{z_k,\mathrm{PFT}}}
+                                        {\displaystyle \sum_{k=k_\mathrm{root,PFT}}^{N_\mathrm{soil}-1} r_{z_k,\mathrm{PFT}}} \right) \right],
 
-In the present version, leaf expansion and senescence happen over the
-course of a single day. This is clearly not an empirically robust
-representation of leaf behaviour, whereby leaf expansion occurs over a
-period of 10-14 days, and senescence over a similar period. This will be
-incorporated in later versions. When the cold or drought phenological
-status of the gridcell status changes (:math:`S_{phen,grid}`) from ‘2’
-to ‘1’, and the leaves are still on (:math:`S_{phen,coh}` =2 ), the leaf
-biomass at this timestep is ’remembered’ by the model state variable
-:math:`l_{memory,coh}`. This provides a ‘target’ biomass for leaf onset
-at the beginning of the next growing season (it is a target, since
-depletion of stored carbon in the off season may render achieving the
-target impossible).
+where :math:`\psi\left(z_k,t'\right)` is the soil matric potential of
+layer :math:`k` at time :math:`t'`, :math:`k_\mathrm{root,PFT}` is the deepest
+soil layer in the PFT's rooting zone, :math:`r_{z_k,\mathrm{PFT}}` is the
+fraction of roots of each plant functional type at each soil layer,
+and :math:`N_\mathrm{soil}` is the total number of soil layers. To avoid a
+strong influence of the typically very thin top soil layer, we exclude this
+layer when estimating :math:`\psi_\mathrm{PFT,grid}`.
 
-.. math:: l_{memory,coh} = C_{leaf,coh}
+For the most part, drought conditions are based on a comparison
+between :math:`\psi_\mathrm{PFT,grid}\left(t\right)` and a PFT-specific,
+threshold parameter :math:`\psi_\mathrm{PFT,drought} | \psi_\mathrm{PFT,drought} \in \left] -\infty,0\right[`
+(:math:`\mathrm{mm}`).
+When :math:`\psi_\mathrm{PFT,grid}\left(t\right) < \psi_\mathrm{PFT,drought}`, we assume
+drought conditions (plants likely to be or become leafless), and
+when :math:`\psi_\mathrm{PFT,grid}\left(t\right) \ge \psi_\mathrm{PFT,drought}`, we
+assume non-drought conditions (plants likely to be or become fully flushed).
 
-Leaf carbon is then added to the leaf litter flux :math:`l_{leaf,coh}`
-(KgC individual\ :math:`^{-1}`)
+Similarly to the cold-deciduous phenology, we must include additional
+constrains to ensure that plants are truly deciduous, even when the seasonal
+cycle of :math:`\psi_\mathrm{PFT,grid}\left(t\right)` never crosses the drought
+threshold. To prevent plants to remain leafless for long periods of
+time, PFTs will forcibly flush leaves when the time since last flushing
+(:math:`t_\mathrm{Flush,coh}`, :math:`\mathrm{day}`) exceeds 395 days
+(13 months). Likewise, the maximum time leaves can remain fully flushed is
+defined by the PFT-specific leaf life span (:math:`\tau_\mathrm{Leaf,coh}`) or 12 months,
+whichever is the shortest.
 
-.. math:: l_{leaf,coh} = C_{leaf,coh}
+The use of a single-parameter threshold to define drought conditions can potentially
+lead to a *flickering* behaviour, in which deciduous PFTs would flush and abscise leaves
+multiple times if plant available water (:math:`\psi_\mathrm{PFT,grid}\left(t\right)`) straddles
+around :math:`\psi_\mathrm{PFT,drought}`. To prevent this, leaf abscission can only occur if
+the time since last flushing has exceeded 90 days (3 months). Similarly, plants can only flush
+leaves when the time since last abscission (:math:`t_\mathrm{Abscise,coh}`, :math:`\mathrm{day}`) exceeds
+a PFT-specific parameter (:math:`t_\mathrm{PFT,MinOff}`, :math:`\mathrm{day}`). The only exception
+to this rule is when a site is perennially moist, in which case PFTs can flush their leaves after
+30 days, akin to a brevi-deciduous behaviour.
 
-The alive biomass is depleted by the quantity of leaf mass lost, and the
-leaf biomass is set to zero
+The diagram below summarises how elongation factor is defined after accounting for the time-driven
+phenological cycles:
 
-.. math:: C_{alive,coh} = C_{alive,coh} - C_{leaf,coh}
+.. figure:: images/PhenologyDecisionTreeHard.png
 
-.. math:: C_{leaf,coh} = 0
 
-Finally, the status :math:`S_{phen,coh}` is set to 1, indicating that
-the leaves have fallen off.
+Drought-deciduous leaf phenology (semi-deciduous)
+-------------------------------------------------
 
-For bud burst, or leaf-on, the same occurs in reverse. If the leaves are
-off (:math:`S_{phen,coh}`\ =1) and the phenological status triggers
-budburst (:math:`S_{phen,grid}`\ =2) then the leaf mass is set the
-maximum of the leaf memory and the available store
+The semi-, drought-deciduous phenology in FATES is based on the hard-, drought-deciduous
+phenology, with a further modification in the elongation factor dynamics based on the ED-2.2
+model (:ref:`Longo et al. 2019<Longoetal2019a>`). Semi-, drought-deciduous PFTs can partially
+abscise or partially flush leaves when drought conditions are moderate, and therefore can
+experience non-instantaneous flushing and abscission seasons.
 
-.. math:: C_{leaf,coh} =  \textrm{max}\left(l_{memory,coh}, C_{store,coh}\right.)
+To define the degree of abscission or flushing, we define a first guess for the elongation
+factor (:math:`\varepsilon^{\star}_\mathrm{leaf,PFT}`) that compares the plant available
+water with two thresholds:
 
-this amount of carbon is removed from the store
+.. math:: \varepsilon^{\star}_\mathrm{leaf,PFT}(t) =
+            \max{\left[0,\min{\left(1,\frac{\psi_\mathrm{PFT,grid}\left(t\right)-\psi_\mathrm{PFT,drought}}{\psi_\mathrm{PFT,moist}-\psi_\mathrm{PFT,drought}}\right)}\right]}
 
-.. math:: C_{store,coh} = C_{store,coh}  - C_{leaf,coh}
+where :math:`\psi_\mathrm{PFT,moist}` (:math:`\mathrm{mm}`) is a PFT-specific
+parameter that defines the threshold above which plant available water is
+no longer a limiting factor, and :math:`\psi_\mathrm{PFT,drought}` defines
+the threshold below which plant available water is strongly limiting. The latter
+parameter is defined by the same parameter name in the FATES parameter file.
 
-and the new leaf biomass is added to the alive pool
+Typically, :math:`\varepsilon^{\star}_\mathrm{leaf,PFT}` will be the actual elongation factor.
+However, akin to the hard-deciduous PFTs, we must ensure that semi-deciduous PFTs still have
+at least one abscission/flushing cycle every year, and that PFTs do not switch between abscising
+and flushing phases too frequently, especially when the elongation factor is zero. To this end,
+we define :math:`t_\mathrm{Abscise,coh}` (:math:`\mathrm{day}`) to be the time since last full
+abscission (i.e., when PFT lost all leaves), and :math:`t_\mathrm{Flush,coh}` (:math:`\mathrm{day}`)
+as the time since last "out-of-leafless-state" flushing event. We then apply the set of rules
+described in the figure below.
 
-.. math:: C_{alive,coh} = C_{alive,coh}  + C_{leaf,coh}
+.. figure:: images/PhenologyDecisionTreeSemi.png
 
-Lastly, the leaf memory variable is set to zero and the phenological
-status of the cohort back to ‘2’. No parameters are currently required
-for this carbon accounting scheme.
+**Note**. The semi-deciduous implementation is still experimental, and may be revised as
+more experiments are carried out and more data become available.
+
+
+
+Carbon allocation dynamics of deciduous plants
+----------------------------------------------
+
+In the present version, phenology (i.e., the elongation factors) is
+updated at daily time steps. Once phenology is updated, carbon pools
+(i.e., plant tissues, storage and litter) are updated too.
+
+To facilitate the tracking of phenology dynamics,
+we define a flag variable (:math:`S_\mathrm{phen,coh}`) that describes the
+leaf phenology status of every cohort:
+
+.. math::   S_\mathrm{phen,coh} =
+            \begin{cases}
+               1 & \textrm{, if cohort is completely leafless,} \\
+               2 & \textrm{, if cohort is flushing leaves or leaves are fully flushed,} \\
+               3 & \textrm{, if cohort is abscising leaves (but not completely leafless).}
+            \end{cases}
+
+Expansion (flushing) phase
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When cohorts are in expansion phase (i.e., :math:`S_\mathrm{phen,coh}=2`), carbon will
+be transferred from the storage pool, based on the expected carbon stocks:
+
+.. math::   \begin{array}{l}
+               C^{\star}_\mathrm{leaf,coh}\left(t\right) = \varepsilon_\mathrm{leaf,coh}\left(t\right) \, C^{\odot}_\mathrm{leaf,coh}, \\
+               C^{\star}_\mathrm{root,coh}\left(t\right) = \varepsilon_\mathrm{root,coh}\left(t\right) \, C^{\odot}_\mathrm{root,coh}, \\
+               C^{\star}_\mathrm{stem,coh}\left(t\right) = \varepsilon_\mathrm{stem,coh}\left(t\right) \, C^{\odot}_\mathrm{stem,coh},
+            \end{array}
+
+where :math:`C^{\star}_\mathrm{leaf,coh}`, :math:`C^{\star}_\mathrm{root,coh}` and :math:`C^{\star}_\mathrm{stem,coh}` are
+respectively the maximum carbon biomass of leaves, fine roots and stems (sapwood + heartwood) that the cohort can attain given their size, PFT,
+canopy trimming status, damage status and elongation factors.
+
+In reality, the actual carbon stocks :math:`C_\mathrm{tissue,coh}\left(t\right)` will depend on
+both on :math:`C^{\star}_\mathrm{tissue,coh}` and the amount of carbon storage at the previous
+time step (:math:`C_\mathrm{store,coh}`), meaning
+that :math:`C_\mathrm{tissue,coh}\left(t\right) \leq C^{\star}_\mathrm{tissue,coh}`. The transfer of
+carbon from storage to the living tissues is solved by the :ref:`parteh_section` module.
+
+
+Abscission phase
+~~~~~~~~~~~~~~~~
+
+When cohorts are abscising tissues (i.e., :math:`S_\mathrm{phen,coh} \in \left\{1,3\right\}`), the
+updated carbon pools are defined based on the updated elongation factors:
+
+.. math::   \begin{array}{l}
+               C_\mathrm{leaf,coh}\left(t\right) = \min{\left[\varepsilon_\mathrm{leaf,coh}\left(t\right) \, C^{\odot}_\mathrm{leaf,coh}, C_\mathrm{leaf,coh}\left(t-1\right)\right]}, \\
+               C_\mathrm{root,coh}\left(t\right) = \min{\left[\varepsilon_\mathrm{root,coh}\left(t\right) \, C^{\odot}_\mathrm{root,coh}, C_\mathrm{root,coh}\left(t-1\right)\right]}, \\
+               C_\mathrm{stem,coh}\left(t\right) = \min{\left[\varepsilon_\mathrm{stem,coh}\left(t\right) \, C^{\odot}_\mathrm{stem,coh}, C_\mathrm{stem,coh}\left(t-1\right)\right]},
+            \end{array}
+
+where :math:`C^{\odot}_\mathrm{leaf,coh}`, :math:`C^{\odot}_\mathrm{root,coh}` and :math:`C^{\odot}_\mathrm{stem,coh}` are
+respectively the maximum carbon biomass of leaves, fine roots and stems
+(sapwood + heartwood) that the cohort can attain given their size, PFT,
+canopy trimming status and damage status.
+
+Litter fluxes (:math:`\mathrm{kgC\,individual^{-1}\,day^{-1}}`) are defined as follows:
+
+
+.. math::   \begin{array}{l}
+               {\displaystyle l_\mathrm{leaf,coh}\left(t\right) = \frac{1}{\Delta t} \, \left[C_\mathrm{leaf,coh}\left(t-1\right) - C_\mathrm{leaf,coh}\left(t\right)\right]}, \\
+               {\displaystyle l_\mathrm{root,coh}\left(t\right) = \frac{1}{\Delta t} \, \left[C_\mathrm{root,coh}\left(t-1\right) - C_\mathrm{root,coh}\left(t\right)\right]}, \\
+               {\displaystyle l_\mathrm{stem,coh}\left(t\right) = \frac{1}{\Delta t} \, \left[C_\mathrm{stem,coh}\left(t-1\right) - C_\mathrm{stem,coh}\left(t\right)\right]}, \\
+            \end{array}
+
+where :math:`\Delta t` is the phenological time step.
+
+During abscission phase, cold-deciduous PFTs will use any storage carbon available to bring living tissues to the
+expected level (i.e., :math:`C^{\star}_\mathrm{tissue,coh}`), similarly to what
+occurs during the expansion (flushing) phase. This has minimum impact on cold-deciduous viability
+because tissue turnover rate is a function of temperature, and therefore the costs are low during their
+leaf-off season. This is not the case for drought deciduous, because the atmospheric
+temperature (and the maintenance costs) are typically high in the leaf-off season, particularly in dry
+tropical ecosystems. Therefore, when drought-deciduous PFTs status is :math:`S_\mathrm{phen,coh} \in \left\{1,3\right\}`,
+they completely halt allocation to any tissue, and all carbon acquired during the abscission phase (only
+possible when :math:`S_\mathrm{phen,coh} = 3`) is transferred to carbon storage.
+
+
 
 .. raw:: latex
 
@@ -2622,10 +2777,40 @@ for this carbon accounting scheme.
 | cold}`          | cold days for   |                 |                 |
 |                 | senescence      |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| :math:`T_{g}`   | Threshold for   | :math:`^{o}`\ C |                 |
-|                 | counting        |                 |                 |
+| :math:`T_{g}`   | Threshold for   | :math:`^{\circ} |                 |
+|                 | counting        | \mathrm{C}`     |                 |
 |                 | growing degree  |                 |                 |
 |                 | days            |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`\nu_     | Fraction of     | none            |                 |
+| {\mathrm{root   | active          |                 |                 |
+| ,PFT}}`         | abscission of   |                 |                 |
+|                 | fine roots,     |                 |                 |
+|                 | relative to     |                 |                 |
+|                 | leaves.         |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`\nu_     | Fraction of     | none            |                 |
+| {\mathrm{stem   | active          |                 |                 |
+| ,PFT}}`         | abscission of   |                 |                 |
+|                 | stems, relative |                 |                 |
+|                 | to leaves.      |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`\psi_    | Threshold below | :math:`\mathrm{ |                 |
+| \mathrm{PFT     | which drought   | mm}`            |                 |
+| ,drought}`      | deciduous       |                 |                 |
+|                 | cohorts abscise |                 |                 |
+|                 | all leaves      |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`\psi_    | Threshold above | :math:`\mathrm{ |                 |
+| \mathrm{PFT     | which water is  | mm}`            |                 |
+| ,moist}`        | no longer a     |                 |                 |
+|                 | limiting factor |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`t_       | Minimum         | :math:`\mathrm{ |                 |
+| \mathrm{PFT     | leaf-off time   | day}`           |                 |
+| ,MinOff}`       | for hard-,      |                 |                 |
+|                 | drought         |                 |                 |
+|                 | deciduous PFTs  |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
 .. raw:: latex
