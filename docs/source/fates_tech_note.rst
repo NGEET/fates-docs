@@ -1973,7 +1973,7 @@ At very high temperatures, and with low values of
 :math:`r_0`, the whole term can become negative, and we therefore cap it at 0 to
  prevent negative R_{dark}.
 We scale vertically through the canopy based on nitrogen availability following
-:ref:`Lloyd et al. 2010<lloyd2010>`, in the same way that :math:`V_{c,max}`
+:ref:`Lloyd et al. 2010<Lloydetal2010>`, in the same way that :math:`V_{c,max}`
 values are scaled uisng :math:`V_{above}`, described above.
 .. math:: r_{tref} = nscaler * r_{tref}
 
@@ -1992,7 +1992,7 @@ to the leaf layer of interest.
 We then adjust R_{dark} for current vegetation temperature (:math:`veg_{temp}`).
 .. math:: R_{m,leaf,coh} = r_{tref} * exp(b * (veg_{temp} - TrefC) + c * (veg_{temp}^{2} - TrefC^{2}))
 where :math:`TrefC` is the reference temperature of 25 degrees C, and :math:`b`
-and :math:`c` are parameters from :ref:`Heskel et al. 2016<heskel2016>`, set as
+and :math:`c` are parameters from :ref:`Heskel et al. 2016<Heskel2016>`, set as
 :math:`b = 0.1012` and :math:`c = -0.0005`.
 
 

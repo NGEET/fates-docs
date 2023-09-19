@@ -127,6 +127,18 @@ studies, Ecological Applications, 14, 280-298, 10.1890/01-6019.
 Asner, G. P., Knapp, D. E., Broadbent, E. N., Oliveira, P. J. C., Keller, M., and Silva, J. N. 2005.
 Selective Logging in the Brazilian Amazon, Science, 310, 480.
 
+
+.. _atkin2017:
+
+|br|
+
+Atkin, O.K., Bahar, N. H. A., Bloomfield, K.J., Griffin, K.L., Heskel, M.A., Huntingford, C., 
+Martinez de la Torre, A., Turnbull, M.H.,. 2017. Leaf Respiration in Terrestrial Biosphere Models. In: 
+Tcherkez, G., Ghashghaie, J. (eds) 
+Plant Respiration: Metabolic Fluxes and Carbon Balance. Advances in Photosynthesis and Respiration, 
+vol 43. Springer, Cham. 10.1007/978-3-319-68703-2_6
+
+
 .. _Atondo-Bueno2016:
 
 |br|
@@ -1089,6 +1101,17 @@ lake and reservoir modeling: A review. Rev. Geophys. 24:625-649.
 Henderson-Sellers, A., Yang, Z.-L., and Dickinson, R.E. 1993. The
 project for intercomparison of land-surface parameterization schemes.
 Bull. Amer. Meteor. Soc. 74: 1335-1349.
+
+.. _Heskel2016:
+
+|br|
+
+Heskel, M.A. O'Sullivan, O.S., Reich, P.B., Tjoelker, M.G., Weerasinghe, L.K., Penillard, A., 
+Egerton, J.J.G., Creek, D., Bloomfield, K.J., Xiang, J., Sinca, F., Stangl, Z.R., Martinez de la Torre, A., 
+Griffen, K.L., Huntingford, C., Hurry, V., Meir, P., Turnbull, M.H., Atkin, O.K. .2016.
+Convergence in the temperature response of leaf respiration across biomes and plant functional types. 
+Proc. Natl Acad. Sci. USA 113, 3832–3837.
+
 
 .. _HostetlerBartlein1990:
 
