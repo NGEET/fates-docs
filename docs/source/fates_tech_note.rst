@@ -1958,48 +1958,56 @@ s\ :math:`^{-1}`) .
 .. math:: R_{m,coh} = R_{m,leaf,coh}+ R_{m,froot,coh}+R_{m,croot,coh}+R_{m,stem,coh}
 
 Leaf maintenance respiration - Atkin et al. 2017
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The :ref:`Atkin et al. 2017<atkin2017>` leaf maintenance respiration(R_{dark}) model
+------------------------------------------------
+The :ref:`Atkin et al. 2017<atkin2017>` leaf maintenance respiration (Rdark) model
 includes temperature acclimation. We first determine the
-top-of-canopy R_{dark} rate.
-.. math:: r_{tref} = max(0, r_0 + r_1 * lnc_top + r_2 * max(0, tgrowth))
-where :math:`r_0` is the PFT-dependent base R_{dark} rate,
+top-of-canopy Rdark rate.
+
+.. math:: r_{tref} = max(0, r_0 + r_1 * lnc_{top} + r_2 * max(0, tgrowth))
+
+where :math:`r_0` is the PFT-dependent base Rdark rate,
 :math:`r_1` is a parameter that determines the effects of nitrogen availability
-on R_{dark}, :math:`r_2` is a parameter that determines the effects of temperature
-on R_{dark} and :math:`tgrowth` is the lagged vegetation temperature averaged over
-the acclimation timescale. We use :math:`r_1 = 0.2061` and :math:`r_2 = -0.0402`
+on Rdark, :math:`r_2` is a parameter that determines the effects of temperature
+on Rdark, and :math:`tgrowth` is the lagged vegetation temperature averaged over
+the acclimation timescale. We use :math:`r_1` = 0.2061 and :math:`r_2` = -0.0402
 following :ref:`Atkin et al. 2017<atkin2017>`.
+
 At very high temperatures, and with low values of
-:math:`r_0`, the whole term can become negative, and we therefore cap it at 0 to
- prevent negative R_{dark}.
+:math:`r_0`, the whole term can become negative, and we therefore cap it at 0 to prevent negative Rdark.
+
+      
 We scale vertically through the canopy based on nitrogen availability following
 :ref:`Lloyd et al. 2010<Lloydetal2010>`, in the same way that :math:`V_{c,max}`
 values are scaled uisng :math:`V_{above}`, described above.
+
 .. math:: r_{tref} = nscaler * r_{tref}
 
 where 
 
 .. math:: nscaler = exp(-kn * cumulativelai)
 
-and 
+and
 
-..math:: kn =  exp(0.00963 * vcmax25top - 2.43) 
+.. math:: kn =  exp(0.00963 * vcmax25top - 2.43) 
 
-:math:`vcmax25top` is PFT-dependent maximum rate of carboxylation at the top 
-of canopy at 25 degrees  C, and :math:`cumulativelai` is the cumulative LAI, top down,
+where :math:`vcmax25top` is PFT-dependent maximum carboxylation rate of rubisco at the top 
+of the canopy at 25 degrees C, and :math:`cumulativelai` is the cumulative LAI, top down,
 to the leaf layer of interest. 
 
-We then adjust R_{dark} for current vegetation temperature (:math:`veg_{temp}`).
+We then adjust Rdark for current vegetation temperature (:math:`veg_{temp}`).
+
 .. math:: R_{m,leaf,coh} = r_{tref} * exp(b * (veg_{temp} - TrefC) + c * (veg_{temp}^{2} - TrefC^{2}))
+
 where :math:`TrefC` is the reference temperature of 25 degrees C, and :math:`b`
 and :math:`c` are parameters from :ref:`Heskel et al. 2016<Heskel2016>`, set as
-:math:`b = 0.1012` and :math:`c = -0.0005`.
+:math:`b` = 0.1012 and :math:`c` = -0.0005.
 
-
-Leaf maintenance respiration - Ryan et al. 1991
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      
+      
+Leaf maintenance respiration - Ryan 1991
+----------------------------------------
 To calculate canopy leaf respiration following :ref:`Ryan et al. 1991<ryan1991>`,
- we first determine the top-of-canopy leaf respiration rate
+we first determine the top-of-canopy leaf respiration rate
 (:math:`r_{m,leaf,ft,0}`, gC s\ :math:`^{-1}` m\ :math:`^{-2}`) is
 calculated from a base rate of respiration per unit leaf nitrogen
 derived from :ref:`Ryan et al. 1991<ryan1991>`. The base rate for leaf
