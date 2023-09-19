@@ -43,8 +43,13 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.imgmath',
-    'sphinx.ext.githubpages',
-]
+    'sphinx.ext.githubpages'#,
+    #'sphinx.ext.mathjax'
+    ]
+
+
+#mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['sphinx_templates']

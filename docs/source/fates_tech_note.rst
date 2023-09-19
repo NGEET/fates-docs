@@ -17,7 +17,7 @@ https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
 Authors of FATES code and technical documentation. 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding :sup:`12`, Shijie Shu :sup:`3`, Marcos Longo :sup:`3`, Adrianna Foster :sup:`1`, Adam Hanbury-Brown :sup:`13`, Lara Kueppers :sup:`13`, Jeffrey Q. Chambers :sup:`13`, Sam Levis :sup:`1`, Zachary Robbins :sup:`4`, Claire Zarakas :sup:`7`
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding :sup:`12`, Shijie Shu :sup:`3`, Marcos Longo :sup:`3`, Adrianna Foster :sup:`1`, Adam Hanbury-Brown :sup:`3,14`, Lara Kueppers :sup:`13`, Jeffrey Q. Chambers :sup:`13`, Sam Levis :sup:`1`, Zachary Robbins :sup:`4`, Claire Zarakas :sup:`7`
 
 
 :sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
@@ -45,6 +45,8 @@ Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gr
 :sup:`12` Earth & Biological Sciences, Pacific Northwest National Laboratory, Richland, WA, USA
 
 :sup:`13` University of California, Berkeley
+
+:sup:`14` University of California, Davis
 
 Introduction
 ^^^^^^^^^^^^^^^^^^^
@@ -2895,6 +2897,217 @@ of one plant functional type over the seed pool.
 .. raw:: latex
 
    \bigskip 
+
+
+Environmentally Sensitive Tree Recruitment
+------------------------------------------
+
+FATES has the option to represent environmentally sensitive tree recruitment
+using the Tree Recruitment Scheme (TRS), a module that was originally
+presented offline of FATES (:ref:`Hanbury-Brown et al. 2022<Hanbury-Brown2022>`).
+The primary goal of the TRS is to more mechanistically constrain the amount of
+carbon available for recruitment based on conditions at the forest floor.
+
+The TRS is off by default (fates_regeneration_model = 1), but can be switched
+on using the parameter file. The TRS can be switched on in a reduced
+complexity mode (fates_regeneration_model = 3) without seedling dynamics where it
+represents 1) pft-specific reproductive allocation schedules as a function of dbh
+and 2) allocation to non-seed reproductive biomass. If the TRS is switched on 
+with seedling dynamics (fates_regeneration_model = 2) it will also represent
+environmentally sensitive seedling emergence, seedling mortality and transition
+into the sapling stage (i.e. cohorts tracked by FATES).
+
+The TRS allocates a dynamic fraction of carbon for growth and reproduction
+(:math:`C_{g+r}`; positive carbon balance net after tissue turnover and allocation
+to storage) to reproduction. Regeneration processes, described in detail below,
+move dynamic fractions of :math:`C_{g+r}` through a seedbank and seedling pool
+which are tracked in units of carbon. Carbon recruiting out of the seedling pool
+each day is passed back to FATES’s default recruitment subroutine. The TRS determines
+how much carbon is available for recruitment and FATES’s recruitment subroutine calculates
+how many new recruits to produce and initializes the new cohort. Carbon in seeds or
+seedlings that die or that is allocated to non-seed reproductive biomass, moves to the
+litter pool. Unlike the offline version of the TRS presented in
+:ref:`Hanbury-Brown et al. (2022)<Hanbury-Brown2022>`, FATES-TRS uses
+exponential moving averages (EMAs) of environmental variables in the seedling
+layer to calculate the rates of regeneration processes.
+EMAs are tracked on different timescales depending on the process.
+
+.. figure:: images/TRS_overview.png   
+   :scale: 90 %
+   :alt: TRS image
+
+   Daily regeneration processes (depicted with hour glasses) represented by FATES-TRS transfer reproductive carbon through seed bank and seedling carbon pools (depicted as circles). Processes are sensitive to DBH or environmental conditions (see inset key). The litter pool receives non-seed reproductive carbon, dead seeds, and dead seedlings. Carbon for new recruits is passed back to FATES’s default recruitment subroutine. "Host VDM" = FATES. 
+
+
+Allocation to reproduction
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Allocation to reproduction occurs in FATES’s parteh module (parteh/PRTAllometricCarbonMod.F90).
+FATES without the TRS switched on (i.e. “default FATES”) assumes reproductive allocation is either
+insensitive to size or is a step function of size, depending on the parameterization. In contrast,
+the TRS allocates a dynamic fraction of cohort-level :math:`C_{g+r}` to reproduction based on the
+cohort’s size and the TRS’s reproductive allocation (RA)
+function. This follows observations that the probability a tree is
+reproductive increases sigmoidally with size within species (:ref:`Visser et al., 2016<Visser2016>`).
+Each mature cohort contributes to recruitment via the TRS if they are in positive carbon balance.
+The effective fraction of cohort-level :math:`C_{g+r}` allocated to reproduction, :math:`F_{E,repro}`,
+is calculated based on a sigmoidal relationship relating the cohort’s current dbh (cm)
+to the probability of being reproductive (:math:`P_{repro}`). This formulation assumes
+that all reproductive individuals in a cohort allocate to reproduction at a constant, PFT-specific rate,
+:math:`F_{repro}`, which is modified by :math:`P_{repro}`
+to calculate :math:`F_{E,repro}`
+
+.. math::
+   :label: Eqn 1.14.1
+
+   P_{repro} =  \frac{e^{( a_{RA}  (dbh) +  b_{RA}) } }{1 + e^{(  a_{RA}  (dbh) +  b_{RA}  )} } 
+
+.. math::
+   :label: Eqn 1.14.2
+
+   F_{E,repro} =  (P_{repro})   (F_{repro})
+
+where :math:`a_{RA}` and :math:`b_{RA}` are PFT-specific parameters describing the shape of the sigmoidal curve.
+This functional form is consistent with empirical data (:ref:`Visser et al., 2016<Visser2016>`;
+:ref:`Minor & Kobe, 2019<MinorKobe2019>`). The TRS subsequently multiplies :math:`F_{E,repro}` by :math:`C_{g+r}`
+to get reproductive carbon per cohort.
+
+See Table below for all TRS parameters.
+
+
+Allocation to seed vs. non-seed reproductive biomass and seed mortality 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In nature, only a subset of the carbon allocated to reproduction becomes seeds, with the rest going to flowers,
+fruit flesh, capsules, etc. (:ref:`Wenk et al., 2017<Wenk2017>`). Default FATES sends all reproductive carbon
+to an undifferentiated “seed pool” from which carbon is lost and recruits are formed
+(:ref:`Fisher et al., 2015<Fisheretal2015>`). The TRS partitions each cohort’s reproductive carbon into seed carbon
+and non-seed reproductive carbon (e.g., flowers, fruit flesh, and capsules) based on a prescribed,
+PFT-specific fraction of reproductive carbon that is seed, :math:`F_{seed}`. This happens in the SeedIn
+subroutine (biogeochem/EDPhysiologyMod). Seed carbon moves to the seed bank each day and non-seed reproductive
+carbon moves to litter. Seeds in the seed bank die at a PFT-specific, constant rate, :math:`S_{mort}`,
+which represents all modes of seed mortality including predation and decay (same as default FATES).
+
+Seedling emergence
+~~~~~~~~~~~~~~~~~~
+
+Seedling emergence is sensitive to soil moisture (:ref:`Garwood, 1983<Garwood1983>`;
+:ref:`Atondo-Bueno et al., 2016<Atondo-Bueno2016>`; :ref:`Ruiz Talonia et al., 2017<Ruiz2017>`) and light (:ref:`Pearson et al., 2002<Pearson2002>`)
+in nature. Default FATES represents it as an environmentally insensitive constant.
+In the TRS, emergence depends on both soil moisture and light. 
+
+Light-dependence of germination is captured on day i in a Michaelis-Menten rate modifier [0,1]
+
+.. math::
+
+   f(PAR_i) = \frac{ PAR_i}  {PAR_i  + PAR_{crit}}
+
+
+based on :math:`PAR_i`, the 24-hour EMA of photosynthetically active radiation (PAR) at the seedling layer.
+Seedling layer PAR is sensitive to canopy layer and understory layer vegetation cover such that seedling layer PAR is an area-weighted average of PAR incident at the top and bottom of the understory layer. When there is very little
+vegetation present, PAR at the seedling layer is taken from the boundary conditions (i.e. same as top of canopy).
+:math:`PAR_{crit}` is a PFT-specific PAR threshold governing the shape of the germination response to reduced light.
+Most tropical pioneer species exhibit an increase in germination probability with increases in light,
+whereas germination in shade-tolerant species is insensitive to light (captured by :math:`PAR_{crit} = 0`).
+
+The EMA of soil matric potential on day i (:math:`SMP_{EMA,i}`) at seedling rooting depth, :math:`d_{seeedling}`,
+is influenced by SMP in a rolling window of days, :math:`W_{emerg}` (default = 7 days),
+prior to i. If :math:`SMP_{EMA,i}` is above a critical threshold, :math:`\psi_{emerg}`, then seedling emergence occurs.
+The emergence rate on day i, :math:`F_{emerg,i}`, is dynamically calculated as a function of :math:`SMP_{EMA,i}`.
+The pft-specific moisture response parameter, :math:`b_{emerg}`, modifies the mean seedling emergence coefficient
+(:math:`a_{emerg}`) in response to variation in :math:`SMP_{EMA}` such that
+
+
+.. math::
+   F_{emerg,i} = \left\{
+        \begin{array}{ll}
+            0 & \quad SMP_{i} < \psi_{emerg} \\
+           f(PAR_{i}) (a_{emerg}) \left(  \frac {   \sum_{j = i - W_{emerg} }^{ i} ( 1 / -SMP_{j}  ) } {W_{emerg}} \right) ^{ b_{emerg} } & \quad SMP_{i} \geq \psi_{emerg}
+        \end{array}
+    \right . 
+
+This produces pulses of seedling emergence in response to seasonal and interannual
+precipitation events, and stalls seedling emergence under relatively dry conditions. 
+
+Moisture and light-sensitive seedling survival
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The TRS tracks a seedling pool that is sensitive to light and moisture stress.
+Seedling survival decreases differentially at low soil moisture and low light, affecting forest
+composition across environmental gradients (:ref:`Kobe, 1999<Kobe1999>`; :ref:`Engelbrecht et al., 2007<Engelbrecht2007>`).
+
+The TRS seeks to capture this with a PFT-specific moisture stress threshold, :math:`\psi_{crit}`,
+below which the seedling pool starts to “accumulate” (mathematically an EMA is tracked with a
+timescale of :math:`W_{\psi}` days; default = 126) moisture deficit days (MDD) similar to the concept
+of growing degree days. The new MDD value on day i, :math:`MDD_i`, is calculated as the difference
+between the absolute value of site-level SMP on day i, :math:`SMP_i`, and the absolute value of :math:`\psi_{crit}`. 
+
+.. math::
+   MDD_i = \sum_{j = i - W_{\psi}}^{i} \left\{
+        \begin{array}{ll}
+            0 & \quad \psi_j \geq \psi_{crit} \\
+            |\psi_j| - |\psi_{crit}| & \quad \psi_j < \psi_{crit}
+        \end{array}
+    \right. 
+
+
+:math:`MDD_i` is then used to update an EMA of MDD, :math:`MDD_{EMA}`. Finally, :math:`MDD_{EMA}` is
+multiplied by the timescale of the EMA (in days), :math:`W_{\psi}`, to approximate an “accumulation” of MDD. 
+
+
+This formulation simultaneously captures the magnitude and duration of moisture stress.
+Observations of seedling wilting points from a manipulative drought experiment at BCI
+(:ref:`Engelbrecht & Kursar, 2003<EngelbrechtKursar2003>`; :ref:`Engelbrecht et al., 2007<Engelbrecht2007>`)
+were used to explore the relationship between MDD accumulation and seedling mortality.
+Observed drought-induced mortality is 0 up to a critical accumulation of MDD, :math:`MDD_{crit}`,
+at which point a convex quadratic relationship best explained drought-induced seedling mortality as a function of MDD
+(see SI Methods S1 and Fig. S1 in :ref:`Hanbury-Brown et al., 2022<Hanbury-Brown2022>` for more details).
+The mortality rate from moisture stress (:math:`M_{\psi}`) on day i is therefore
+
+.. math::
+   M_{\psi,i} =  \left\{
+        \begin{array}{ll}
+            0 & \quad MDD_i < MDD_{crit} \\
+           a_{\psi}MDD_i^2 + b_{\psi}MDD_i + c_{\psi} & \quad  MDD_i  \geq MDD_{crit}
+        \end{array}
+    \right. .
+
+Seedlings also die from insufficient light, which we refer to as light stress. The light stress mortality rate,
+:math:`M_L`, on day i is a function of “cumulative” (mathematically an EMA is tracked with a timescale of W_L days; default = 32) PAR at the seedling layer, :math:`L_{seedling}`, within a moving window of days, :math:`W_L`, prior to i. Similar to the approach used to calculate :math:`MDD_{EMA}`, :math:`L_{seedling}` is calculated by multiplying an EMA of seedling layer PAR, :math:`PAR_{EMA}`, by :math:`W_L` to approximate the cumulative light incident at the seedling layer prior to i. Two PFT-specific parameters determine the shape of the negative exponential relationship between mortality and and light
+
+.. math::
+   M_{L,i} = e^{a_{ML} \left ( \sum_{j=i-W_{L}}^{i} L_{seedling,j} \right) + b_{ML}}
+
+
+where :math:`a_{ML}` is a PFT-specific light response parameter and :math:`b_{ML}` is the intercept. This function is based on an analysis by :ref:`Kobe (1999)<Kobe1999>` who tested four functional forms and found that the negative exponential best described light stress mortality for two shade tolerant and one light demanding species that were transplanted into varied light environments. A background seedling mortality rate, :math:`M_{background}`, represents other seedling mortality (e.g. herbivory, pathogens, tree fall, etc.). Total seedling mortality is the sum of moisture-dependent, light-dependent and background mortality.   
+
+Recruitment
+~~~~~~~~~~~
+
+The rate of transition from seedling to sapling increases with understory light (:ref:`Brokaw, 1985<Brokaw1985>`; :ref:`Rüger et al., 2009b<Ruger2009b>`). Recruitment in the TRS is represented with a dynamic seedling to sapling transition rate (TR) which is the fraction of total carbon in the seedling pool, :math:`C_{seedling}`, that is available to make new recruits each day. The TR on day i is calculated as a power function of :math:`PAR_{EMA,i}`. If SMP on day i, :math:`\psi_i`, is drier than :math:`\psi_{crit}` the transition rate goes to zero such that
+
+.. math::
+
+   TR_{i} = \left\{
+        \begin{array}{ll}
+            0 & \quad \psi_i < \psi_{crit} \\
+           a_{TR} \left( \frac{ \sum_{j = i - W_{L}}^{i} PAR_{j} } {W_{L}} \right)^{b_{TR}}  & \quad  \psi_i \geq \psi_{crit}
+        \end{array}
+    \right. 
+
+where :math:`a_{TR}` is a coefficient derived from the mean transition rate at observed mean understory PAR (see SI Methods S1 in :ref:`Hanbury-Brown et al. (2022)<Hanbury-Brown2022>` for more information) and :math:`b_{TR}` is the light response modifier. The light response modifier produces accelerating (i.e. light demanding) or decelerating responses to light (Fig. 2f) depending on if :math:`b_{TR}` is greater or less than 1. Of a variety of functional forms tested at BCI, a power function with species-specific light response modifiers best explained observed variation in recruitment rates under spatially heterogenous patch-level light (:ref:`Rüger et al., 2009<Ruger2009b>`). This formulation is more broadly supported by the growth-mortality functional trade-off axis where light demanding species can take advantage of higher light conditions through faster relative growth rates (:ref:`Wright et al., 2010<Wright2010>`). 
+
+Carbon transitioning out of the seedling layer is available to FATES’s default recruitment subroutine which converts carbon available for recruitment into a number density of new recruits based on the amount of carbon required to form an individual in the smallest size class tracked by the VDM, Z0. The number of new recruits predicted on day i, :math:`R_i`, is
+
+.. math::
+
+   R_i = \frac{(TR_i) (C_{seedling,i}) } {Z_0}  
+
+The regeneration processes represented above introduce 18 new parameters used by FATES-TRS that are not used by default FATES. 
+
+.. csv-table:: Tree Recruitment Scheme Parameters. LD = light-demanding, ST = shade-tolerant, DT = drought-tolerant, DI = drought-intolerant.
+   :file: images/trs_params.csv
+   :widths: 25 25 25 25
+   :header-rows: 1
 
 Litter Production and Fragmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
