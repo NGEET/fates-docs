@@ -251,9 +251,9 @@ height-structured cohorts, we calculate the relativized differences in
 height (:math:`h_{coh}`, m) between two cohorts of the same pft,
 :math:`p` and :math:`q` as
 
-.. math:: d_{hite,p,q} = \frac{\mathrm{abs}(h_{p-}h_{q})}{\frac{1}{2}(h_{p}+h_{q})}
+.. math:: d_{height,p,q} = \frac{\mathrm{abs}(h_{p-}h_{q})}{\frac{1}{2}(h_{p}+h_{q})}
 
-If :math:`d_{hite,p,q}` is smaller than some threshold :math:`t_{ch}`,
+If :math:`d_{height,p,q}` is smaller than some threshold :math:`t_{ch}`,
 and they are of the same plant functional type, the two cohorts are
 considered equivalent and merged to form a third cohort :math:`r`, with
 the properties of cohort :math:`p` and :math:`q` averaged such that they
