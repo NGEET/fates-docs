@@ -3134,7 +3134,10 @@ Litter Production and Fragmentation
   section for more detail. 1-hour (twigs), 10-hour (small branches),
   100-hour (large branches) and 1000-hour(boles or trunks). 4.5 %, 7.5%,
   21 % and 67% of the woody biomass (:math:`C_{store,coh} + C_{sw,coh}`)
-  is partitioned into each class, respectively.
+  is partitioned into each class, respectively. If the cohort dbh is smaller
+  than a fuel class size threshold specified by `fates_frag_cwd_frac` then
+  no biomass is sent to that class. The relative proportions of biomass sent to
+  each of the remaining fuel classes is preserved.
 
 :math:`l_{leaf}` and :math:`l_{root}` are indexed by plant functional
 type (:math:`ft`). The rational for indexing leaf and fine root by PFT
