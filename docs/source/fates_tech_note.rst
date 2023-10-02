@@ -17,7 +17,7 @@ https://pdfs.semanticscholar.org/396c/b9f172cb681421ed78325a2237bfb428eece.pdf
 Authors of FATES code and technical documentation. 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding :sup:`12`, Shijie Shu :sup:`3`, Marcos Longo :sup:`3`, Adrianna Foster :sup:`1`, Adam Hanbury-Brown :sup:`13`, Lara Kueppers :sup:`13`, Jeffrey Q. Chambers :sup:`13`, Sam Levis :sup:`1`, Zachary Robbins :sup:`4`, Claire Zarakas :sup:`7`
+Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gregory Lemieux :sup:`3`, Chonggang Xu :sup:`4`, Brad Christofferson :sup:`5`, Jacquelyn Shuman  :sup:`1`,  Maoyi Huang :sup:`6`, Erik Kluzek :sup:`1`, Benjamin Andre :sup:`1`, Jessica F. Needham :sup:`3`, Jennifer Holm :sup:`3`, Marlies Kovenock  :sup:`7`, Abigail L. S. Swann :sup:`7`, Stefan Muszala :sup:`1`, Shawn P. Serbin :sup:`8`, Qianyu Li :sup:`8`, Mariana Verteinstein :sup:`1`, Anthony P. Walker :sup:`11`, Alan di Vittorio :sup:`3`, Yilin Fang :sup:`9`, Yi Xu :sup:`6`, Junyan Ding :sup:`12`, Shijie Shu :sup:`3`, Marcos Longo :sup:`3`, Adrianna Foster :sup:`1`, Adam Hanbury-Brown :sup:`3,14`, Lara Kueppers :sup:`13`, Jeffrey Q. Chambers :sup:`13`, Sam Levis :sup:`1`, Zachary Robbins :sup:`4`, Claire Zarakas :sup:`7`
 
 
 :sup:`1` Climate and Global Dynamics Division, National Center for Atmospheric Research, Boulder, CO, USA
@@ -45,6 +45,8 @@ Rosie A. Fisher :sup:`1,2`, Ryan G. Knox :sup:`3`, Charles D. Koven :sup:`3`, Gr
 :sup:`12` Earth & Biological Sciences, Pacific Northwest National Laboratory, Richland, WA, USA
 
 :sup:`13` University of California, Berkeley
+
+:sup:`14` University of California, Davis
 
 Introduction
 ^^^^^^^^^^^^^^^^^^^
@@ -512,9 +514,6 @@ can be restarted, are as follows
 | Woody       | _{B         | :sup:`-2`   | (lsc)       |
 | Debris      | G,patch}`   |             |             |
 +-------------+-------------+-------------+-------------+
-| Canopy      | :math:`S_{c |             | Canopy      |
-| Spread      | ,patch}`    |             | Layer       |
-+-------------+-------------+-------------+-------------+
 | Column      | :math:`{l_{ | integer     |             |
 | Index       | patch}}`    |             |             |
 +-------------+-------------+-------------+-------------+
@@ -779,12 +778,12 @@ to know the spatial extent of tree crowns. Crown area,
 :math:`A_{crown}`, m\ :sup:`2`, is defined as
 
 
-.. math:: A_{crown,coh}  =  S_{c,patch,cl}.dbh_{coh}^{(p_{e,leaf}-p_{e,leaf-crown})}
+.. math:: A_{crown,coh}  =  S_{c}.dbh_{coh}^{(p_{e,leaf}-p_{e,leaf-crown})}
 
 where :math:`A_{crown,coh}` is the crown area of a single tree canopy
-(m\ :sup:`2`) and :math:`S_{c,patch,cl}` is the ‘canopy spread’
-parameter (unitless) of this canopy layer, which is assigned as a
-function of canopy space filling, discussed below. :math:`S_{c,patch,cl}` is effectively
+(m\ :sup:`2`) and :math:`S_{c}` is the ‘canopy spread’
+parameter (unitless), which is assigned as a
+function of canopy space filling, discussed below. :math:`S_{c}` is effectively
 a normalisation constant in the power law describing the relationship of crown area 
 to dbh. However, this is not constant but varies by the canopy areae to ground area fraction.  
 In contrast to
@@ -836,7 +835,7 @@ because 1) the crown area predicted for a cohort to lose may be larger
 than the total crown area of the cohort, which requires iterative
 solutions, and 2) on some occasions (e.g. after fire, or if the parameter which sets the disturbed area as a function of the fractional crown area of canopy tree mortality is less than one), the canopy may
 open up and require ‘promotion’ of cohorts from the understorey, and 3)
-canopy area may change due to the variations of canopy spread values (:math:`S_{c,patch,cl}`, see the section below for details) when
+canopy area may change due to the variations of canopy spread values (:math:`S_{c}`, see the section below for details) when
 fractions of cohorts are demoted or promoted. Further details can be
 found in the code references in the footnote.
 
@@ -1958,8 +1957,57 @@ s\ :math:`^{-1}`) .
 
 .. math:: R_{m,coh} = R_{m,leaf,coh}+ R_{m,froot,coh}+R_{m,croot,coh}+R_{m,stem,coh}
 
-To calculate canopy leaf respiration, which varies through we canopy, we
-first determine the top-of-canopy leaf respiration rate
+Leaf maintenance respiration - Atkin et al. 2017
+------------------------------------------------
+The :ref:`Atkin et al. 2017<atkin2017>` leaf maintenance respiration (Rdark) model
+includes temperature acclimation. We first determine the
+top-of-canopy Rdark rate.
+
+.. math:: r_{tref} = max(0, r_0 + r_1 * lnc_{top} + r_2 * max(0, tgrowth))
+
+where :math:`r_0` is the PFT-dependent base Rdark rate,
+:math:`r_1` is a parameter that determines the effects of nitrogen availability
+on Rdark, :math:`r_2` is a parameter that determines the effects of temperature
+on Rdark, and :math:`tgrowth` is the lagged vegetation temperature averaged over
+the acclimation timescale. We use :math:`r_1` = 0.2061 and :math:`r_2` = -0.0402
+following :ref:`Atkin et al. 2017<atkin2017>`.
+
+At very high temperatures, and with low values of
+:math:`r_0`, the whole term can become negative, and we therefore cap it at 0 to prevent negative Rdark.
+
+      
+We scale vertically through the canopy based on nitrogen availability following
+:ref:`Lloyd et al. 2010<Lloydetal2010>`, in the same way that :math:`V_{c,max}`
+values are scaled uisng :math:`V_{above}`, described above.
+
+.. math:: r_{tref} = nscaler * r_{tref}
+
+where 
+
+.. math:: nscaler = exp(-kn * cumulativelai)
+
+and
+
+.. math:: kn =  exp(0.00963 * vcmax25top - 2.43) 
+
+where :math:`vcmax25top` is PFT-dependent maximum carboxylation rate of rubisco at the top 
+of the canopy at 25 degrees C, and :math:`cumulativelai` is the cumulative LAI, top down,
+to the leaf layer of interest. 
+
+We then adjust Rdark for current vegetation temperature (:math:`veg_{temp}`).
+
+.. math:: R_{m,leaf,coh} = r_{tref} * exp(b * (veg_{temp} - TrefC) + c * (veg_{temp}^{2} - TrefC^{2}))
+
+where :math:`TrefC` is the reference temperature of 25 degrees C, and :math:`b`
+and :math:`c` are parameters from :ref:`Heskel et al. 2016<Heskel2016>`, set as
+:math:`b` = 0.1012 and :math:`c` = -0.0005.
+
+      
+      
+Leaf maintenance respiration - Ryan 1991
+----------------------------------------
+To calculate canopy leaf respiration following :ref:`Ryan et al. 1991<ryan1991>`,
+we first determine the top-of-canopy leaf respiration rate
 (:math:`r_{m,leaf,ft,0}`, gC s\ :math:`^{-1}` m\ :math:`^{-2}`) is
 calculated from a base rate of respiration per unit leaf nitrogen
 derived from :ref:`Ryan et al. 1991<ryan1991>`. The base rate for leaf
@@ -2461,8 +2509,53 @@ the greatly reduced maintenance and turnover requirements.
 Phenology
 ^^^^^^^^^^^^^^^^^^^^
 
-Cold Deciduous Phenology
-------------------------
+In deciduous plant functional types, the target leaf biomass
+(:math:`C_\mathrm{leaf,coh}`) can be  regulated through
+the leaf elongation factor (:math:`\varepsilon_\mathrm{leaf,PFT}`), a
+non-dimensional, fractional quantity (i.e., :math:`0 \ge \varepsilon_\mathrm{leaf,PFT} \ge 1`)
+that quantifies the degree of environmental stress (cold or drought) experienced by the PFT
+environmental conditions (temperature or moisture):
+
+.. math:: C_\mathrm{leaf,coh} = \varepsilon_\mathrm{leaf,coh} \, C^{\odot}_\mathrm{leaf,coh},
+
+where (:math:`C^{\odot}_\mathrm{leaf,coh}`) is the leaf biomass given size
+and PFT when the cohort does not experience any stress. Importantly,
+:math:`C^{\star}_\mathrm{leaf,coh}` is not the absolute maximum leaf biomass given size, as
+it can be still impacted by crown damage or canopy trimming.
+
+Two categories of deciduous PFTs are currently implemented in FATES, **cold deciduous** (summergreen) and
+**drought deciduous** (raingreen). Cold deciduous plants are always *hard-deciduous*, meaning
+that :math:`\varepsilon_\mathrm{leaf,coh}` can only be either 0 (leaves completely abscised) or
+1 (PFTs will fully flush leaves provided that enough carbon storage is available). For drought-deciduous
+PFTs, two strategies are available, *hard-deciduous* phenology, akin to the cold deciduous, and
+the *semi-deciduous* phenology, where :math:`\varepsilon_\mathrm{leaf,coh}` can be any fraction between
+0 and 1 (inclusive), which allows plants to partially abscise or partially flush leaves when drought
+conditions are moderate. For evergreen PFTs, :math:`\varepsilon_\mathrm{leaf,coh} = 1` at all times.
+
+In addition to leaf phenology, in FATES it is possible to simulate active flushing
+and abscission of fine roots and stems in response to environmental conditions. In
+the case of fine roots, the main purpose is to reduce the maintenance
+of high-turnover tissues when plants are not assimilating carbon. In the
+case of stems, phenology is intended to be used for grass PFTs only, with the
+goal of avoiding numerical instabilities when running plant hydraulics (FATES-Hydro).
+
+Fine-root and stem phenologies are controlled by PFT-specific drop fraction
+parameters, namely :math:`\nu_\mathrm{root,PFT}` (FATES parameter ``fates_phen_fnrt_drop_fraction``)
+and :math:`\nu_\mathrm{stem,PFT}` (FATES parameter ``fates_phen_stem_drop_fraction``). Both
+parameters range from 0 (perennial) to 1 (tissue phenology tracks leaf phenology), and are
+used to determine elongation-factor-equivalent values for these tissues after the elongation
+factor for leaves is determined:
+
+.. math::   \begin{array}{l}
+               \varepsilon_{\mathrm{root,PFT}} = 1 - \left( 1 - \varepsilon_{\mathrm{leaf,PFT}} \right) \, \nu_{\mathrm{root,PFT}}, \\
+               \varepsilon_{\mathrm{stem,PFT}} = 1 - \left( 1 - \varepsilon_{\mathrm{leaf,PFT}} \right) \, \nu_{\mathrm{stem,PFT}}.
+            \end{array}
+
+In the next sections, we describe how :math:`\varepsilon_\mathrm{leaf,coh}` is
+defined for non-evergreen PFTs.
+
+Cold Deciduous Leaf Phenology
+-----------------------------
 
 Cold Leaf-out timing
 ~~~~~~~~~~~~~~~~~~~~
@@ -2473,36 +2566,32 @@ verified against satellite data and is one of the only globally verified
 and published models of leaf-out phenology. This model differs from the
 phenology model in the CLM4.5. The model simulates leaf-on date as a
 function of the number of growing degree days (GDD), defined by the sum
-of mean daily temperatures (:math:`T_{day}` :math:`^{o}`\ C) above a
-given threshold :math:`T_{g}` (0 :math:`^{o}`\ C).
+of mean daily temperatures (:math:`T_\mathrm{day}` :math:`\phantom{.}^{\circ}\mathrm{C}`) above a
+given threshold :math:`T_{g}` (:math:`0^{\circ}\mathrm{C}`).
 
-.. math:: GDD=\sum \textrm{max}(T_{day}-T_{g},0)
+.. math:: \mathrm{GDD} = \sum \max{\left(T_\mathrm{day}-T_{g},0\right)}
 
-Budburst occurs when :math:`GDD` exceeds a threshold
-(:math:`GDD_{crit}`). The threshold is modulated by the number of
-chilling days experienced (NCD) where the mean daily temperature falls
-below a threshold determined by `Botta et al. 2000<botta2000>` as
-5\ :math:`^{o}`\ C. A greater number of chilling days means that fewer
-growing degree days are required before budburst:
+Budburst occurs when :math:`\mathrm{GDD}` exceeds a threshold
+(:math:`\mathrm{GDD}_\mathrm{crit}`). The threshold is modulated by the number of
+chilling days experienced (:math:`\mathrm{NCD}`) where the mean daily temperature falls
+below a threshold determined by :ref:`Botta et al. 2000<botta2000>` as :math:`5^{\circ}\mathrm{C}`.
+A greater number of chilling days means that fewer growing degree days are required before budburst:
 
-.. math:: GDD_{crit}=a+be^{c.NCD}
+.. math:: \mathrm{GDD}_\mathrm{crit}=a+b\,\exp{\left(c\,\mathrm{NCD}\right)}
 
-where a = -68, b= 638 and c=-0.01 `Botta et al. 2000<botta2000>`. In the
-Northern Hemisphere, counting of degree days begins on 1st January, and
-of chilling days on 1st November. The calendar opposite of these dates
-is used for points in the Southern Hemisphere.
+where :math:`a = -68`, :math:`b= 638` and :math:`c=-0.01` (:ref:`Botta et al. 2000<botta2000>`).
+In the Northern Hemisphere, counting of degree days begins on 1st January, and of
+chilling days on 1st November. In the Southern Hemisphere, we use 1st July (growing degree days)
+and 1st May (chilling days) instead.
 
 If the growing degree days exceed the critical threshold, leaf-on is
-triggered by a change in the gridcell phenology status flag
-:math:`S_{phen,grid}` where ‘2’ indicates that leaves should come on and
-‘1’ indicates that they should fall.
+triggered by a change in the leaf elongation factor:
 
-.. math::
-
-   \begin{array}{ll}
-   S_{phen,grid} = 2
-   &\textrm{ if } S_{phen,grid} = 1\textrm{ and } GDD_{grid} \ge GDD_{crit} \\
-   \end{array}
+.. math::   \varepsilon_\mathrm{leaf,PFT}(t) =
+               \begin{cases}
+                  1 & \textrm{, if } \varepsilon_\mathrm{leaf,PFT}(t-1) = 0 \textrm{ and } \mathrm{GDD}(t) \ge \mathrm{GDD}_\mathrm{crit} \\
+                  \varepsilon_\mathrm{leaf,PFT}(t-1) & \textrm{, otherwise}
+               \end{cases}
 
 Cold Leaf-off timing
 ~~~~~~~~~~~~~~~~~~~~
@@ -2512,16 +2601,15 @@ The leaf-off model is taken from the Sheffield Dynamic Vegetation Model
 :ref:`Sitch et al. 2003<sitch2003>` and IBIS
 :ref:`Foley et al. 1996<Foley1996>` models. The average daily
 temperatures of the previous 10 day period are stored. Senescence is
-triggered when the number of days with an average temperature below
-7.5\ :math:`^{o}` (:math:`n_{colddays}`) rises above a threshold values
-:math:`n_{crit,cold}`, set at 5 days.
+triggered when the number of days with an average temperature below :math:`7.5^{\circ}\mathrm{C}`
+(:math:`n_\mathrm{colddays}`) rises above a threshold values
+:math:`n_{\mathrm{crit},\mathrm{cold}}`, set at 5 days.
 
-.. math::
-
-   \begin{array}{ll}
-   S_{phen,grid} = 1
-   &\textrm{ if } S_{phen,grid} = 2\textrm{ and } n_{colddays} \ge n_{crit,cold} \\
-   \end{array}
+.. math::   \varepsilon_\mathrm{leaf,PFT}(t) =
+               \begin{cases}
+                  0 & \textrm{, if} \varepsilon_\mathrm{leaf,PFT}(t-1) = 1 \textrm{ and } n_\mathrm{colddays}(t) \ge n_\mathrm{crit,cold} \\
+                  \varepsilon_\mathrm{leaf,PFT}(t-1) & \textrm{, otherwise}
+               \end{cases}
 
 Global implementation modifications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2543,69 +2631,184 @@ Further to this rule, we introduce a ‘buffer’ time periods after leaf-on
 of 30 days, so that cold-snap periods in the spring cannot trigger a
 leaf senescence. The 30 day limit is an arbitrary limit. In addition, we
 constrain growing degree day accumulation to the second half of the year
-(Jult onwards in the Northern hemisphere, or Jan-June in the Southern)
-and only allow GDD accumulation while the leaves are off.
+(July-December in the Northern hemisphere, or January-June in the Southern
+Hemisphere) and only allow GDD accumulation while the leaves are off.
 
-Drought-deciduous Phenology: TBD
--------------------------------- 
+Drought-deciduous leaf phenology (hard-deciduous)
+-------------------------------------------------
 
-In the current version of the model, a drought deciduous algorithm
-exists, but is not yet operational, due to issue detected in the existing
-CN and soil moisture modules, which also affect the behaviour of the
-native ED drought deciduous model. This is a priority to address before
-the science tag is released.
+The hard-, drought-deciduous phenology in FATES is based on CLM-4
+(:ref:`Dahlin et al. 2015<Dahlinetal2015>`; :ref:`Oleson et al. 2013<Olesonetal2013>`).
+Both leaf flushing (growth) and leaf abscission (senescence) are controlled by
+the plant available water (:math:`\psi_\mathrm{PFT,grid}` :math:`\mathrm{mm}`),
+a PFT-specific variable that is defined as the 10-day running average of the
+soil matric potential across the rooting zone:
 
-Carbon Dynamics of deciduous plants
------------------------------------ 
+.. math:: \psi_\mathrm{PFT,grid}\left(t\right) = \frac{1}{10} \,
+   \left[ \sum_{t'=t-9}^{t} \left( \frac{\displaystyle \sum_{k=k_\mathrm{root,PFT}}^{N_\mathrm{soil}-1} \psi\left(z_k,t'\right) \, r_{z_k,\mathrm{PFT}}}
+                                        {\displaystyle \sum_{k=k_\mathrm{root,PFT}}^{N_\mathrm{soil}-1} r_{z_k,\mathrm{PFT}}} \right) \right],
 
-In the present version, leaf expansion and senescence happen over the
-course of a single day. This is clearly not an empirically robust
-representation of leaf behaviour, whereby leaf expansion occurs over a
-period of 10-14 days, and senescence over a similar period. This will be
-incorporated in later versions. When the cold or drought phenological
-status of the gridcell status changes (:math:`S_{phen,grid}`) from ‘2’
-to ‘1’, and the leaves are still on (:math:`S_{phen,coh}` =2 ), the leaf
-biomass at this timestep is ’remembered’ by the model state variable
-:math:`l_{memory,coh}`. This provides a ‘target’ biomass for leaf onset
-at the beginning of the next growing season (it is a target, since
-depletion of stored carbon in the off season may render achieving the
-target impossible).
+where :math:`\psi\left(z_k,t'\right)` is the soil matric potential of
+layer :math:`k` at time :math:`t'`, :math:`k_\mathrm{root,PFT}` is the deepest
+soil layer in the PFT's rooting zone, :math:`r_{z_k,\mathrm{PFT}}` is the
+fraction of roots of each plant functional type at each soil layer,
+and :math:`N_\mathrm{soil}` is the total number of soil layers. To avoid a
+strong influence of the typically very thin top soil layer, we exclude this
+layer when estimating :math:`\psi_\mathrm{PFT,grid}`.
 
-.. math:: l_{memory,coh} = C_{leaf,coh}
+For the most part, drought conditions are based on a comparison
+between :math:`\psi_\mathrm{PFT,grid}\left(t\right)` and a PFT-specific,
+threshold parameter :math:`\psi_\mathrm{PFT,drought} | \psi_\mathrm{PFT,drought} \in \left] -\infty,0\right[`
+(:math:`\mathrm{mm}`).
+When :math:`\psi_\mathrm{PFT,grid}\left(t\right) < \psi_\mathrm{PFT,drought}`, we assume
+drought conditions (plants likely to be or become leafless), and
+when :math:`\psi_\mathrm{PFT,grid}\left(t\right) \ge \psi_\mathrm{PFT,drought}`, we
+assume non-drought conditions (plants likely to be or become fully flushed).
 
-Leaf carbon is then added to the leaf litter flux :math:`l_{leaf,coh}`
-(KgC individual\ :math:`^{-1}`)
+Similarly to the cold-deciduous phenology, we must include additional
+constrains to ensure that plants are truly deciduous, even when the seasonal
+cycle of :math:`\psi_\mathrm{PFT,grid}\left(t\right)` never crosses the drought
+threshold. To prevent plants to remain leafless for long periods of
+time, PFTs will forcibly flush leaves when the time since last flushing
+(:math:`t_\mathrm{Flush,coh}`, :math:`\mathrm{day}`) exceeds 395 days
+(13 months). Likewise, the maximum time leaves can remain fully flushed is
+defined by the PFT-specific leaf life span (:math:`\tau_\mathrm{Leaf,coh}`) or 12 months,
+whichever is the shortest.
 
-.. math:: l_{leaf,coh} = C_{leaf,coh}
+The use of a single-parameter threshold to define drought conditions can potentially
+lead to a *flickering* behaviour, in which deciduous PFTs would flush and abscise leaves
+multiple times if plant available water (:math:`\psi_\mathrm{PFT,grid}\left(t\right)`) straddles
+around :math:`\psi_\mathrm{PFT,drought}`. To prevent this, leaf abscission can only occur if
+the time since last flushing has exceeded 90 days (3 months). Similarly, plants can only flush
+leaves when the time since last abscission (:math:`t_\mathrm{Abscise,coh}`, :math:`\mathrm{day}`) exceeds
+a PFT-specific parameter (:math:`t_\mathrm{PFT,MinOff}`, :math:`\mathrm{day}`). The only exception
+to this rule is when a site is perennially moist, in which case PFTs can flush their leaves after
+30 days, akin to a brevi-deciduous behaviour.
 
-The alive biomass is depleted by the quantity of leaf mass lost, and the
-leaf biomass is set to zero
+The diagram below summarises how elongation factor is defined after accounting for the time-driven
+phenological cycles:
 
-.. math:: C_{alive,coh} = C_{alive,coh} - C_{leaf,coh}
+.. figure:: images/PhenologyDecisionTreeHard.png
 
-.. math:: C_{leaf,coh} = 0
 
-Finally, the status :math:`S_{phen,coh}` is set to 1, indicating that
-the leaves have fallen off.
+Drought-deciduous leaf phenology (semi-deciduous)
+-------------------------------------------------
 
-For bud burst, or leaf-on, the same occurs in reverse. If the leaves are
-off (:math:`S_{phen,coh}`\ =1) and the phenological status triggers
-budburst (:math:`S_{phen,grid}`\ =2) then the leaf mass is set the
-maximum of the leaf memory and the available store
+The semi-, drought-deciduous phenology in FATES is based on the hard-, drought-deciduous
+phenology, with a further modification in the elongation factor dynamics based on the ED-2.2
+model (:ref:`Longo et al. 2019<Longoetal2019a>`). Semi-, drought-deciduous PFTs can partially
+abscise or partially flush leaves when drought conditions are moderate, and therefore can
+experience non-instantaneous flushing and abscission seasons.
 
-.. math:: C_{leaf,coh} =  \textrm{max}\left(l_{memory,coh}, C_{store,coh}\right.)
+To define the degree of abscission or flushing, we define a first guess for the elongation
+factor (:math:`\varepsilon^{\star}_\mathrm{leaf,PFT}`) that compares the plant available
+water with two thresholds:
 
-this amount of carbon is removed from the store
+.. math:: \varepsilon^{\star}_\mathrm{leaf,PFT}(t) =
+            \max{\left[0,\min{\left(1,\frac{\psi_\mathrm{PFT,grid}\left(t\right)-\psi_\mathrm{PFT,drought}}{\psi_\mathrm{PFT,moist}-\psi_\mathrm{PFT,drought}}\right)}\right]}
 
-.. math:: C_{store,coh} = C_{store,coh}  - C_{leaf,coh}
+where :math:`\psi_\mathrm{PFT,moist}` (:math:`\mathrm{mm}`) is a PFT-specific
+parameter that defines the threshold above which plant available water is
+no longer a limiting factor, and :math:`\psi_\mathrm{PFT,drought}` defines
+the threshold below which plant available water is strongly limiting. The latter
+parameter is defined by the same parameter name in the FATES parameter file.
 
-and the new leaf biomass is added to the alive pool
+Typically, :math:`\varepsilon^{\star}_\mathrm{leaf,PFT}` will be the actual elongation factor.
+However, akin to the hard-deciduous PFTs, we must ensure that semi-deciduous PFTs still have
+at least one abscission/flushing cycle every year, and that PFTs do not switch between abscising
+and flushing phases too frequently, especially when the elongation factor is zero. To this end,
+we define :math:`t_\mathrm{Abscise,coh}` (:math:`\mathrm{day}`) to be the time since last full
+abscission (i.e., when PFT lost all leaves), and :math:`t_\mathrm{Flush,coh}` (:math:`\mathrm{day}`)
+as the time since last "out-of-leafless-state" flushing event. We then apply the set of rules
+described in the figure below.
 
-.. math:: C_{alive,coh} = C_{alive,coh}  + C_{leaf,coh}
+.. figure:: images/PhenologyDecisionTreeSemi.png
 
-Lastly, the leaf memory variable is set to zero and the phenological
-status of the cohort back to ‘2’. No parameters are currently required
-for this carbon accounting scheme.
+**Note**. The semi-deciduous implementation is still experimental, and may be revised as
+more experiments are carried out and more data become available.
+
+
+
+Carbon allocation dynamics of deciduous plants
+----------------------------------------------
+
+In the present version, phenology (i.e., the elongation factors) is
+updated at daily time steps. Once phenology is updated, carbon pools
+(i.e., plant tissues, storage and litter) are updated too.
+
+To facilitate the tracking of phenology dynamics,
+we define a flag variable (:math:`S_\mathrm{phen,coh}`) that describes the
+leaf phenology status of every cohort:
+
+.. math::   S_\mathrm{phen,coh} =
+            \begin{cases}
+               1 & \textrm{, if cohort is completely leafless,} \\
+               2 & \textrm{, if cohort is flushing leaves or leaves are fully flushed,} \\
+               3 & \textrm{, if cohort is abscising leaves (but not completely leafless).}
+            \end{cases}
+
+Expansion (flushing) phase
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When cohorts are in expansion phase (i.e., :math:`S_\mathrm{phen,coh}=2`), carbon will
+be transferred from the storage pool, based on the expected carbon stocks:
+
+.. math::   \begin{array}{l}
+               C^{\star}_\mathrm{leaf,coh}\left(t\right) = \varepsilon_\mathrm{leaf,coh}\left(t\right) \, C^{\odot}_\mathrm{leaf,coh}, \\
+               C^{\star}_\mathrm{root,coh}\left(t\right) = \varepsilon_\mathrm{root,coh}\left(t\right) \, C^{\odot}_\mathrm{root,coh}, \\
+               C^{\star}_\mathrm{stem,coh}\left(t\right) = \varepsilon_\mathrm{stem,coh}\left(t\right) \, C^{\odot}_\mathrm{stem,coh},
+            \end{array}
+
+where :math:`C^{\star}_\mathrm{leaf,coh}`, :math:`C^{\star}_\mathrm{root,coh}` and :math:`C^{\star}_\mathrm{stem,coh}` are
+respectively the maximum carbon biomass of leaves, fine roots and stems (sapwood + heartwood) that the cohort can attain given their size, PFT,
+canopy trimming status, damage status and elongation factors.
+
+In reality, the actual carbon stocks :math:`C_\mathrm{tissue,coh}\left(t\right)` will depend on
+both on :math:`C^{\star}_\mathrm{tissue,coh}` and the amount of carbon storage at the previous
+time step (:math:`C_\mathrm{store,coh}`), meaning
+that :math:`C_\mathrm{tissue,coh}\left(t\right) \leq C^{\star}_\mathrm{tissue,coh}`. The transfer of
+carbon from storage to the living tissues is solved by the :ref:`parteh_section` module.
+
+
+Abscission phase
+~~~~~~~~~~~~~~~~
+
+When cohorts are abscising tissues (i.e., :math:`S_\mathrm{phen,coh} \in \left\{1,3\right\}`), the
+updated carbon pools are defined based on the updated elongation factors:
+
+.. math::   \begin{array}{l}
+               C_\mathrm{leaf,coh}\left(t\right) = \min{\left[\varepsilon_\mathrm{leaf,coh}\left(t\right) \, C^{\odot}_\mathrm{leaf,coh}, C_\mathrm{leaf,coh}\left(t-1\right)\right]}, \\
+               C_\mathrm{root,coh}\left(t\right) = \min{\left[\varepsilon_\mathrm{root,coh}\left(t\right) \, C^{\odot}_\mathrm{root,coh}, C_\mathrm{root,coh}\left(t-1\right)\right]}, \\
+               C_\mathrm{stem,coh}\left(t\right) = \min{\left[\varepsilon_\mathrm{stem,coh}\left(t\right) \, C^{\odot}_\mathrm{stem,coh}, C_\mathrm{stem,coh}\left(t-1\right)\right]},
+            \end{array}
+
+where :math:`C^{\odot}_\mathrm{leaf,coh}`, :math:`C^{\odot}_\mathrm{root,coh}` and :math:`C^{\odot}_\mathrm{stem,coh}` are
+respectively the maximum carbon biomass of leaves, fine roots and stems
+(sapwood + heartwood) that the cohort can attain given their size, PFT,
+canopy trimming status and damage status.
+
+Litter fluxes (:math:`\mathrm{kgC\,individual^{-1}\,day^{-1}}`) are defined as follows:
+
+
+.. math::   \begin{array}{l}
+               {\displaystyle l_\mathrm{leaf,coh}\left(t\right) = \frac{1}{\Delta t} \, \left[C_\mathrm{leaf,coh}\left(t-1\right) - C_\mathrm{leaf,coh}\left(t\right)\right]}, \\
+               {\displaystyle l_\mathrm{root,coh}\left(t\right) = \frac{1}{\Delta t} \, \left[C_\mathrm{root,coh}\left(t-1\right) - C_\mathrm{root,coh}\left(t\right)\right]}, \\
+               {\displaystyle l_\mathrm{stem,coh}\left(t\right) = \frac{1}{\Delta t} \, \left[C_\mathrm{stem,coh}\left(t-1\right) - C_\mathrm{stem,coh}\left(t\right)\right]}, \\
+            \end{array}
+
+where :math:`\Delta t` is the phenological time step.
+
+During abscission phase, cold-deciduous PFTs will use any storage carbon available to bring living tissues to the
+expected level (i.e., :math:`C^{\star}_\mathrm{tissue,coh}`), similarly to what
+occurs during the expansion (flushing) phase. This has minimum impact on cold-deciduous viability
+because tissue turnover rate is a function of temperature, and therefore the costs are low during their
+leaf-off season. This is not the case for drought deciduous, because the atmospheric
+temperature (and the maintenance costs) are typically high in the leaf-off season, particularly in dry
+tropical ecosystems. Therefore, when drought-deciduous PFTs status is :math:`S_\mathrm{phen,coh} \in \left\{1,3\right\}`,
+they completely halt allocation to any tissue, and all carbon acquired during the abscission phase (only
+possible when :math:`S_\mathrm{phen,coh} = 3`) is transferred to carbon storage.
+
+
 
 .. raw:: latex
 
@@ -2623,10 +2826,40 @@ for this carbon accounting scheme.
 | cold}`          | cold days for   |                 |                 |
 |                 | senescence      |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
-| :math:`T_{g}`   | Threshold for   | :math:`^{o}`\ C |                 |
-|                 | counting        |                 |                 |
+| :math:`T_{g}`   | Threshold for   | :math:`^{\circ} |                 |
+|                 | counting        | \mathrm{C}`     |                 |
 |                 | growing degree  |                 |                 |
 |                 | days            |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`\nu_     | Fraction of     | none            |                 |
+| {\mathrm{root   | active          |                 |                 |
+| ,PFT}}`         | abscission of   |                 |                 |
+|                 | fine roots,     |                 |                 |
+|                 | relative to     |                 |                 |
+|                 | leaves.         |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`\nu_     | Fraction of     | none            |                 |
+| {\mathrm{stem   | active          |                 |                 |
+| ,PFT}}`         | abscission of   |                 |                 |
+|                 | stems, relative |                 |                 |
+|                 | to leaves.      |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`\psi_    | Threshold below | :math:`\mathrm{ |                 |
+| \mathrm{PFT     | which drought   | mm}`            |                 |
+| ,drought}`      | deciduous       |                 |                 |
+|                 | cohorts abscise |                 |                 |
+|                 | all leaves      |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`\psi_    | Threshold above | :math:`\mathrm{ |                 |
+| \mathrm{PFT     | which water is  | mm}`            |                 |
+| ,moist}`        | no longer a     |                 |                 |
+|                 | limiting factor |                 |                 |
++-----------------+-----------------+-----------------+-----------------+
+| :math:`t_       | Minimum         | :math:`\mathrm{ |                 |
+| \mathrm{PFT     | leaf-off time   | day}`           |                 |
+| ,MinOff}`       | for hard-,      |                 |                 |
+|                 | drought         |                 |                 |
+|                 | deciduous PFTs  |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
 .. raw:: latex
@@ -2714,6 +2947,217 @@ of one plant functional type over the seed pool.
 
    \bigskip 
 
+
+Environmentally Sensitive Tree Recruitment
+------------------------------------------
+
+FATES has the option to represent environmentally sensitive tree recruitment
+using the Tree Recruitment Scheme (TRS), a module that was originally
+presented offline of FATES (:ref:`Hanbury-Brown et al. 2022<Hanbury-Brown2022>`).
+The primary goal of the TRS is to more mechanistically constrain the amount of
+carbon available for recruitment based on conditions at the forest floor.
+
+The TRS is off by default (fates_regeneration_model = 1), but can be switched
+on using the parameter file. The TRS can be switched on in a reduced
+complexity mode (fates_regeneration_model = 3) without seedling dynamics where it
+represents 1) pft-specific reproductive allocation schedules as a function of dbh
+and 2) allocation to non-seed reproductive biomass. If the TRS is switched on 
+with seedling dynamics (fates_regeneration_model = 2) it will also represent
+environmentally sensitive seedling emergence, seedling mortality and transition
+into the sapling stage (i.e. cohorts tracked by FATES).
+
+The TRS allocates a dynamic fraction of carbon for growth and reproduction
+(:math:`C_{g+r}`; positive carbon balance net after tissue turnover and allocation
+to storage) to reproduction. Regeneration processes, described in detail below,
+move dynamic fractions of :math:`C_{g+r}` through a seedbank and seedling pool
+which are tracked in units of carbon. Carbon recruiting out of the seedling pool
+each day is passed back to FATES’s default recruitment subroutine. The TRS determines
+how much carbon is available for recruitment and FATES’s recruitment subroutine calculates
+how many new recruits to produce and initializes the new cohort. Carbon in seeds or
+seedlings that die or that is allocated to non-seed reproductive biomass, moves to the
+litter pool. Unlike the offline version of the TRS presented in
+:ref:`Hanbury-Brown et al. (2022)<Hanbury-Brown2022>`, FATES-TRS uses
+exponential moving averages (EMAs) of environmental variables in the seedling
+layer to calculate the rates of regeneration processes.
+EMAs are tracked on different timescales depending on the process.
+
+.. figure:: images/TRS_overview.png   
+   :scale: 90 %
+   :alt: TRS image
+
+   Daily regeneration processes (depicted with hour glasses) represented by FATES-TRS transfer reproductive carbon through seed bank and seedling carbon pools (depicted as circles). Processes are sensitive to DBH or environmental conditions (see inset key). The litter pool receives non-seed reproductive carbon, dead seeds, and dead seedlings. Carbon for new recruits is passed back to FATES’s default recruitment subroutine. "Host VDM" = FATES. 
+
+
+Allocation to reproduction
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Allocation to reproduction occurs in FATES’s parteh module (parteh/PRTAllometricCarbonMod.F90).
+FATES without the TRS switched on (i.e. “default FATES”) assumes reproductive allocation is either
+insensitive to size or is a step function of size, depending on the parameterization. In contrast,
+the TRS allocates a dynamic fraction of cohort-level :math:`C_{g+r}` to reproduction based on the
+cohort’s size and the TRS’s reproductive allocation (RA)
+function. This follows observations that the probability a tree is
+reproductive increases sigmoidally with size within species (:ref:`Visser et al., 2016<Visser2016>`).
+Each mature cohort contributes to recruitment via the TRS if they are in positive carbon balance.
+The effective fraction of cohort-level :math:`C_{g+r}` allocated to reproduction, :math:`F_{E,repro}`,
+is calculated based on a sigmoidal relationship relating the cohort’s current dbh (cm)
+to the probability of being reproductive (:math:`P_{repro}`). This formulation assumes
+that all reproductive individuals in a cohort allocate to reproduction at a constant, PFT-specific rate,
+:math:`F_{repro}`, which is modified by :math:`P_{repro}`
+to calculate :math:`F_{E,repro}`
+
+.. math::
+   :label: Eqn 1.14.1
+
+   P_{repro} =  \frac{e^{( a_{RA}  (dbh) +  b_{RA}) } }{1 + e^{(  a_{RA}  (dbh) +  b_{RA}  )} } 
+
+.. math::
+   :label: Eqn 1.14.2
+
+   F_{E,repro} =  (P_{repro})   (F_{repro})
+
+where :math:`a_{RA}` and :math:`b_{RA}` are PFT-specific parameters describing the shape of the sigmoidal curve.
+This functional form is consistent with empirical data (:ref:`Visser et al., 2016<Visser2016>`;
+:ref:`Minor & Kobe, 2019<MinorKobe2019>`). The TRS subsequently multiplies :math:`F_{E,repro}` by :math:`C_{g+r}`
+to get reproductive carbon per cohort.
+
+See Table below for all TRS parameters.
+
+
+Allocation to seed vs. non-seed reproductive biomass and seed mortality 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In nature, only a subset of the carbon allocated to reproduction becomes seeds, with the rest going to flowers,
+fruit flesh, capsules, etc. (:ref:`Wenk et al., 2017<Wenk2017>`). Default FATES sends all reproductive carbon
+to an undifferentiated “seed pool” from which carbon is lost and recruits are formed
+(:ref:`Fisher et al., 2015<Fisheretal2015>`). The TRS partitions each cohort’s reproductive carbon into seed carbon
+and non-seed reproductive carbon (e.g., flowers, fruit flesh, and capsules) based on a prescribed,
+PFT-specific fraction of reproductive carbon that is seed, :math:`F_{seed}`. This happens in the SeedIn
+subroutine (biogeochem/EDPhysiologyMod). Seed carbon moves to the seed bank each day and non-seed reproductive
+carbon moves to litter. Seeds in the seed bank die at a PFT-specific, constant rate, :math:`S_{mort}`,
+which represents all modes of seed mortality including predation and decay (same as default FATES).
+
+Seedling emergence
+~~~~~~~~~~~~~~~~~~
+
+Seedling emergence is sensitive to soil moisture (:ref:`Garwood, 1983<Garwood1983>`;
+:ref:`Atondo-Bueno et al., 2016<Atondo-Bueno2016>`; :ref:`Ruiz Talonia et al., 2017<Ruiz2017>`) and light (:ref:`Pearson et al., 2002<Pearson2002>`)
+in nature. Default FATES represents it as an environmentally insensitive constant.
+In the TRS, emergence depends on both soil moisture and light. 
+
+Light-dependence of germination is captured on day i in a Michaelis-Menten rate modifier [0,1]
+
+.. math::
+
+   f(PAR_i) = \frac{ PAR_i}  {PAR_i  + PAR_{crit}}
+
+
+based on :math:`PAR_i`, the 24-hour EMA of photosynthetically active radiation (PAR) at the seedling layer.
+Seedling layer PAR is sensitive to canopy layer and understory layer vegetation cover such that seedling layer PAR is an area-weighted average of PAR incident at the top and bottom of the understory layer. When there is very little
+vegetation present, PAR at the seedling layer is taken from the boundary conditions (i.e. same as top of canopy).
+:math:`PAR_{crit}` is a PFT-specific PAR threshold governing the shape of the germination response to reduced light.
+Most tropical pioneer species exhibit an increase in germination probability with increases in light,
+whereas germination in shade-tolerant species is insensitive to light (captured by :math:`PAR_{crit} = 0`).
+
+The EMA of soil matric potential on day i (:math:`SMP_{EMA,i}`) at seedling rooting depth, :math:`d_{seeedling}`,
+is influenced by SMP in a rolling window of days, :math:`W_{emerg}` (default = 7 days),
+prior to i. If :math:`SMP_{EMA,i}` is above a critical threshold, :math:`\psi_{emerg}`, then seedling emergence occurs.
+The emergence rate on day i, :math:`F_{emerg,i}`, is dynamically calculated as a function of :math:`SMP_{EMA,i}`.
+The pft-specific moisture response parameter, :math:`b_{emerg}`, modifies the mean seedling emergence coefficient
+(:math:`a_{emerg}`) in response to variation in :math:`SMP_{EMA}` such that
+
+
+.. math::
+   F_{emerg,i} = \left\{
+        \begin{array}{ll}
+            0 & \quad SMP_{i} < \psi_{emerg} \\
+           f(PAR_{i}) (a_{emerg}) \left(  \frac {   \sum_{j = i - W_{emerg} }^{ i} ( 1 / -SMP_{j}  ) } {W_{emerg}} \right) ^{ b_{emerg} } & \quad SMP_{i} \geq \psi_{emerg}
+        \end{array}
+    \right . 
+
+This produces pulses of seedling emergence in response to seasonal and interannual
+precipitation events, and stalls seedling emergence under relatively dry conditions. 
+
+Moisture and light-sensitive seedling survival
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The TRS tracks a seedling pool that is sensitive to light and moisture stress.
+Seedling survival decreases differentially at low soil moisture and low light, affecting forest
+composition across environmental gradients (:ref:`Kobe, 1999<Kobe1999>`; :ref:`Engelbrecht et al., 2007<Engelbrecht2007>`).
+
+The TRS seeks to capture this with a PFT-specific moisture stress threshold, :math:`\psi_{crit}`,
+below which the seedling pool starts to “accumulate” (mathematically an EMA is tracked with a
+timescale of :math:`W_{\psi}` days; default = 126) moisture deficit days (MDD) similar to the concept
+of growing degree days. The new MDD value on day i, :math:`MDD_i`, is calculated as the difference
+between the absolute value of site-level SMP on day i, :math:`SMP_i`, and the absolute value of :math:`\psi_{crit}`. 
+
+.. math::
+   MDD_i = \sum_{j = i - W_{\psi}}^{i} \left\{
+        \begin{array}{ll}
+            0 & \quad \psi_j \geq \psi_{crit} \\
+            |\psi_j| - |\psi_{crit}| & \quad \psi_j < \psi_{crit}
+        \end{array}
+    \right. 
+
+
+:math:`MDD_i` is then used to update an EMA of MDD, :math:`MDD_{EMA}`. Finally, :math:`MDD_{EMA}` is
+multiplied by the timescale of the EMA (in days), :math:`W_{\psi}`, to approximate an “accumulation” of MDD. 
+
+
+This formulation simultaneously captures the magnitude and duration of moisture stress.
+Observations of seedling wilting points from a manipulative drought experiment at BCI
+(:ref:`Engelbrecht & Kursar, 2003<EngelbrechtKursar2003>`; :ref:`Engelbrecht et al., 2007<Engelbrecht2007>`)
+were used to explore the relationship between MDD accumulation and seedling mortality.
+Observed drought-induced mortality is 0 up to a critical accumulation of MDD, :math:`MDD_{crit}`,
+at which point a convex quadratic relationship best explained drought-induced seedling mortality as a function of MDD
+(see SI Methods S1 and Fig. S1 in :ref:`Hanbury-Brown et al., 2022<Hanbury-Brown2022>` for more details).
+The mortality rate from moisture stress (:math:`M_{\psi}`) on day i is therefore
+
+.. math::
+   M_{\psi,i} =  \left\{
+        \begin{array}{ll}
+            0 & \quad MDD_i < MDD_{crit} \\
+           a_{\psi}MDD_i^2 + b_{\psi}MDD_i + c_{\psi} & \quad  MDD_i  \geq MDD_{crit}
+        \end{array}
+    \right. .
+
+Seedlings also die from insufficient light, which we refer to as light stress. The light stress mortality rate,
+:math:`M_L`, on day i is a function of “cumulative” (mathematically an EMA is tracked with a timescale of W_L days; default = 32) PAR at the seedling layer, :math:`L_{seedling}`, within a moving window of days, :math:`W_L`, prior to i. Similar to the approach used to calculate :math:`MDD_{EMA}`, :math:`L_{seedling}` is calculated by multiplying an EMA of seedling layer PAR, :math:`PAR_{EMA}`, by :math:`W_L` to approximate the cumulative light incident at the seedling layer prior to i. Two PFT-specific parameters determine the shape of the negative exponential relationship between mortality and and light
+
+.. math::
+   M_{L,i} = e^{a_{ML} \left ( \sum_{j=i-W_{L}}^{i} L_{seedling,j} \right) + b_{ML}}
+
+
+where :math:`a_{ML}` is a PFT-specific light response parameter and :math:`b_{ML}` is the intercept. This function is based on an analysis by :ref:`Kobe (1999)<Kobe1999>` who tested four functional forms and found that the negative exponential best described light stress mortality for two shade tolerant and one light demanding species that were transplanted into varied light environments. A background seedling mortality rate, :math:`M_{background}`, represents other seedling mortality (e.g. herbivory, pathogens, tree fall, etc.). Total seedling mortality is the sum of moisture-dependent, light-dependent and background mortality.   
+
+Recruitment
+~~~~~~~~~~~
+
+The rate of transition from seedling to sapling increases with understory light (:ref:`Brokaw, 1985<Brokaw1985>`; :ref:`Rüger et al., 2009b<Ruger2009b>`). Recruitment in the TRS is represented with a dynamic seedling to sapling transition rate (TR) which is the fraction of total carbon in the seedling pool, :math:`C_{seedling}`, that is available to make new recruits each day. The TR on day i is calculated as a power function of :math:`PAR_{EMA,i}`. If SMP on day i, :math:`\psi_i`, is drier than :math:`\psi_{crit}` the transition rate goes to zero such that
+
+.. math::
+
+   TR_{i} = \left\{
+        \begin{array}{ll}
+            0 & \quad \psi_i < \psi_{crit} \\
+           a_{TR} \left( \frac{ \sum_{j = i - W_{L}}^{i} PAR_{j} } {W_{L}} \right)^{b_{TR}}  & \quad  \psi_i \geq \psi_{crit}
+        \end{array}
+    \right. 
+
+where :math:`a_{TR}` is a coefficient derived from the mean transition rate at observed mean understory PAR (see SI Methods S1 in :ref:`Hanbury-Brown et al. (2022)<Hanbury-Brown2022>` for more information) and :math:`b_{TR}` is the light response modifier. The light response modifier produces accelerating (i.e. light demanding) or decelerating responses to light (Fig. 2f) depending on if :math:`b_{TR}` is greater or less than 1. Of a variety of functional forms tested at BCI, a power function with species-specific light response modifiers best explained observed variation in recruitment rates under spatially heterogenous patch-level light (:ref:`Rüger et al., 2009<Ruger2009b>`). This formulation is more broadly supported by the growth-mortality functional trade-off axis where light demanding species can take advantage of higher light conditions through faster relative growth rates (:ref:`Wright et al., 2010<Wright2010>`). 
+
+Carbon transitioning out of the seedling layer is available to FATES’s default recruitment subroutine which converts carbon available for recruitment into a number density of new recruits based on the amount of carbon required to form an individual in the smallest size class tracked by the VDM, Z0. The number of new recruits predicted on day i, :math:`R_i`, is
+
+.. math::
+
+   R_i = \frac{(TR_i) (C_{seedling,i}) } {Z_0}  
+
+The regeneration processes represented above introduce 18 new parameters used by FATES-TRS that are not used by default FATES. 
+
+.. csv-table:: Tree Recruitment Scheme Parameters. LD = light-demanding, ST = shade-tolerant, DT = drought-tolerant, DI = drought-intolerant.
+   :file: images/trs_params.csv
+   :widths: 25 25 25 25
+   :header-rows: 1
+
 Litter Production and Fragmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2739,7 +3183,10 @@ Litter Production and Fragmentation
   section for more detail. 1-hour (twigs), 10-hour (small branches),
   100-hour (large branches) and 1000-hour(boles or trunks). 4.5 %, 7.5%,
   21 % and 67% of the woody biomass (:math:`C_{store,coh} + C_{sw,coh}`)
-  is partitioned into each class, respectively.
+  is partitioned into each class, respectively. If the cohort dbh is smaller
+  than the fuel class size threshold specified by the `fates_frag_cwd_frac`
+  parameter then no biomass is sent to that class. The relative
+  proportions of biomass sent to each of the remaining fuel classes are preserved.
 
 :math:`l_{leaf}` and :math:`l_{root}` are indexed by plant functional
 type (:math:`ft`). The rational for indexing leaf and fine root by PFT
@@ -3860,7 +4307,91 @@ Zeng, Xubin. 2001. “Global Vegetation Root Distribution for Land
 Modeling.” *Journal of Hydrometeorology* 2(5): 525–30.
 
 
+Crown Damage Module
+^^^^^^^^^^^^^^^^^^^^^^
+The crown damage module represents crown damage as a reduction in crown area and the biomass of tissues in
+the crown (leaves, sapwood, storage, structural and reproductive tissues), 
+implemented via changes to allometric relationships. Damage currently does not change the height of cohorts or the biomass of the stem. 
 
+We treat damage as a categorical variable with each cohort associated with a ‘damage class’ that describes its degree of crown loss. 
+Damage classes can be set in the parameter file via :literal:`damage_bin_edges`, which sets the lower bin edges for the percentage of crown loss
+in each damage class. Damage classes do not need to be evenly spaced. Damage class is an argument to allometric equations and 
+is used to reduce the biomass of crown tissues. For example: 
+
+.. math:: bl = bl * (1 - crownreduction)
+
+where :math:`bl` is leaf biomass.
+
+We reduce sapwood and structural tissues in proportion to their branch fraction.
+
+.. math::  bsap = bsap - (bsap * agbfrac *  branchfrac * crownreduction)
+
+where :math:`bsap` is sapwood biomass, :math:`agbfrac` is aboveground biomass fraction and :math:`branchfrac` is the branch fraction. 
+Branch fraction is calculated as the sum of the first three coarse woody debris pools (i.e. excluding the main stem).
+
+Damage is not currently linked to explicit drivers. The timing of damage events is set by the ``damage_event_code`` parameter - described in table
+:ref:`crown_damage_event_table`.
+   
+.. _crown_damage_event_table:
+
+.. list-table:: Crown damage event codes
+   :widths: 25 25 
+   :header-rows: 1
+   :stub-columns: 0
+
+   * - Event code
+     - Description
+   * - 1
+     - Damage is off
+   * - 2
+     - Damage occurs on the first time step
+   * - 3
+     - Damage occurs every day (not recommended)
+   * - 4
+     - Damage occurs once a month (on the first day)
+   * - negative number
+     - Damage occurs annually on the specified day of the year
+   * - YYYYMMDD
+     - Damage occurs on a given date.
+
+The ``damage_frac`` parameter determines the proportion of a cohort that is damaged with each damage event.
+Part of the cohort keeps its current damage class, while the damaged portion of the cohort is equally divided into 
+cohorts with higher damage classes. In the figure below there are five damage classes including undamaged and 
+``damage_frac`` is set to ``0.1``. Of the intial cohort of 1000 individuals
+25 individuals are therefore moved into each of the four higher damage classes.    
+
+.. figure:: images/Damage_1.png 
+
+
+Recovery from crown damage is set via the ``damage_recovery_scalar`` parameter. A value of zero means that during daily
+allocation of NPP, no recovery occurs and damaged cohorts will allocate all available carbon to growth along their 
+altered allometric trajectories. A value of one means that cohorts will use all available carbon to regrow damaged tissues,
+at the expense of dbh growth. The maximum number of individuals of a cohort that can recover in each timestep (:math:`nmax`) is
+a function of the available allocatable carbon to grow with (:math:`C_b`) and the change in carbon between 
+the damage class :math:`i` and :math:`i-1` (:math:`C_r`):
+
+.. math:: nmax = n_i * C_b / C_r
+
+Where :math:`n_i` is the initial number density of the cohort. The number of plants that recover is
+then :math:`nmax * fr` where :math:`fr` is the ``damage_recovery_scalar`` parameter.
+
+
+
+.. figure:: images/Damage_2.png 
+
+Crown damage in FATES can lead to mortality via carbon starvation. However, to capture mortality associated with crown loss 
+from mechanisms not currently in FATES (e.g. pathogen entry) an additional mortality term describes an increase
+in mortality with crown loss :math:`M_{d,coh}`.  
+
+ 
+.. math::
+
+	 M_{d,coh} = \frac{1}{1 + e^{(-r_d * (damage - p_d))}}
+
+where :math:`damage` is the fraction of crown loss, :math:`r_d` is the rate that mortality increases with crown loss,
+and :math:`p_d` is the inflection point of the curve, i.e. the crown loss at which annual mortality rate has increased to 50%.
+       
+For an application of the FATES crown damage module see :ref:`Needham et al. (2022)<Needhametal2022>`.  
 
 FATES Reduced Complexity Configurations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -4028,6 +4559,12 @@ of each PFT being allocated areas based on a PFT map read from an
 input surface dataset, each PFT is allocated the same area on all
 gridcells. Thus it can be used for specific experiemnts looking at PFT
 differences across climate gradients.
+
+In no competition with and without prescribed biogeography cohorts
+can be initialised based on a given dbh, rather than spun up from 
+bare ground, by setting the fates_recruit_init_density parameter
+to a negative number, which is then interpreted as initial dbh. 
+
 
 Prescribed biogeography with competition mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

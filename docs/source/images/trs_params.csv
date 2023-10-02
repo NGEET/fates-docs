@@ -1,0 +1,75 @@
+Parameter symbol and full parameter name,Value optimized for BCI,Units,Description
+":math:`F_{repro}`
+(fates_trs_seed_alloc)","0.1
+(all PFTs)",None,Fraction of :math:`C_{g+r}` allocated to reproduction
+":math:`a_{RA}`
+(fates_trs_repro_alloc_a)","LD-DI: 0.0058
+LD-DT: 0.0059
+ST-DI: 0.0042 
+ST-DT: 0.0049",":math:`\delta RA
+[\delta dbh]^{-1}`",Governs RA as function of dbh (logit function coefficient)
+":math:`b_{RA}`
+(fates_trs_repro_alloc_b)","LD-DI: -3.1380
+LD-DT: -2.4607
+ST-DI: -2.6518 
+ST-DT: -2.6171",None,Governs RA as function of dbh (intercept in logit function)
+":math:`F_{seed}`
+(fates_trs_repro_frac_seed)","0.24
+(all PFTs)",None,Fraction of reproductive C that is seed
+":math:`s_{mort}`
+(fates_trs_seed_decay_rate)","0.51
+(all PFTs)",yr-1 ,Seed mortality rate
+":math:`d_{seedling}`
+(fates_trs_seedling_root_depth)","0.06
+(all PFTs)",m,Seedling rooting depth
+":math:`a_{emerg}`
+(fates_trs_a_emerg)",0.0003,day-1,Coefficient for seedling emergence rate 
+":math:`b_{emerg}`
+(fates_trs_b_emerg)","LD-DI: 1.6
+LD-DT: 1.6
+ST-DI: 1.2 
+ST-DT: 1.2",None,Seedling emergence sensitivity to soil moisture
+":math:`W_{emerg}`
+(fates_trs_sdlng_emerg_h2o_timescale)",7 (all PFTs),days,Time window for  emergence response to soil moisture
+":math:`\psi_{emerg}`
+(fates_trs_seedling_psi_emerg)",-15744.65,mm H2O suction,Soil moisture required for emergence
+":math:`PAR_{crit}`
+(fates_trs_par_crit_germ)",0.656,MJ m-2 day-1,Critical PAR level  for light-sensitive germination
+":math:`M_{background}`
+(fates_trs_background_seedling_mort)","LD-DI: 0.17 LD-DT: 0.18 
+ST-DI: 0.19 
+ST-DT: 0.11 ",yr-1,Background seedling mortality rate
+":math:`\psi_{crit}` 
+(fates_trs_seedling_psi_crit)","DI: -175912.9
+DT: -251995.7",mm H2O suction,Seedling moisture stress threshold
+:math:`MDD_{crit}` (fates_trs_seedling_mdd_crit),"DI: 46E5
+DT: 14E5",mm H2O suction days,Moisture deficit day threshold for seedling mortality
+":math:`a_{\psi}`
+(fates_trs_seedling_h2o_mort_a)","DI: 1.04E-16
+DT: 4.07E-17",None,Moisture-based mortality coefficient
+":math:`b_{\psi}`
+(fates_trs_seedling_h2o_mort_b)","DI:-5.5E-10
+DT:-6.4E-11",None,Moisture-based mortality coefficient
+":math:`c_{\psi}`
+(fates_trs_seedling_h2o_mort_c)","DI:3.5E-04
+DT:1.3E-05",None,Moisture-based mortality coefficient
+" :math:`W_{\psi}`
+(fates_trs_sdlng_mdd_timescale)","126
+(all PFTs)",days,Time window for MDD
+" :math:`a_{ML}`
+(fates_trs_seedling_light_mort_a)","LD:-0.033
+ST:-0.00990",None,Light-based mortality coefficient
+" :math:`b_{ML}`
+(fates_trs_seedling_light_mort_b)","LD:-3.84
+ST:-7.15",None,Light-based mortality coefficient
+" :math:`W_{L}`
+(fates_trs_sdlng_mort_par_timescale)","32
+(all PFTs)",days,Time window for seedling light response
+" :math:`a_{TR}`
+(fates_trs_seedling_light_rec_a)","LD:0.010
+ST:0.007",None,Seedling to sapling transition rate coefficient
+" :math:`b_{TR}`
+(fates_trs_seedling_light_rec_b)","LD: 1.0653
+ST: 0.8615",None,Recruitment light response parameter
+ :math:`H_{min}` (fates_trs_recruit_hgt_min),2.345,m,Min height of a new recruit
+fates_trs_regeneration_model ,2,None,Switch to choose regeneration mode (1: default FATES  2: TRS  3: TRS no seedling dynamics)

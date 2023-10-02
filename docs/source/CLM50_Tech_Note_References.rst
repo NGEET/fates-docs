@@ -127,6 +127,26 @@ studies, Ecological Applications, 14, 280-298, 10.1890/01-6019.
 Asner, G. P., Knapp, D. E., Broadbent, E. N., Oliveira, P. J. C., Keller, M., and Silva, J. N. 2005.
 Selective Logging in the Brazilian Amazon, Science, 310, 480.
 
+
+.. _atkin2017:
+
+|br|
+
+Atkin, O.K., Bahar, N. H. A., Bloomfield, K.J., Griffin, K.L., Heskel, M.A., Huntingford, C., 
+Martinez de la Torre, A., Turnbull, M.H.,. 2017. Leaf Respiration in Terrestrial Biosphere Models. In: 
+Tcherkez, G., Ghashghaie, J. (eds) 
+Plant Respiration: Metabolic Fluxes and Carbon Balance. Advances in Photosynthesis and Respiration, 
+vol 43. Springer, Cham. 10.1007/978-3-319-68703-2_6
+
+
+.. _Atondo-Bueno2016:
+
+|br|
+
+Atondo-Bueno EJ, López-Barrera F, Bonilla-Moheno M, Williams-Linera G, Ramírez-Marcial N. 2016. 
+Direct seeding of Oreomunnea mexicana, a threatened tree species from Southeastern Mexico. New Forests 47: 845–860.
+
+
 .. _AxelssonAxelsson1986:
 
 |br|
@@ -141,12 +161,6 @@ fertilization. Tree Phys. 2:189-204.
 
 Atkin OK, Bloomfield KJ, Reich PB, Tjoelker MG, Asner GP, Bonal D et al (2015) Global variability in leaf respiration in relation to climate, plant functional types and leaf traits. New Phytologist 206:614–636
 
-.. _Atkin2017:
-
-|br|
-
-Leaf Respiration in Terrestrial Biosphere Models. In Plant Respiration: Metabolic Fluxes and Carbon Balance, Advances
-in Photosynthesis and Respiration 43, G. Tcherkez, J. Ghashghaie (eds.) Springer International Publishing AG 2017
 
 .. _BadgerandDirmeyer2015:
 
@@ -315,6 +329,13 @@ Geosci. Model Dev., 7, 2193-2222, doi:10.5194/gmd-7-2193-2014.
 |br|
 
 Botta, A et al., 2000. A global prognostic scheme of leaf onset using satellite data. Global Change Biology 6.7, pp. 709-725.
+
+
+.. _Brokaw1985:
+
+|br|
+
+Brokaw NVL. 1985. Gap-phase regeneration in a tropical forest. Ecology 66: 682–687.
 
 .. _Brun1989:
 
@@ -660,6 +681,19 @@ Dunfield, P., Knowles, R., Dumont, R. and Moore, T.R., 1993. Methane
 Production and Consumption in Temperate and Sub-Arctic Peat Soils -
 Response to Temperature and Ph. Soil Biology & Biochemistry 25:321-326.
 
+
+.. _Engelbrecht2007:
+
+|br|
+
+Engelbrecht BMJ, Comita LS, Condit R, Kursar T, Tyree MT, Turner BL, Hubbell SP. 2007. Drought sensitivity shapes species distribution patterns in tropical forests. Nature 447: 80–82.
+
+.. _EngelbrechtKursar2003:
+
+|br|
+
+Engelbrecht BMJ, Kursar TA. 2003. Comparative drought-resistance of seedlings of 28 species of co-occurring tropical woody plants. Oecologia 136: 383–393.
+
 .. _EntekhabiEagleson1989:
 
 |br|
@@ -799,6 +833,14 @@ Peat Accumulation. Ecosystems. 4:479-498.
 |br|
 
 Fyllas, N.M. et al., 2014. Analysing Amazonian forest productivity using a new individual and trait- based model (TFS v. 1). Geoscientific Model Development 7.4, pp. 1251-1269.
+
+
+.. _Garwood1983:
+
+|br|
+
+Garwood NC. 1983. Seed Germination in a Seasonal Tropical Forest in Panama: A Community Study. Ecological Monographs 53: 159–181.
+
 
 .. _Gallaisetal2006:
 
@@ -983,6 +1025,15 @@ Truesdale, J.E., and Rasch, P.J. 2006. Simulation of the global
 hydrological cycle in the CCSM Community Atmosphere Model version 3
 (CAM3): mean features. J. Climate 19:2199-2221.
 
+.. _Hanbury-Brown2022:
+
+|br|
+
+Hanbury-Brown, A.R., Powell, T.L., Muller-Landau, H.C., Wright, S.J.
+and Kueppers, L.M. (2022), Simulating environmentally-sensitive tree
+recruitment in vegetation demographic models.
+New Phytol, 235: 78-93. https://doi.org/10.1111/nph.18059
+
 .. _Hansenetal2003:
 
 |br|
@@ -1044,6 +1095,17 @@ lake and reservoir modeling: A review. Rev. Geophys. 24:625-649.
 Henderson-Sellers, A., Yang, Z.-L., and Dickinson, R.E. 1993. The
 project for intercomparison of land-surface parameterization schemes.
 Bull. Amer. Meteor. Soc. 74: 1335-1349.
+
+.. _Heskel2016:
+
+|br|
+
+Heskel, M.A. O'Sullivan, O.S., Reich, P.B., Tjoelker, M.G., Weerasinghe, L.K., Penillard, A., 
+Egerton, J.J.G., Creek, D., Bloomfield, K.J., Xiang, J., Sinca, F., Stangl, Z.R., Martinez de la Torre, A., 
+Griffen, K.L., Huntingford, C., Hurry, V., Meir, P., Turnbull, M.H., Atkin, O.K. .2016.
+Convergence in the temperature response of leaf respiration across biomes and plant functional types. 
+Proc. Natl Acad. Sci. USA 113, 3832–3837.
+
 
 .. _HostetlerBartlein1990:
 
@@ -1244,6 +1306,14 @@ DOI:10.1029/2006GL027509.
 Kimball, J.S., Thornton, P.E., White, M.A. and Running, S.W. 1997.
 Simulating forest productivity and surface-atmosphere exchange in the
 BOREAS study region. Tree Physiology 17:589-599.
+
+
+.. _Kobe1999:
+
+|br|
+
+Kobe RK. 1999. Light Gradient Partitioning among Tropical Tree Species
+through Differential Seedling Mortality and Growth. Ecology 80: 187–201.
 
 .. _Kohyamaetal2001:
 
@@ -1674,6 +1744,18 @@ Lombardozzi, D.L., Bonan, G.B., Smith, N.G., Dukes, J.S. 2015. Temperature
 acclimation of photosynthesis and respiration: A key uncertainty in the
 carbon cycle-climate feedback. Geophys. Res. Lett. 42:8624-8631.
 
+.. _Longoetal2019a:
+
+|br|
+
+Longo, M., Knox, R.G., Medvigy,  D.M., Levine, N.M., Dietze, M.C.,
+Kim, Y., Swann, A.L.S., Zhang, K., Rollinson, C.R., Bras,  R.L.,
+Wofsy,  S.C., and Moorcroft, P.R., 2019. The biophysics, ecology,
+and biogeochemistry of functionally diverse, vertically and
+horizontally heterogeneous ecosystems: the Ecosystem Demography
+model, version 2.2 – part 1: Model description.
+Geosci. Model Dev. 12: 4309–4346, doi:10.5194/gmd-12-4309-2019.
+
 .. _Lovelandetal2000:
 
 |br|
@@ -1819,6 +1901,15 @@ river flow in climate models. J. Climate 7:914-928.
 Millington, R. and Quirk, J.P., 1961. Permeability of Porous Solids.
 Transactions of the Faraday Society 57:1200-1207.
 
+
+.. _MinorKobe2019:
+
+|br|
+
+Minor DM, Kobe RK. 2019. Fruit production is influenced by tree size
+and size‐asymmetric crowding in a wet tropical forest.
+Ecology and Evolution 9: 1458–1472.
+
 .. _Mironovetal2010:
 
 |br|
@@ -1858,6 +1949,16 @@ fraction absorbed PAR from year one of MODIS data. Remote Sens. Environ.
 83:214-231.
 
 .. _Neffetal2005:
+
+|br|
+
+Needham, J.F., Arellano, G., Davies, S.J., Fisher, R.A., Hammer, V.,
+Knox, R., Mitre, D., Muller-Landau, H.C., Zuleta, D., Koven, C.D. 2022.
+Tree crown damage and its effects on forest carbon cycling in a tropical forest.
+Global Change Biology 28:5560-5574. DOI:10.1111/gcb.16318
+
+
+.. _Needhametal2022:
 
 |br|
 
@@ -2022,7 +2123,7 @@ National Center for Atmospheric Research, Boulder, CO, 169 pp.
 
 Oleson, K.W., et al. 2013. Technical description of version 4.5 of the
 Community Land Model (CLM). NCAR Technical Note NCAR/TN-503+STR,
-National Center for Atmospheric Research, Boulder, CO, 420 pp.
+National Center for Atmospheric Research, Boulder, CO, 420 pp, doi:10.5065/D6RR1W7M.
 
 .. _Olson1963:
 
@@ -2117,6 +2218,13 @@ from soils. J. Geophys. Res. 106(D15):17403-17419.
 
 Paterson, W.S.B., 1994. The Physics of Glaciers. Elsevier Science Inc.,
 New York, 480 pp.
+
+.. _Pearson2002:
+
+|br|
+
+Pearson TRH, Burslem DFRP, Mullins CE, Dalling JW. 2002. Germination ecology
+of neotropical pioneers: Interacting effects of environmental conditions and seed size. Ecology 83: 2798–2807.
 
 .. _Pelletieretal2016:
 
@@ -2360,6 +2468,23 @@ ecosystem process model for other biomes, BIOME-BGC, and an
 applicationfor global-scale models. In: J.R. Ehleringer and C. Field
 (Editors), Scaling Physiological Processes: Leaf to Globe. Academic
 Press, San Diego, CA, pp. 141-158.
+
+
+.. _Ruiz2017:
+
+|br|
+
+Ruiz Talonia L, Reid N, Gross CL, Whalley RDB. 2017. Germination
+ecology of six species of Eucalyptus in shrink–swell vertosols: moisture,
+seed depth and seed size limit seedling emergence. Australian Journal of Botany 65: 22–22.
+
+
+.. _Ruger2009b:
+
+|br|
+
+Rüger N, Huth A, Hubbell SP, Condit R. 2009. Response of recruitment to light availability across a tropical lowland rain forest community. Journal of Ecology 97: 1–3.
+
 
 .. _Sacksetal2009:
 
@@ -2989,6 +3114,16 @@ http://dods.extra.cea.fr/data/p529viov/cruncep/readme.htm. Data
 available at
 http://dods.extra.cea.fr/store/p529viov/cruncep/V4\_1901\_2011/].
 
+
+.. _Visser2016:
+
+|br|
+
+Visser, M. D., Bruijning, M., Wright, S. J., Muller-Landau, H. C.,
+Jongejans, E., Comita, L. S., & de Kroon, H. (2016). Functional traits as
+predictors of vital rates across the life cycle of tropical trees.
+Functional Ecology, 30(2), Article 2. https://doi.org/10.1111/1365-2435.12621
+
 .. _VitousekHowarth1991:
 
 |br|
@@ -3035,6 +3170,12 @@ burial fraction over short vegetation in the NCAR CLM3. Adv. Atmos. Sci.
 |br|
 
 Weng, E.S. et al., 2014. Scaling from individuals to ecosystems in an Earth System Model using a mathematically tractable model of height-structured competition for light. Biogeosciences Discussions 11.12, pp. 17757-17860.
+
+.. _Wenk2017:
+
+Wenk EH, Abramowicz K, Westoby M, Falster DS. 2017. Coordinated shifts
+in allocation among reproductive tissues across 14 coexisting plant species. 
+BioRxiv. doi: 0.1101/141473
 
 .. _Whiteetal1997:
 
