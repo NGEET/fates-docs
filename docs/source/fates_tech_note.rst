@@ -3436,20 +3436,23 @@ Mechanistic simulation of hydraulic failure is not undertaken on account
 of it’s mechanistic complexity (see :ref:`McDowell et al. 2013<Mcdowelletal2013>` for
 details). Instead, we use a proxy for hydraulic failure induced
 mortality (:math:`M_{hf,coh}`) that uses a water potential threshold
-beyond mortality is triggered, such that the tolerance of low water
+beyond which mortality is triggered, such that the tolerance of low water
 potentials is a function of plant functional type (as expressed via the
 :math:`\psi_c` parameter). For each day that the aggregate water
 potential falls below a threshold value, a set fraction of the trees are
-killed. The aggregation of soil moisture potential across the root zone
+killed. To prevent hydraulic failure mortality of vegetation at high latitudes,
+:math:`M_{hf,coh} = 0`
+when the temperature of any soil layer (:math:`t-soisno-sl`) falls below -2 degrees C.
+The aggregation of soil moisture potential across the root zone
 is expressed using the :math:`\beta` function. We thus determine plant
 mortality caused by extremely low water potentials as
 
 .. math::
 
    M_{hf,coh} = \left\{ \begin{array}{ll}
-   S_{m,ft}& \textrm{for } \beta_{ft} < 10^{-6}\\
+   S_{m,ft}& \textrm{for } \beta_{ft} < 10^{-6}  \textrm{and } min(t-soisno-sl) >= -2.0\\
    &\\
-   0.0& \textrm{for } \beta_{ft}>= 10^{-6}.\\
+   0.0& \textrm{for } \beta_{ft}>= 10^{-6} \textrm{and } min(t-soisno-sl) <  -2.0.\\
    \end{array} \right.
 
 The threshold value of 10\ :math:`^{-6}` represents a state where the
