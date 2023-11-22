@@ -3442,7 +3442,7 @@ potentials is a function of plant functional type (as expressed via the
 potential falls below a threshold value, a set fraction of the trees are
 killed. To prevent hydraulic failure mortality of vegetation at high latitudes,
 :math:`M_{hf,coh} = 0`
-when the temperature of any soil layer (:math:`t\_soisno\_sl`) falls below -2 degrees C.
+when the temperature of any soil layer (:math:`t-soisno-sl`) falls below -2 degrees C.
 The aggregation of soil moisture potential across the root zone
 is expressed using the :math:`\beta` function. We thus determine plant
 mortality caused by extremely low water potentials as
@@ -3450,9 +3450,9 @@ mortality caused by extremely low water potentials as
 .. math::
 
    M_{hf,coh} = \left\{ \begin{array}{ll}
-   S_{m,ft}& \textrm{for } \beta_{ft} < 10^{-6}  \textrm{and } min(t\_soisno\_sl) >= -2.0\\
+   S_{m,ft}& \textrm{for } \beta_{ft} < 10^{-6}  \textrm{and } min(t-soisno-sl) >= -2.0\\
    &\\
-   0.0& \textrm{for } \beta_{ft}>= 10^{-6} \textrm{and } min(t\_soisno\_sl) <  -2.0.\\
+   0.0& \textrm{for } \beta_{ft}>= 10^{-6} \textrm{and } min(t-soisno-sl) <  -2.0.\\
    \end{array} \right.
 
 The threshold value of 10\ :math:`^{-6}` represents a state where the
