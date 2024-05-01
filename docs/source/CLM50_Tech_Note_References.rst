@@ -2626,6 +2626,16 @@ formulation. J. Climate 9:676-705.
 
 Sellers, Piers J et al. (1996). A revised land surface parameterization (SiB2) for atmospheric GCMs. Part II: The generation of global fields of terrestrial biophysical parameters from satellite data. Journal of climate 9.4, pp. 706-737.
 
+.. _Sentmanetal2011:
+
+|br|
+
+
+Sentman, L. T., E. Shevliakova, R. J. Stouffer, and S. Malyshev, 2011:
+Time Scales of Terrestrial Carbon Response Related to Land-Use
+Application: Implications for Initializing an Earth System
+Model. Earth Interact., 15, 1–16, https://doi.org/10.1175/2011EI401.1.
+
 .. _Shietal2013:
 
 |br|

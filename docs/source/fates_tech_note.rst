@@ -4208,12 +4208,14 @@ states via one of two ways:
 
 .. figure:: images/land_use_initialization_flowcharts.png
 
-	    FLow chart of tweo ways of initializing FATES with land
-	    use change: A no-spinup case initializes land use staets
-	    at the start of a transient run. A Spinup case first runs
+	    FLow chart of two ways of initializing FATES with land
+	    use change: A no-spinup case initializes land use states
+	    at the start of a transient run, bu twith no attempt to
+	    first spin up to an equilibrium state. A Spinup case first runs
 	    the model under potential vegetation (i.e., no land use)
 	    and then applies initial land use change to get to a
-	    desired time point, followed by transient land use after that.
+	    desired compositino of land use at the time point that
+	    starts a transient run, followed by transient land use after that.
 
 The first way of initializing land use states is to runwith no spinup from bare
 ground, starting in some specific year of the historical record. In
@@ -4228,12 +4230,12 @@ steady-state land use forcing to achieve spun-up initial
 conditions. However, because land use change away from primary lands is a
 one-way process, there cannot be steady-state conditions if land use
 change that includes such transition rates are nonzero. Thus the
-simplest steady-state conditions that do allow equilibration is the
+simplest steady-state condition that does allow equilibration is the
 absence of land use, which we call 'potential vegetation mode'. In this
 case, a flag is set that asserts 100% primary land fraction and no
 harvest, until steady state conditions are met.  This may also involve
 methods to accelerate soil organic matter spinup, which will thus also
-be in steady state with respect to no-land-use conditions.
+be in steady state with respect to the no-land-use conditions.
 
 After sufficiently spun up steady-state conditions are achieved in
 potential vegetation mode, land use is introduced upon exiting
@@ -4241,7 +4243,12 @@ potential vegetation mode; this is triggered automatically based on
 logical flags that are passed within the restart file. In this case, land use change rates are
 diagnosed from the land use state vector in the driving dataset, so
 that disturbance rates on the first day  lead to the desired land use
-state distribiutions on the second day of the simulation.
+state distribiutions on the second day of the simulation. This will
+create an initial disequilibrium in the age distributions and
+disturbance products (e.g. necromass), which must then propagate
+through the system for some time, and thus must be done ~100 years
+prior to the start of the period of interest (see :ref:`Sentman et al.,
+2011<Sentmanetal2011>` for further discussion).
 
 
 Running Dynamic Land-use with prescribed land cover (i.e., 'nocomp' configuration)
@@ -4263,24 +4270,26 @@ is below:
 	    patch mosaic with Land Use, Land Cover, and patch age all
 	    distinguishing patches.
 
+Because land use change drives changes to land cover, in a
+prescribed land-cover case with land use change, the prescribed land
+cover must be dependent on land use. Thus, under this configuration, a
+second dataset is read that specifies, for each gridcell, what the nocomp PFT
+composition should be on each non-crop land use type.  The crop land
+use type is assigned a single PFT that is permitted to grow on crop
+patches.
+
 The land cover is thus a function of both the land use in a given
 gridcell at a given time, and the prescribed PFT composition
 conditional on land use:
 
-.. math:: P(x,y,t) = L(x,y,t) * C_L(x,y)
+.. math:: A_p(x,y,t) = \sum_i \left( U_i(x,y,t) * C_{p,i}(x,y) \right)
 
-Where :math:`P(x,y,t)` is the fractional area covered by all patches
-with a given nocomp PFT label at gridcell :math:`(x,y)` and timestep
-:math:`t`, :math:`L(x,y,t)` is the fractional area of all patches with
-a given land use type, and :math:`C_L(x,y)` is the composition of
-PFTs for a given gridcell and land use type. Note that :math:`C_L` is
-time-invariant in such a configuration.
-
-Because land use change drives changes to land cover as well, in a
-prescribed land-cover case with land use change, the prescribed land
-cover must be dependent on land use. Thus, under this configuration, a
-second dataset is read that specifies, for each gridcell, what the nocomp PFT
-composition should be on each non-crop land use type.
+Where :math:`A_p(x,y,t)` is the fractional area covered by all patches
+with a given nocomp PFT label :math:`p` at gridcell :math:`(x,y)` and timestep
+:math:`t`; :math:`U_i(x,y,t)` is the fractional area of all patches with
+a given land use type :math:`i` at that point in space and time, and :math:`C_{p,i}(x,y)` is the composition of
+PFT :math:`p` for a given gridcell and land use type :math:`i`. Note that :math:`C_{p,i}` is
+time-invariant in such a configuration. 
 
 During either land use change disturbance or tree harvest disturbance,
 the resulting patches may need to have their nocomp PFTs changed so
