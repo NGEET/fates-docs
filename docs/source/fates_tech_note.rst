@@ -3950,8 +3950,25 @@ within the area affected by fire is a function of the ratio between
 | s}`             | parameter       |                 |                 |
 +-----------------+-----------------+-----------------+-----------------+
 
-Wood Harvest (The selective logging module)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Land Use, Land Use Change, and Forestry
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The demographic representation in FATES allows for a complex
+representation of land use change and its legacies.  FATES uses the
+patch concept to apply to both natural and anthropogenic disturbance
+histories. Thus each patch can be indexed by both a continuous
+variable (patch age) and a categorical variable (patch land use
+label). FATES treats two
+distinct types of anthropogenic disturbance: logging and land use
+change. Logging causes trees to be harvested, and the land that those
+trees had grown on to become disturbed. Land use change is represented
+as a disturbance rate that updates the
+land use label of the resulting patch, and may lead to harvest or
+other changes during the land use change disturbance. 
+
+
+Wood Harvest
+------------
 Over half of all tropical forests have been cleared or logged, and almost half of standing 
 old-growth tropical forests are designated by national forest services for timber production 
 (:ref:`Sist et al., 2015<sistetal2015>`). Disturbances that result from logging are known to 
@@ -3971,7 +3988,7 @@ and (5) transports harvested logs off-site by adding the remaining necromass
 from damaged trees into coarse woody debris and litter pool.
 
 Logging practices
------------------
+~~~~~~~~~~~~~~~~~
 
 The logging module struture and parameterization is based on detailed field and remote 
 sensing studies (:ref:`Putz et al., 2008<putzetal2008>`; :ref:`Asner et al., 2004 <asneretal2004>`; 
@@ -4000,7 +4017,7 @@ to forests than conventional logging
 .. figure:: images/Logging_figure1.png
 
 Mortality associated with logging
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The FATES logging module was designed to represent a range of logging practices in field operations 
 at a landscape level. Once logging events are activated, we define three types of mortality 
@@ -4019,7 +4036,7 @@ of trees :math:`<=DBH_{max_{infra}}` (called mechanical damage fraction) are rem
 building infrastructure (:ref:`Feldpausch et al., 2005 <feldpauschetal2005>`). 
 
 Patch dynamics following logging disturbance
---------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To capture the disturbance mechanisms and degree of damage associated with logging practices 
 at the landscape level, we apply the mortality types following a workflow designed to correspond to 
@@ -4050,7 +4067,7 @@ pending the inclusion of separate land-use fractions for managed and unmanaged f
 
 	    
 Flow of necromass following logging disturbance
------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Logging operations affect forest structure and composition, and also carbon cycling 
 (:ref:`Palace et al., 2008 <palaceetal2008>`) by modifying the live biomass pools and flow of 
@@ -4123,9 +4140,166 @@ state (albeit in covering a smaller area).
 .. figure:: images/logging_schematic_mixed_open_closed_canopy.png
 
 After logging occurs, the patches that have been disturbed are tracked
-as belonging to secondary lands, and are not fused with patches on
+as belonging to secondary lands, by updating their land use labels, and are not fused with patches on
 primary lands. This allows primary and secondary land areas to be
 tracked, with possibly different ecological dynamics occuring on each.
+
+Land Use Change
+---------------
+
+Land use change in FATES is driven by a transition matrix that
+specifies what areal fraction of land is converted from one land use
+type to another, in rates of fraction/year. Land use types in FATES
+are currently allowed five distinct categories:
+
+1. Primary Lands
+2. Secondary Lands
+3. Rangelands
+4. Pasture Lands
+5. Crop Lands
+
+In the special case of 'nocomp' mode, there may also be bare ground
+lands, which also have an absence of land use (i.e. they have a
+bare-ground land use) as well. Each of these land use types are
+tracked via an integer flag for each patch. Natural disturbance
+processes retain the land flag for the resulting patch as the parent
+patch, and patches with differing
+land use type flags cannot be fused. This ensures that total patch area of
+each land use type is conserved, in the absence of land use change and
+logging disturbance.
+
+.. figure:: images/land_use_transition_matrix.png
+
+	    Possible disturbances in FATES, represented as a land use
+	    transition matrix of land use changing from a donor type
+	    to a receiver type. Bold text on diagonals are for the
+	    FATES land use types. Disturbance types that may generate
+	    eahc type of land use transition are listed in italics.
+	    Natural disturbance rates (fire, treefall) are only
+	    permitted on diagonal elements, i.e. they do not result in
+	    land use change. Harvest results in secondary land,
+	    whether the donor type is primary or secondary land. All
+	    other transition types are represented as land use change
+	    rates that are read in from the land use driver
+	    file. Black squares are non-permitted transitions;
+	    i.e., nothing can become primary land after it has
+	    transitioned away from primary land.
+
+.. figure:: images/land_use_data_workflow.png
+
+	    Work flow for land use driver tools. LUH2 data (leftmost
+	    blue box) is regridded vi a aset of puython tools (red
+	    box) to create a single netcdf file (next blue box), which
+	    is read by host model and passed to FATES.
+
+The land use transition matrix is input to FATES via a separate file,
+that is read by the host model and passed to FATES, alongside a
+land-use state vector. Currently, the LUH2 (:ref:`Hurtt et al. 2020<hurttetal2020>`) dataset is used for
+these drivers. The dimensions of the land-use transition
+matrix are lat x lon x donor land use type x receiver land use type x
+time.
+
+
+Initialization of land use
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The land use state vector is used to initialize the land use
+states via one of two ways:
+
+.. figure:: images/land_use_initialization_flowcharts.png
+
+	    FLow chart of tweo ways of initializing FATES with land
+	    use change: A no-spinup case initializes land use staets
+	    at the start of a transient run. A Spinup case first runs
+	    the model under potential vegetation (i.e., no land use)
+	    and then applies initial land use change to get to a
+	    desired time point, followed by transient land use after that.
+
+The first way of initializing land use states is to runwith no spinup from bare
+ground, starting in some specific year of the historical record. In
+this case, the land use state vector is used to initialize a set of
+patches whose areal fraction and land use labels then match the land use state
+vector at the time of initialization, but all of which start from a
+near-bare-ground initialization. In this way, land use is always
+transient, there is not any steady-state equilibration period.
+
+The second way is to first run the model through a period of
+steady-state land use forcing to achieve spun-up initial
+conditions. However, because land use change away from primary lands is a
+one-way process, there cannot be steady-state conditions if land use
+change that includes such transition rates are nonzero. Thus the
+simplest steady-state conditions that do allow equilibration is the
+absence of land use, which we call 'potential vegetation mode'. In this
+case, a flag is set that asserts 100% primary land fraction and no
+harvest, until steady state conditions are met.  This may also involve
+methods to accelerate soil organic matter spinup, which will thus also
+be in steady state with respect to no-land-use conditions.
+
+After sufficiently spun up steady-state conditions are achieved in
+potential vegetation mode, land use is introduced upon exiting
+potential vegetation mode; this is triggered automatically based on
+logical flags that are passed within the restart file. In this case, land use change rates are
+diagnosed from the land use state vector in the driving dataset, so
+that disturbance rates on the first day  lead to the desired land use
+state distribiutions on the second day of the simulation.
+
+
+Running Dynamic Land-use with prescribed land cover (i.e., 'nocomp' configuration)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If FATES is run with both land use chaneg and prescribed landcover,
+then the patch structure must handle three specific pieces of
+infoirmation: (1) Land Use label, (2) nocomp PFT label, and (3) patch
+age. The first two of these are categorical and the third is
+continuous. An example of what such a patch structure might look like
+is below:
+
+.. figure:: images/landuse_nocomp_tiling_structure.png
+
+	    Schematic of an example patch structure when land use change,
+	    and prescribed land cover (i.e. 'nocomp' configuration)
+	    are both active. (a) Land Use fractions. (b) PFT Land
+	    Cover fractions nested within Land Use fractinos. (c) Full
+	    patch mosaic with Land Use, Land Cover, and patch age all
+	    distinguishing patches.
+
+The land cover is thus a function of both the land use in a given
+gridcell at a given time, and the prescribed PFT composition
+conditional on land use:
+
+.. math:: P(x,y,t) = L(x,y,t) * C_L(x,y)
+
+Where :math:`P(x,y,t)` is the fractional area covered by all patches
+with a given nocomp PFT label at gridcell :math:`(x,y)` and timestep
+:math:`t`, :math:`L(x,y,t)` is the fractional area of all patches with
+a given land use type, and :math:`C_L(x,y)` is the composition of
+PFTs for a given gridcell and land use type. Note that :math:`C_L` is
+time-invariant in such a configuration.
+
+Because land use change drives changes to land cover as well, in a
+prescribed land-cover case with land use change, the prescribed land
+cover must be dependent on land use. Thus, under this configuration, a
+second dataset is read that specifies, for each gridcell, what the nocomp PFT
+composition should be on each non-crop land use type.
+
+During either land use change disturbance or tree harvest disturbance,
+the resulting patches may need to have their nocomp PFTs changed so
+that they match the PFT distribiution of the resulting land use.  This
+is accomplished as below:
+
+.. figure:: images/LU_nocomp_transition_schematic.png
+
+	    Schematic of series of steps that occur when changing land
+	    use and land cover, under a prescribed land cover
+	    configuration. Colors indicate patches with nocomp PFTs. (a) disturbed area is calculated across all
+	    patches of donor land use type(s). (b) Newly disturbed
+	    patches are separated after main disturbance sequence. (c)
+	    Patch nocomp PFT areas are changed and/or reweighted, so that the proportion
+	    of PFTs in newly disturbed patch area matches that of the
+	    receiver land use type. (d) newly disturbed patches are
+	    added back to FATES patch structure with new land use and
+	    land cover labels.
+
 
 
 Plant Hydraulic module
@@ -4552,7 +4726,7 @@ unlike FATES-SP mode, disturbance can occur on each patch and thus the
 space allocated to each PFT may be split into one
 or more patches based on disturbance history.  Each patch has a PFT
 label, and only that PFT is allowed to grow on the patch. Cohorts of
-agiven PFT compete against each other for canopy access and thus
+a given PFT compete against each other for canopy access and thus
 light.
 
 No competition without prescribed biogeography mode
