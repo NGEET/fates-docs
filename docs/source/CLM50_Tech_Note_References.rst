@@ -1198,7 +1198,7 @@ Hurtt, G.C., Frolking, S., Fearon, M.G., Moore, B., Shevliakova, E.,
 Malyshev, S., Pacala, S.W., and Houghton, R.A. 2006. The underpinnings
 of land-use history: three centuries of global gridded land-use
 transitions, wood-harvest activity, and resulting secondary lands.
-Global Change Biol. 12:1208-1229.
+Global Change Biol. 12:1208-1229. 
 
 .. _Hurttetal2011:
 
@@ -1208,6 +1208,21 @@ Hurtt, G.C., et al. 2011. Harmonization of land-use scenarios for the
 period 1500-2100: 600 years of global gridded annual land-use
 transitions, wood harvest, and resulting secondary lands. Climatic
 Change 109:117-161. DOI:10.1007/s10584-011-0153-2.
+
+.. _Hurttetal2020:
+
+|br|
+
+Hurtt, G. C., Chini, L., Sahajpal, R., Frolking, S., Bodirsky, B. L.,
+Calvin, K., Doelman, J. C., Fisk, J., Fujimori, S., Klein Goldewijk,
+K., Hasegawa, T., Havlik, P., Heinimann, A., Humpenöder, F.,
+Jungclaus, J., Kaplan, J. O., Kennedy, J., Krisztin, T., Lawrence, D.,
+Lawrence, P., Ma, L., Mertz, O., Pongratz, J., Popp, A., Poulter, B.,
+Riahi, K., Shevliakova, E., Stehfest, E., Thornton, P.,
+Tubiello, F. N., van Vuuren, D. P., and Zhang, X.: Harmonization of
+global land use change and management for the period 850–2100 (LUH2)
+for CMIP6, Geosci. Model Dev., 13, 5425–5464,
+https://doi.org/10.5194/gmd-13-5425-2020, 2020.
 
 .. _Idso1981:
 
@@ -2610,6 +2625,16 @@ formulation. J. Climate 9:676-705.
 |br|
 
 Sellers, Piers J et al. (1996). A revised land surface parameterization (SiB2) for atmospheric GCMs. Part II: The generation of global fields of terrestrial biophysical parameters from satellite data. Journal of climate 9.4, pp. 706-737.
+
+.. _Sentmanetal2011:
+
+|br|
+
+
+Sentman, L. T., E. Shevliakova, R. J. Stouffer, and S. Malyshev, 2011:
+Time Scales of Terrestrial Carbon Response Related to Land-Use
+Application: Implications for Initializing an Earth System
+Model. Earth Interact., 15, 1–16, https://doi.org/10.1175/2011EI401.1.
 
 .. _Shietal2013:
 
