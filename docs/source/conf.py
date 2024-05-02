@@ -26,7 +26,7 @@ author = u'FATES Development Team'
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'd5.0.1'
+release = u'd6.0.1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -42,7 +42,6 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinx.ext.imgmath',
     'sphinx.ext.githubpages',
     'sphinx.ext.mathjax'
     ]
