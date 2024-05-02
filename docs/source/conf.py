@@ -26,7 +26,7 @@ author = u'FATES Development Team'
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'd5.0.0'
+release = u'd5.0.1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -43,13 +43,9 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.imgmath',
-    'sphinx.ext.githubpages'#,
-    #'sphinx.ext.mathjax'
+    'sphinx.ext.githubpages',
+    'sphinx.ext.mathjax'
     ]
-
-
-#mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
-
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['sphinx_templates']
