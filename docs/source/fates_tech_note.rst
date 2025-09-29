@@ -1145,9 +1145,6 @@ described later.
 Radiation Transfer
 ^^^^^^^^^^^^^^^^^^^
 
-Fundamental Radiation Transfer Theory
--------------------------------------
-
 The first interaction of the land surface with the properties of
 vegetation concerns the partitioning of energy into that which is
 absorbed by vegetation, reflected back into the atmosphere, and absorbed
@@ -1164,20 +1161,22 @@ under-storey layers, in-between which the radiation streams are fully
 mixed. The radiation mixing between canopy layers is necessary as the
 position of different plants in the under-storey is not defined
 spatially or relative to the canopy trees above.  Earlier versions of FATES used
- the work of :ref:`Norman 1979<norman1979>`. In 2024 the two-stream approximation was
- adapted to work within the multi-canopy and multi-leaf layer structure of FATES. The next
- sections detail these two options.
+the work of :ref:`Norman 1979<norman1979>`. In 2024 the two-stream approximation was
+adapted to work within the multi-canopy and multi-leaf layer structure of FATES. The next
+sections detail these two options.
 
-Two-Tream Radiation Scattering
-++++++++++++++++++++++++++++++
+Two-Stream Radiation Scattering
+-------------------------------
 
 The two-stream radiation documentation relies too heavily on latex and porting it to this documentation syle (rich text) is less than ideal.  The documentation has be pre-compiled and can be downloaded in its PDF form :download:`here<twostream/TwoStream_techdoc_knox_v1.pdf>`.
 
 Important note, the methods of calculating the leaf-level scattering parameters of optical depth, scatterinng coefficient and backscatter fractions follow methods described in the CLM tech-note.
 
 Norman Radiation Scattering
-+++++++++++++++++++++++++++
+---------------------------
 
+Governing Equations
++++++++++++++++++++
 The Norman radiation scattering method implements a one-dimensional scheme that traces the absorption,
 transmittance and reflectance of each canopy layer and the soil,
 iterating the upwards and downwards passes of radiation through the
@@ -1373,8 +1372,8 @@ fractions, (required by the photosynthesis calculations), is
 
 .. math:: abs_{sun,z} =  abs_{dif,z} \cdot f_{sun}+ abs_{dir,z}
 
-Resolution of radiation transfer theory within the FATES canopy structure
--------------------------------------------------------------------------
+Resolution of Norman radiation transfer theory within the FATES canopy structure
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The radiation transfer theory above, was described with reference to a
 single canopy of one plant functional type, for the sake of clarity of
