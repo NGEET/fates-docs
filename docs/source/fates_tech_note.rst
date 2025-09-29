@@ -1145,29 +1145,43 @@ described later.
 Radiation Transfer
 ^^^^^^^^^^^^^^^^^^^
 
-Fundamental Radiation Transfer Theory
--------------------------------------
-
 The first interaction of the land surface with the properties of
 vegetation concerns the partitioning of energy into that which is
 absorbed by vegetation, reflected back into the atmosphere, and absorbed
-by the ground surface. Older versions of the CLM have utilized a
+by the ground surface. CLM has mostly relied on a a
 "two-stream" approximation
 :ref:`Sellers 1985<sellers1985>`, :ref:`Sellers et al. 1986<sellers1996>` that provided an
 empirical solution for the radiation partitioning of a multi-layer
-canopy for two streams, of diffuse and direct light. However,
-implementation of the Ecosystem Demography model requires a) the
+canopy for two streams, of diffuse and direct light.
+
+Adapting two-stream radiation to FATES added additional complexities: a) the
 adoption of an explicit multiple layer canopy b) the implementation of a
 multiple plant type canopy and c) the distinction of canopy and
 under-storey layers, in-between which the radiation streams are fully
 mixed. The radiation mixing between canopy layers is necessary as the
 position of different plants in the under-storey is not defined
-spatially or relative to the canopy trees above. In this new scheme, we
-thus implemented a one-dimensional scheme that traces the absorption,
+spatially or relative to the canopy trees above.  Earlier versions of FATES used
+the work of :ref:`Norman 1979<norman1979>`. In 2024 the two-stream approximation was
+adapted to work within the multi-canopy and multi-leaf layer structure of FATES. The next
+sections detail these two options.
+
+Two-Stream Radiation Scattering
+-------------------------------
+
+The two-stream radiation documentation relies too heavily on latex and porting it to this documentation syle (rich text) is less than ideal.  The documentation has be pre-compiled and can be downloaded in its PDF form :download:`here<twostream/TwoStream_techdoc_knox_v1.pdf>`.
+
+Important note, the methods of calculating the leaf-level scattering parameters of optical depth, scatterinng coefficient and backscatter fractions follow methods described in the CLM tech-note.
+
+Norman Radiation Scattering
+---------------------------
+
+Governing Equations
++++++++++++++++++++
+The Norman radiation scattering method implements a one-dimensional scheme that traces the absorption,
 transmittance and reflectance of each canopy layer and the soil,
 iterating the upwards and downwards passes of radiation through the
 canopy until a pre-defined accuracy tolerance is reached. This approach
-is based on the work of :ref:`Norman 1979<norman1979>`.
+is based on
 
 Here we describe the basic theory of the radiation transfer model for
 the case of a single homogenous canopy, and in the next section we
@@ -1190,10 +1204,9 @@ and
 
 .. math::
 
-   \begin{array} {l}
+   \begin{array}{l}
    \phi_1 = 0.5 - 0.633\chi_{l} - 0.33\chi_l ^2\\
    \phi_2 =0.877 (1 - 2\phi_1)\\
-
    \end{array}
 
 The leaf angle distribution is a descriptor of how leaf surfaces are
@@ -1359,8 +1372,8 @@ fractions, (required by the photosynthesis calculations), is
 
 .. math:: abs_{sun,z} =  abs_{dif,z} \cdot f_{sun}+ abs_{dir,z}
 
-Resolution of radiation transfer theory within the FATES canopy structure
--------------------------------------------------------------------------
+Resolution of Norman radiation transfer theory within the FATES canopy structure
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The radiation transfer theory above, was described with reference to a
 single canopy of one plant functional type, for the sake of clarity of
