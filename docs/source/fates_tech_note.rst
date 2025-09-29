@@ -4715,7 +4715,7 @@ configurations is below:
 
 Satellite Phenology (FATES-SP) Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-THi sis the simples of the large-scale configurations, and reverts the
+This is the simplest of the large-scale configurations, and reverts the
 behavior of the model as close as possible to the existing CLM-SP and
 ELM-SP configurations.  In this mode, FATES is given information
 about the static areal coverage of each PFT, as well as time-varying
