@@ -4766,3 +4766,46 @@ e.g. neotropical versus African and/or Asian tropical forest PFTs.
 Full FATES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 All processes are active.
+
+
+Mapping to host land model atmospheric chemstry coupling algorithms (BVOCs and dry deposition)
+--------------------------------------------------------------------
+
+Biological Volatile Organic Compounds (BVOCs)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The implementation of Biological Volatile Organic Compounds (BVOCs) in 
+FATES allows for the simulation of the emission, transport, and 
+deposition of BVOCs within the model. This includes the representation 
+of various plant functional types (PFTs) and their specific BVOC emission 
+characteristics, as well as the interactions between BVOCs and atmospheric 
+chemistry. 
+
+As yet, FATES does not include a fully coupled atmospheric chemistry 
+module, and instead, when coupled to CLM, uses the default CLM BVOC module, 
+which is called MEGAN.  This capability is necessary for coupling FATES with 
+atmospheric chemistry models to study the interactions between BVOC 
+emissions and atmospheric processes. The MEGAN model in CLM is built on the 
+assumption that there is only one kind of vegetation in each patch. 
+thus, this capability is only functional when using a 'No Competition' mode 
+(which incudes FAATS-SP mode).
+MEGAN in CLM is congigured and parameterized for a particular set of plant functional types.
+In FATES, we thus include a parameter that maps the PFTs defined by FATES on to the 
+PFTs defined by MEGAN. This parameter is called 'fates_voc_pftindex'.  This is used to define a 
+flag for each FATES PFT that indicates the corresponding MEGAN PFT and is passed to the 
+host land model for the purposes of calculating BVOC emissions accurately.
+
+At present, this capability is only implemented in CLM and is yet to be included in
+other HLMs that use FATES. In principle a model that can estimate BVOC for mixed 
+vegetation types is necessary to allow utlization of BVOC emissions with 
+dynamic vegetation modes (e.g. the full FATES mode),
+
+.. raw:: latex
+
+   \captionof{table}{Parameters to define the mapping of PFTs in FATES to the MEGAN model }
+
++-----------------------------+-------------------------------------+-------+------------+
+| Parameter Symbol            | Parameter Name                      | Units | indexed by |
++=============================+=====================================+=======+============+
+| :math:`voc_{pftindex,ft}`   | Mapping of FATES PFTs to MEGAN PFTs | none  | ft         |
++-----------------------------+-------------------------------------+-------+------------+
